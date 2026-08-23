@@ -56,8 +56,15 @@ và ghi vào lịch sử.
 ## Tính năng
 
 - **Phiên ôn 15 phút/ngày**: thẻ lật → mindmap và ý chính → quiz, có đồng hồ đếm ngược.
-- **Mindmap cho cả 35 bài** cùng **19 sơ đồ minh hoạ** vẽ bằng SVG nội tuyến (hệ tuần hoàn, hô hấp,
-  tiêu hoá, chuỗi thức ăn, mạch điện, trạng thái vật chất, hệ toạ độ, trục thời gian thì tiếng Anh…).
+- **Mindmap cho cả 35 bài** cùng **19 sơ đồ** và **30 hình minh hoạ chi tiết cho môn Science**,
+  tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
+  quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,
+  đường đi của thức ăn, nhung mao ruột non, thận và bàng quang, năm nhóm động vật có xương sống,
+  lưới thức ăn, gấu bắc cực và lạc đà, nước đá – nước – hơi, ba biến đổi không thuận nghịch,
+  cách thu lại muối, nhiệt kế 0°C và 100°C, lực kế lò xo, dù và quả bóng rơi,
+  cách tạo bóng, ống hút gãy và lăng kính, mạch điện thật, bảng kí hiệu mạch,
+  ngày và đêm, tám hành tinh, các pha Mặt Trăng, bố trí thí nghiệm công bằng,
+  bảng số liệu và đồ thị, rác nhựa ra biển, ba thùng phân loại rác.
 - **Ứng dụng hàng ngày**: sau mỗi bài quiz app hiện 3 việc làm được ngay, tích được và lưu theo ngày.
 - **Song ngữ có nút ẩn**: mặc định chỉ hiện tiếng Anh, chạm mới hiện tiếng Việt.
 - **Nghe phát âm** từ và câu tiếng Anh bằng giọng en-GB của thiết bị.
@@ -83,7 +90,8 @@ Mọi thứ nằm trong các khối `<script>` của `index.html`:
 | `DATA` | ý chính, từ vựng, quiz của 35 bài học |
 | `EXTRA` | câu quiz bổ sung cho đủ bằng số ý chính |
 | `MM` | nhánh mindmap từng bài (`"Tiếng Anh\|Tiếng Việt"`) |
-| `DIA` | sơ đồ SVG minh hoạ |
+| `DIA` | sơ đồ tóm tắt của bài |
+| `IMG` | 30 hình minh hoạ chi tiết môn Science |
 | `EXT` | phần Mở rộng: đào sâu, ứng dụng, thử thách |
 | `EXAMS` | ba đề thi thử |
 | `PROG` | **thứ tự unit theo sách** — sửa ở đây nếu lớp dạy khác thứ tự |

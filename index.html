@@ -1787,7 +1787,7 @@ function vUnit(){
   const body=view.querySelector('#body');
   if(tab==="kp"){
     body.className="stack";
-    body.innerHTML = `${diagramFor(u.id)}
+    body.innerHTML = `${figuresHTML(u.id)}${diagramFor(u.id)}
       <div class="card" style="padding:12px 10px">
         <p class="label" style="margin:2px 0 8px 6px">Mindmap &middot; ${(MM[u.id]||[]).length} ý chính</p>
         ${mindmapSVG(u.id, u.t)}</div>
@@ -1926,7 +1926,7 @@ function vSession(){
     view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
       <div class="row"><span class="label">Chặng 2 &middot; Học kỹ</span><span class="spacer"></span>
         <span class="pill">${u.kp.length} ý chính</span></div>
-      ${diagramFor(u.id)}
+      ${figuresHTML(u.id)}${diagramFor(u.id)}
       <div class="card" style="padding:12px 10px">${mindmapSVG(u.id,u.t)}</div>
       <div class="stack-s">${u.kp.map((p,i)=>`<div class="kp"><div class="row" style="align-items:flex-start">
         <p class="en" style="flex:1">${i+1}. ${p.en}</p>${spk(p.en)}</div>
@@ -2736,7 +2736,598 @@ function vAdmin(){
 }
 </script>
 
+
+<style>
+.fig{background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow)}
+.fig .canvas{padding:14px 12px 6px; background:var(--card-2); border-bottom:1px solid var(--line)}
+.fig .cap{padding:11px 14px 13px}
+.fig .cap b{display:block; font-family:Literata,serif; font-size:14px; font-weight:600; line-height:1.4}
+.fig .cap span{display:block; font-size:12.5px; color:var(--ink-soft); margin-top:4px}
+.fig .cap .no{font-size:10.5px; font-weight:700; letter-spacing:.1em; color:var(--ac); text-transform:uppercase}
+</style>
+
 <script>
+/* Hình minh hoạ chi tiết cho môn Science — vẽ bằng SVG nội tuyến, chạy offline */
+const SV = 'style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg"';
+const IMG = {
+s1:[
+ {en:"The human heart, cut open", vi:"Quả tim bổ đôi — 4 ngăn, nửa trái có thành dày hơn vì phải bơm máu đi khắp cơ thể",
+  svg:`<svg viewBox="0 0 320 210" ${SV}>
+   <path d="M108 74 C82 96 82 140 104 166 C124 190 156 200 178 194 C214 184 236 150 234 114 C232 82 208 62 178 60 C154 58 126 60 108 74 Z" fill="#E9737A" stroke="#B1444C" stroke-width="2.5"/>
+   <path d="M168 62 C158 100 156 150 172 194" fill="none" stroke="#B1444C" stroke-width="3"/>
+   <path d="M104 122 C140 112 200 112 232 122" fill="none" stroke="#B1444C" stroke-width="2" stroke-dasharray="5 4"/>
+   <path d="M150 60 C150 34 128 26 112 34" fill="none" stroke="#5C7FC9" stroke-width="11" stroke-linecap="round"/>
+   <path d="M186 58 C196 28 224 24 240 40 C252 52 250 74 236 84" fill="none" stroke="#C0444C" stroke-width="11" stroke-linecap="round"/>
+   <path d="M120 66 C104 44 86 46 78 58" fill="none" stroke="#5C7FC9" stroke-width="9" stroke-linecap="round"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="118" y="104" text-anchor="middle" fill="#fff">RA</text>
+    <text x="200" y="104" text-anchor="middle" fill="#fff">LA</text>
+    <text x="126" y="156" text-anchor="middle" fill="#fff">RV</text>
+    <text x="200" y="160" text-anchor="middle" fill="#fff">LV</text>
+    <text x="4" y="34" fill="#5C7FC9">vena cava</text><text x="4" y="46" font-size="8.5" fill="var(--ink-faint)">máu về tim</text>
+    <text x="316" y="30" fill="#C0444C" text-anchor="end">aorta</text><text x="316" y="42" font-size="8" fill="var(--ink-faint)" text-anchor="end">đi nuôi cơ thể</text>
+    <text x="4" y="152" font-size="8.5" fill="var(--ink-soft)">nửa PHẢI</text><text x="4" y="164" font-size="8.5" fill="var(--ink-soft)">lên phổi</text>
+    <text x="316" y="152" font-size="8.5" fill="var(--ink-soft)" text-anchor="end">nửa TRÁI</text><text x="316" y="164" font-size="8.5" fill="var(--ink-soft)" text-anchor="end">thành dày hơn</text>
+    <text x="160" y="206" text-anchor="middle" font-size="9" fill="var(--ink-faint)">A = atrium (tâm nhĩ) &middot; V = ventricle (tâm thất)</text></g></svg>`},
+ {en:"What blood is made of", vi:"Một ống máu để lắng: huyết tương ở trên, bạch cầu và tiểu cầu ở giữa, hồng cầu lắng xuống đáy",
+  svg:`<svg viewBox="0 0 320 190" ${SV}>
+   <path d="M60 22 h44 v112 a22 22 0 0 1 -44 0 z" fill="#F6D96B" stroke="var(--ink-soft)" stroke-width="2"/>
+   <path d="M60 96 h44 v38 a22 22 0 0 1 -44 0 z" fill="#E0575F" stroke="none"/>
+   <rect x="60" y="88" width="44" height="8" fill="#F2F2F2"/>
+   <path d="M60 22 h44 v112 a22 22 0 0 1 -44 0 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+   <rect x="56" y="14" width="52" height="10" rx="4" fill="var(--ink-soft)"/>
+   <g stroke="var(--ink-faint)" stroke-width="1.2"><path d="M108 56 h34"/><path d="M108 92 h34"/><path d="M108 118 h34"/></g>
+   <g font-family="Lexend,sans-serif" font-size="10">
+    <text x="148" y="52" fill="var(--ink)">plasma 55%</text><text x="148" y="65" font-size="9" fill="var(--ink-soft)">huyết tương &mdash; phần lỏng</text>
+    <text x="148" y="88" fill="var(--ink)">white cells + platelets</text><text x="148" y="101" font-size="9" fill="var(--ink-soft)">chống bệnh và làm đông máu</text>
+    <text x="148" y="122" fill="var(--ink)">red cells 45%</text><text x="148" y="135" font-size="9" fill="var(--ink-soft)">hồng cầu &mdash; chở oxygen</text></g>
+   <g transform="translate(64,152)"><ellipse cx="16" cy="14" rx="16" ry="11" fill="#E0575F"/><ellipse cx="16" cy="14" rx="7" ry="4.5" fill="#B8434A"/>
+    <text x="40" y="18" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-soft)">hồng cầu lõm hai mặt</text></g></svg>`},
+ {en:"Taking your pulse", vi:"Đặt hai ngón tay lên cổ tay, đếm số nhịp trong 15 giây rồi nhân 4 ra số nhịp mỗi phút",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <path d="M40 118 C70 106 110 100 150 100 L150 62 C150 52 162 52 162 62 L162 96 L166 58 C166 48 178 48 178 58 L178 96 L184 62 C184 52 196 52 196 62 L196 98 L202 74 C202 64 214 64 214 74 L214 108 C214 134 192 148 168 148 L96 148 C66 148 44 138 40 118 Z" fill="#F2C9A8" stroke="#C79468" stroke-width="2.5"/>
+   <path d="M64 116 C82 108 104 104 128 103" fill="none" stroke="#C0444C" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round"/>
+   <ellipse cx="86" cy="112" rx="9" ry="13" transform="rotate(-18 86 112)" fill="#E8B48C" stroke="#C79468" stroke-width="2"/>
+   <ellipse cx="104" cy="108" rx="9" ry="13" transform="rotate(-18 104 108)" fill="#E8B48C" stroke="#C79468" stroke-width="2"/>
+   <g font-family="Lexend,sans-serif" font-size="10">
+    <text x="40" y="30" fill="var(--ink)">radial artery &middot; động mạch cổ tay</text>
+    <path d="M96 36 L108 96" stroke="var(--ink-faint)" stroke-width="1.2"/>
+    <text x="228" y="126" fill="var(--ink-soft)" font-size="9">bàn tay</text></g>
+   <g transform="translate(214,20)"><rect width="94" height="46" rx="10" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2"/>
+    <text x="47" y="21" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="700" fill="var(--ac)">18 &times; 4</text>
+    <text x="47" y="37" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">= 72 bpm</text></g></svg>`}],
+s10:[
+ {en:"The breathing system", vi:"Không khí đi từ mũi qua khí quản, chia vào hai phế quản rồi tới hai lá phổi. Phổi trái nhỏ hơn để nhường chỗ cho tim",
+  svg:`<svg viewBox="0 0 320 210" ${SV}>
+   <path d="M150 12 h20 v42 h-20 z" fill="#D8DEE8" stroke="var(--ink-soft)" stroke-width="2"/>
+   <g stroke="var(--ink-soft)" stroke-width="1.4"><path d="M150 20 h20"/><path d="M150 30 h20"/><path d="M150 40 h20"/></g>
+   <path d="M158 54 L118 76" stroke="#D8DEE8" stroke-width="9" stroke-linecap="round"/>
+   <path d="M162 54 L202 76" stroke="#D8DEE8" stroke-width="9" stroke-linecap="round"/>
+   <path d="M116 74 C82 82 70 118 78 150 C84 174 106 182 122 172 C136 162 138 120 132 92 C130 80 124 72 116 74 Z" fill="#F3B8BE" stroke="#C97A82" stroke-width="2.5"/>
+   <path d="M204 74 C242 82 256 120 248 152 C242 178 216 186 198 174 C182 162 180 118 188 90 C190 78 196 72 204 74 Z" fill="#F3B8BE" stroke="#C97A82" stroke-width="2.5"/>
+   <path d="M158 96 C150 120 150 150 158 172 C166 182 176 178 178 166 C182 140 178 110 170 92 Z" fill="#E9737A" stroke="#B1444C" stroke-width="2"/>
+   <path d="M74 186 C120 168 200 168 252 186" fill="none" stroke="#8FA0C0" stroke-width="6" stroke-linecap="round"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="186" y="30">trachea</text><text x="186" y="42" font-size="8.5" fill="var(--ink-faint)">khí quản</text>
+    <text x="214" y="64">bronchus</text><text x="214" y="76" font-size="8.5" fill="var(--ink-faint)">phế quản</text>
+    <text x="24" y="120">lung</text><text x="24" y="132" font-size="8.5" fill="var(--ink-faint)">phổi trái</text>
+    <text x="296" y="120" text-anchor="end">lung</text><text x="296" y="132" font-size="8.5" fill="var(--ink-faint)" text-anchor="end">phổi phải</text>
+    <text x="160" y="206" text-anchor="middle" font-size="9" fill="#8FA0C0">diaphragm &middot; cơ hoành</text>
+    <text x="196" y="150" font-size="8.5" fill="#B1444C">tim</text></g></svg>`},
+ {en:"Inside an alveolus", vi:"Oxygen từ túi khí đi vào mạch máu, carbon dioxide đi ngược lại ra ngoài. Thành mỏng một lớp tế bào nên khí qua rất nhanh",
+  svg:`<svg viewBox="0 0 320 190" ${SV}>
+   <path d="M60 30 L110 62" stroke="#D8DEE8" stroke-width="10" stroke-linecap="round"/>
+   <circle cx="132" cy="76" r="30" fill="#FDE8EA" stroke="#C97A82" stroke-width="2.5"/>
+   <circle cx="112" cy="126" r="26" fill="#FDE8EA" stroke="#C97A82" stroke-width="2.5"/>
+   <circle cx="176" cy="118" r="28" fill="#FDE8EA" stroke="#C97A82" stroke-width="2.5"/>
+   <path d="M228 26 C196 60 214 96 236 118 C256 140 242 168 214 172" fill="none" stroke="#5C7FC9" stroke-width="12" stroke-linecap="round"/>
+   <path d="M228 26 C196 60 214 96 236 118" fill="none" stroke="#C0444C" stroke-width="12" stroke-linecap="round" opacity="0"/>
+   <g stroke-linecap="round" stroke-width="2.5" fill="none">
+    <path d="M162 76 h44" stroke="#2E8B57"/><path d="M198 70 l8 6 -8 6" stroke="#2E8B57"/>
+    <path d="M206 140 h-42" stroke="#B1444C"/><path d="M170 134 l-8 6 8 6" stroke="#B1444C"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9.5">
+    <text x="30" y="26" fill="var(--ink)">bronchiole</text><text x="30" y="38" font-size="8.5" fill="var(--ink-faint)">ống dẫn khí nhỏ</text>
+    <text x="132" y="80" text-anchor="middle" fill="var(--ink)" font-size="10">alveoli</text>
+    <text x="132" y="92" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">phế nang</text>
+    <text x="212" y="66" fill="#2E8B57" font-size="9">O&#8322; vào máu</text>
+    <text x="212" y="158" fill="#B1444C" font-size="9">CO&#8322; ra ngoài</text>
+    <text x="286" y="100" text-anchor="end" fill="#5C7FC9" font-size="9">mao mạch</text>
+    <text x="160" y="186" text-anchor="middle" font-size="9" fill="var(--ink-faint)">Trải phẳng hết phế nang ra rộng bằng nửa sân tennis</text></g></svg>`},
+ {en:"Breathing in and breathing out", vi:"Hít vào: cơ hoành hạ xuống, lồng ngực nở, không khí tràn vào. Thở ra: cơ hoành nâng lên, đẩy khí ra ngoài",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <g><rect x="14" y="20" width="132" height="128" rx="16" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+    <path d="M80 30 v22" stroke="var(--ink-soft)" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="58" cy="82" rx="24" ry="30" fill="#F3B8BE" stroke="#C97A82" stroke-width="2"/>
+    <ellipse cx="104" cy="82" rx="24" ry="30" fill="#F3B8BE" stroke="#C97A82" stroke-width="2"/>
+    <path d="M28 124 C56 116 104 116 132 124" fill="none" stroke="#5C8FC9" stroke-width="6" stroke-linecap="round"/>
+    <path d="M80 8 v14" stroke="#2E8B57" stroke-width="3"/><path d="M74 16 l6 8 6 -8" fill="none" stroke="#2E8B57" stroke-width="3"/>
+    <text x="80" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">BREATHE IN &middot; hít vào</text></g>
+   <g><rect x="174" y="20" width="132" height="128" rx="16" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+    <path d="M240 30 v22" stroke="var(--ink-soft)" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="218" cy="80" rx="19" ry="22" fill="#F3B8BE" stroke="#C97A82" stroke-width="2"/>
+    <ellipse cx="262" cy="80" rx="19" ry="22" fill="#F3B8BE" stroke="#C97A82" stroke-width="2"/>
+    <path d="M188 116 C216 130 264 130 292 116" fill="none" stroke="#5C8FC9" stroke-width="6" stroke-linecap="round"/>
+    <path d="M240 22 v-14" stroke="#B1444C" stroke-width="3"/><path d="M234 14 l6 -8 6 8" fill="none" stroke="#B1444C" stroke-width="3"/>
+    <text x="240" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">BREATHE OUT &middot; thở ra</text></g></svg>`}],
+s11:[
+ {en:"The journey of food", vi:"Miệng → thực quản → dạ dày → ruột non → ruột già. Cả đường đi dài khoảng 9 mét",
+  svg:`<svg viewBox="0 0 320 230" ${SV}>
+   <ellipse cx="160" cy="22" rx="26" ry="15" fill="#F2C9A8" stroke="#C79468" stroke-width="2"/>
+   <path d="M160 36 v34" stroke="#E4B7C0" stroke-width="13" stroke-linecap="round"/>
+   <path d="M150 72 C120 78 112 104 126 122 C142 142 172 140 180 122 C188 104 184 82 168 74 Z" fill="#E9A6AE" stroke="#B87882" stroke-width="2.5"/>
+   <path d="M150 138 C110 146 100 190 138 200 C176 210 214 196 210 172 C206 150 178 142 152 150" fill="none" stroke="#F0B48C" stroke-width="15" stroke-linecap="round"/>
+   <path d="M96 196 C88 152 96 128 108 122" fill="none" stroke="#C99A6E" stroke-width="13" stroke-linecap="round"/>
+   <path d="M96 196 C120 214 190 216 226 200 C244 190 240 154 226 140" fill="none" stroke="#C99A6E" stroke-width="13" stroke-linecap="round"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="198" y="20">mouth</text><text x="198" y="31" font-size="8.5" fill="var(--ink-faint)">miệng &middot; răng nhai</text>
+    <text x="182" y="56">oesophagus</text><text x="182" y="67" font-size="8.5" fill="var(--ink-faint)">thực quản</text>
+    <text x="66" y="98">stomach</text><text x="66" y="109" font-size="8.5" fill="var(--ink-faint)">dạ dày &middot; axit</text>
+    <path d="M104 96 L128 100" stroke="var(--ink-faint)" stroke-width="1.2"/>
+    <text x="238" y="176" text-anchor="end" font-size="9">small intestine</text><text x="238" y="187" font-size="8.5" fill="var(--ink-faint)" text-anchor="end">ruột non &middot; hấp thụ</text>
+    <text x="40" y="164">large</text><text x="40" y="175" font-size="8.5" fill="var(--ink-faint)">ruột già</text>
+    <text x="160" y="224" text-anchor="middle" font-size="9" fill="var(--ink-faint)">Ruột non dài khoảng 6 m, cuộn lại vừa trong bụng</text></g></svg>`},
+ {en:"Why the small intestine is so good at absorbing", vi:"Thành ruột phủ đầy nhung mao. Nhờ vậy diện tích hấp thụ tăng lên rất nhiều lần trong cùng chiều dài ruột",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <path d="M20 30 C60 22 120 22 160 30 L160 132 C120 140 60 140 20 132 Z" fill="#FBE3D2" stroke="#C99A6E" stroke-width="2"/>
+   <g fill="#F0B48C" stroke="#C99A6E" stroke-width="1.4">
+   <path d="M34 30 q7 -18 14 0 v-2 q-7 22 -14 0 z"/><path d="M56 28 q7 -20 14 0 q-7 24 -14 0 z"/>
+   <path d="M78 26 q7 -20 14 0 q-7 24 -14 0 z"/><path d="M100 26 q7 -20 14 0 q-7 24 -14 0 z"/>
+   <path d="M122 28 q7 -20 14 0 q-7 24 -14 0 z"/><path d="M144 30 q7 -20 14 0 q-7 24 -14 0 z"/></g>
+   <g stroke="#C0444C" stroke-width="1.6" fill="none"><path d="M41 20 v-12"/><path d="M63 16 v-12"/><path d="M85 14 v-12"/><path d="M107 14 v-12"/><path d="M129 16 v-12"/><path d="M151 18 v-12"/></g>
+   <circle cx="240" cy="72" r="52" fill="none" stroke="var(--ink-faint)" stroke-width="1.5" stroke-dasharray="4 4"/>
+   <path d="M196 96 q20 -60 44 -58 q26 -2 44 58 z" fill="#F0B48C" stroke="#C99A6E" stroke-width="2"/>
+   <path d="M240 38 v52" stroke="#C0444C" stroke-width="3"/>
+   <path d="M228 96 q12 -20 24 0" fill="none" stroke="#5C7FC9" stroke-width="3"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5">
+    <text x="90" y="156" text-anchor="middle" fill="var(--ink)">wall of the small intestine &middot; thành ruột non</text>
+    <text x="240" y="30" text-anchor="middle" fill="var(--ink)" font-size="10">villus &middot; nhung mao</text>
+    <text x="240" y="120" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">mạch máu nhận chất dinh dưỡng</text></g></svg>`},
+ {en:"What the kidneys do", vi:"Hai quả thận lọc máu suốt ngày đêm, giữ lại chất cần và thải chất thừa cùng nước ra ngoài thành nước tiểu",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <path d="M96 30 C70 30 58 52 58 76 C58 102 72 120 94 120 C104 120 108 112 104 102 C98 88 98 62 104 48 C108 38 104 30 96 30 Z" fill="#A9505A" stroke="#7C3A42" stroke-width="2.5"/>
+   <path d="M224 30 C250 30 262 52 262 76 C262 102 248 120 226 120 C216 120 212 112 216 102 C222 88 222 62 216 48 C212 38 216 30 224 30 Z" fill="#A9505A" stroke="#7C3A42" stroke-width="2.5"/>
+   <path d="M104 74 h56" stroke="#E8C56A" stroke-width="6" stroke-linecap="round"/>
+   <path d="M216 74 h-56" stroke="#E8C56A" stroke-width="6" stroke-linecap="round"/>
+   <path d="M160 74 v52" stroke="#E8C56A" stroke-width="6" stroke-linecap="round"/>
+   <path d="M136 126 h48 a20 20 0 0 1 0 32 h-48 a20 20 0 0 1 0 -32 z" fill="#F4DE95" stroke="#B79B3E" stroke-width="2.5"/>
+   <path d="M78 46 C64 40 52 46 48 56" fill="none" stroke="#C0444C" stroke-width="5" stroke-linecap="round"/>
+   <path d="M242 46 C256 40 268 46 272 56" fill="none" stroke="#5C7FC9" stroke-width="5" stroke-linecap="round"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="30" y="72">kidney</text><text x="30" y="84" font-size="8.5" fill="var(--ink-faint)">thận</text>
+    <text x="292" y="72" text-anchor="end">kidney</text><text x="292" y="84" font-size="8.5" fill="var(--ink-faint)" text-anchor="end">thận</text>
+    <text x="44" y="40" font-size="8.5" fill="#C0444C">máu bẩn vào</text>
+    <text x="276" y="40" font-size="8.5" fill="#5C7FC9" text-anchor="end">máu sạch ra</text>
+    <text x="160" y="150" text-anchor="middle" font-size="10">bladder &middot; bàng quang</text>
+    <text x="160" y="176" text-anchor="middle" font-size="9" fill="var(--ink-faint)">Uống đủ nước giúp thận làm việc nhẹ nhàng hơn</text></g></svg>`}]
+};
+</script>
+
+<script>
+Object.assign(IMG, {
+s2:[
+ {en:"Ice, water and steam — a reversible change", vi:"Đun nóng thì nước đá tan rồi bay hơi; làm lạnh thì ngưng tụ rồi đóng băng trở lại. Vẫn là nước, không có chất mới",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <g><rect x="14" y="46" width="76" height="62" rx="6" fill="#DCEBF5" stroke="#8FB6CE" stroke-width="2"/>
+    <g fill="#BEDCEE" stroke="#8FB6CE" stroke-width="1.5"><rect x="26" y="62" width="22" height="22" rx="3"/><rect x="52" y="72" width="22" height="22" rx="3"/><rect x="40" y="84" width="22" height="22" rx="3" opacity=".8"/></g>
+    <text x="52" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">ICE &middot; rắn</text></g>
+   <g><rect x="122" y="46" width="76" height="62" rx="6" fill="#DCEBF5" stroke="#8FB6CE" stroke-width="2"/>
+    <path d="M122 74 h76 v28 a6 6 0 0 1 -6 6 h-64 a6 6 0 0 1 -6 -6 z" fill="#78B4DC"/>
+    <path d="M122 74 q10 -6 19 0 t19 0 t19 0 t19 0" fill="none" stroke="#4E8FBF" stroke-width="2"/>
+    <text x="160" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">WATER &middot; lỏng</text></g>
+   <g><rect x="230" y="46" width="76" height="62" rx="6" fill="#DCEBF5" stroke="#8FB6CE" stroke-width="2"/>
+    <g fill="none" stroke="#A8C6D8" stroke-width="2.5" stroke-linecap="round">
+     <path d="M244 96 q8 -12 0 -22 q-8 -10 0 -18"/><path d="M266 100 q8 -12 0 -22 q-8 -10 0 -18"/><path d="M288 96 q8 -12 0 -22 q-8 -10 0 -18"/></g>
+    <text x="268" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">STEAM &middot; khí</text></g>
+   <g stroke="#C0444C" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <path d="M92 60 h28"/><path d="M112 54 l8 6 -8 6"/><path d="M200 60 h28"/><path d="M220 54 l8 6 -8 6"/></g>
+   <g stroke="#4E8FBF" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <path d="M228 96 h-28"/><path d="M208 90 l-8 6 8 6"/><path d="M120 96 h-28"/><path d="M100 90 l-8 6 8 6"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9">
+    <text x="106" y="42" text-anchor="middle" fill="#C0444C">nóng lên</text><text x="214" y="42" text-anchor="middle" fill="#C0444C">nóng lên</text>
+    <text x="160" y="172" text-anchor="middle" fill="#4E8FBF">làm lạnh thì quay ngược lại &mdash; REVERSIBLE</text></g></svg>`},
+ {en:"Three irreversible changes", vi:"Đốt, nấu và gỉ sét đều tạo ra chất mới: tro, trứng chín, lớp gỉ nâu. Không cách nào quay lại được",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <g><rect x="10" y="16" width="94" height="112" rx="12" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="2"/>
+    <rect x="50" y="60" width="8" height="50" rx="3" fill="#C79468"/>
+    <path d="M54 60 c-14 -12 -4 -30 0 -36 c6 10 16 22 0 36 z" fill="#F2A03C" stroke="#D9761F" stroke-width="1.5"/>
+    <path d="M54 52 c-6 -6 -2 -14 0 -18 c3 5 8 11 0 18 z" fill="#FBE08A"/>
+    <text x="57" y="124" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--bad)">burning &middot; đốt</text></g>
+   <g><rect x="113" y="16" width="94" height="112" rx="12" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="2"/>
+    <ellipse cx="160" cy="80" rx="38" ry="26" fill="#FFFDF6" stroke="#DCD6C2" stroke-width="2"/>
+    <circle cx="160" cy="78" r="14" fill="#F5B841"/>
+    <path d="M126 100 h68" stroke="#C0C0C8" stroke-width="4" stroke-linecap="round"/>
+    <text x="160" y="124" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--bad)">cooking &middot; nấu chín</text></g>
+   <g><rect x="216" y="16" width="94" height="112" rx="12" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="2"/>
+    <path d="M244 46 l38 38" stroke="#9A6A3C" stroke-width="11" stroke-linecap="round"/>
+    <path d="M244 46 l38 38" stroke="#C08040" stroke-width="5" stroke-linecap="round" stroke-dasharray="3 6"/>
+    <circle cx="240" cy="42" r="8" fill="#9A6A3C"/>
+    <text x="263" y="124" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--bad)">rusting &middot; gỉ sét</text></g>
+   <text x="160" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">Dấu hiệu: có khí, đổi màu, toả nhiệt hoặc phát sáng &rarr; đã có chất mới</text>
+   <text x="160" y="166" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">IRREVERSIBLE &mdash; không thuận nghịch</text></svg>`},
+ {en:"Getting the salt back out of salty water", vi:"Muối tan hết nên lọc không giữ lại được. Đun cho nước bay hơi thì muối kết tinh lại trong đĩa",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <path d="M24 40 h60 v46 a30 30 0 0 1 -60 0 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <path d="M24 62 h60 v24 a30 30 0 0 1 -60 0 z" fill="#BFD9E8"/>
+   <g fill="#fff" opacity=".9"><circle cx="40" cy="74" r="2"/><circle cx="56" cy="80" r="2"/><circle cx="70" cy="70" r="2"/></g>
+   <text x="54" y="132" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">nước muối</text>
+   <path d="M96 82 h30" stroke="var(--ac)" stroke-width="2.5" fill="none"/><path d="M118 76 l8 6 -8 6" fill="none" stroke="var(--ac)" stroke-width="2.5"/>
+   <ellipse cx="176" cy="80" rx="42" ry="12" fill="#DDE6EE" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <path d="M134 80 a42 12 0 0 0 84 0" fill="#DDE6EE" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <g fill="none" stroke="#A8C6D8" stroke-width="2.5" stroke-linecap="round">
+    <path d="M158 62 q8 -12 0 -22"/><path d="M176 58 q8 -12 0 -22"/><path d="M194 62 q8 -12 0 -22"/></g>
+   <path d="M162 108 h28" stroke="#F2A03C" stroke-width="4" stroke-linecap="round"/>
+   <path d="M170 108 c-8 -8 -2 -16 0 -20 c4 6 10 12 0 20 z" fill="#F2A03C"/>
+   <path d="M186 108 c-8 -8 -2 -16 0 -20 c4 6 10 12 0 20 z" fill="#F2A03C"/>
+   <text x="176" y="132" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">đun cho bay hơi</text>
+   <path d="M226 82 h30" stroke="var(--ac)" stroke-width="2.5" fill="none"/><path d="M248 76 l8 6 -8 6" fill="none" stroke="var(--ac)" stroke-width="2.5"/>
+   <ellipse cx="286" cy="86" rx="26" ry="9" fill="#DDE6EE" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <g fill="#fff" stroke="var(--ink-faint)" stroke-width="1"><rect x="274" y="76" width="7" height="7"/><rect x="284" y="79" width="7" height="7"/><rect x="294" y="75" width="7" height="7"/></g>
+   <text x="286" y="132" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--good)">muối trở lại</text>
+   <text x="160" y="160" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Lấy lại được chất ban đầu nên hoà tan là biến đổi THUẬN NGHỊCH</text></svg>`}],
+s3:[
+ {en:"The five groups of vertebrates", vi:"Năm nhóm động vật có xương sống. Nhớ đặc điểm da và cách sinh sản là phân loại được ngay",
+  svg:`<svg viewBox="0 0 320 150" ${SV}>
+   <g transform="translate(6,18)"><path d="M8 30 q22 -20 44 0 q-22 20 -44 0 z" fill="#6FB2D2" stroke="#3D7FA0" stroke-width="2"/><path d="M52 30 l14 -10 v20 z" fill="#6FB2D2" stroke="#3D7FA0" stroke-width="2"/><circle cx="20" cy="27" r="2.5" fill="#173B4C"/>
+    <text x="34" y="60" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">FISH</text><text x="34" y="72" text-anchor="middle" font-size="8" fill="var(--ink-faint)" font-family="Lexend,sans-serif">vảy ướt</text></g>
+   <g transform="translate(66,18)"><ellipse cx="34" cy="30" rx="24" ry="17" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/><circle cx="24" cy="19" r="7" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/><circle cx="44" cy="19" r="7" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/><circle cx="24" cy="19" r="2.5" fill="#173B4C"/><circle cx="44" cy="19" r="2.5" fill="#173B4C"/>
+    <text x="34" y="60" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">AMPHIBIAN</text><text x="34" y="72" text-anchor="middle" font-size="8" fill="var(--ink-faint)" font-family="Lexend,sans-serif">da ẩm</text></g>
+   <g transform="translate(126,18)"><path d="M10 34 q24 -16 48 -2 l10 4 -10 4 q-24 12 -48 -2 z" fill="#9BC46A" stroke="#6E9440" stroke-width="2"/><circle cx="18" cy="32" r="2.5" fill="#173B4C"/><path d="M22 40 v8 M36 42 v8 M50 40 v8" stroke="#6E9440" stroke-width="3" stroke-linecap="round"/>
+    <text x="34" y="60" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">REPTILE</text><text x="34" y="72" text-anchor="middle" font-size="8" fill="var(--ink-faint)" font-family="Lexend,sans-serif">vảy khô</text></g>
+   <g transform="translate(190,18)"><ellipse cx="32" cy="32" rx="20" ry="14" fill="#E8B04B" stroke="#B57F22" stroke-width="2"/><circle cx="18" cy="22" r="8" fill="#E8B04B" stroke="#B57F22" stroke-width="2"/><path d="M10 22 l-8 3 8 3 z" fill="#D97A2B"/><circle cx="16" cy="20" r="2" fill="#173B4C"/><path d="M52 32 l14 -6 -6 12 z" fill="#D9A03C"/>
+    <text x="34" y="60" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">BIRD</text><text x="34" y="72" text-anchor="middle" font-size="8" fill="var(--ink-faint)" font-family="Lexend,sans-serif">lông vũ</text></g>
+   <g transform="translate(252,18)"><ellipse cx="32" cy="34" rx="22" ry="14" fill="#C79468" stroke="#96683F" stroke-width="2"/><circle cx="52" cy="24" r="10" fill="#C79468" stroke="#96683F" stroke-width="2"/><path d="M46 16 l-2 -8 8 4 z M58 16 l2 -8 -8 4 z" fill="#C79468" stroke="#96683F" stroke-width="1.5"/><circle cx="50" cy="24" r="2" fill="#173B4C"/><path d="M14 40 q-12 4 -8 14" fill="none" stroke="#96683F" stroke-width="3"/>
+    <text x="34" y="60" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">MAMMAL</text><text x="34" y="72" text-anchor="middle" font-size="8" fill="var(--ink-faint)" font-family="Lexend,sans-serif">lông mao</text></g>
+   <text x="160" y="146" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Cả năm nhóm đều có xương sống &middot; vertebrates</text></svg>`},
+ {en:"A food web in a field", vi:"Mũi tên luôn chỉ về con vật ăn. Mất một loài là cả lưới thay đổi theo",
+  svg:`<svg viewBox="0 0 320 190" ${SV}>
+   <g stroke="var(--ac)" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8">
+    <path d="M64 130 L120 96"/><path d="M112 100 l10 -5 -2 10"/>
+    <path d="M64 130 L140 150"/><path d="M132 145 l10 5 -10 4"/>
+    <path d="M160 92 L214 66"/><path d="M206 70 l10 -5 -2 10"/>
+    <path d="M172 150 L216 78"/><path d="M212 88 l6 -11 2 11"/>
+    <path d="M242 62 L264 110"/><path d="M256 100 l10 12 -12 1"/></g>
+   <g><ellipse cx="46" cy="146" rx="34" ry="16" fill="#8FC46A" stroke="#5E9440" stroke-width="2"/>
+    <path d="M28 140 v-16 M40 138 v-20 M52 140 v-18 M64 142 v-14" stroke="#5E9440" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="46" y="178" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">grass &middot; cỏ</text></g>
+   <g><ellipse cx="140" cy="88" rx="20" ry="9" fill="#7FA83C" stroke="#5A7A22" stroke-width="2"/><circle cx="124" cy="84" r="6" fill="#7FA83C" stroke="#5A7A22" stroke-width="2"/>
+    <path d="M144 84 q12 -12 20 -4" fill="none" stroke="#5A7A22" stroke-width="2"/><path d="M136 96 v10 M150 96 v10" stroke="#5A7A22" stroke-width="2"/>
+    <text x="140" y="70" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">grasshopper</text></g>
+   <g><ellipse cx="158" cy="152" rx="22" ry="15" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/><circle cx="149" cy="142" r="6" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/><circle cx="167" cy="142" r="6" fill="#7FBF6A" stroke="#4F8C3E" stroke-width="2"/>
+    <text x="158" y="182" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">frog &middot; ếch</text></g>
+   <g><path d="M206 66 q22 -18 44 -4 q-14 14 -34 10 q-6 -2 -10 -6 z" fill="#B58F3C" stroke="#7E6120" stroke-width="2"/><circle cx="212" cy="64" r="2" fill="#173B4C"/>
+    <text x="232" y="46" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">snake &middot; rắn</text></g>
+   <g><ellipse cx="278" cy="126" rx="20" ry="14" fill="#8C6B4A" stroke="#5E4630" stroke-width="2"/><circle cx="264" cy="116" r="8" fill="#A88055" stroke="#5E4630" stroke-width="2"/><path d="M256 116 l-8 3 8 3 z" fill="#E0A63C"/><circle cx="262" cy="114" r="2" fill="#173B4C"/>
+    <text x="278" y="156" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">hawk &middot; diều hâu</text></g>
+   <text x="160" y="18" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Mũi tên = chiều năng lượng truyền đi, luôn chỉ VỀ con ăn</text></svg>`},
+ {en:"Two animals, two habitats", vi:"Gấu bắc cực có lông dày và mỡ dày để giữ ấm; lạc đà có bướu tích mỡ và lông mi dài chắn cát",
+  svg:`<svg viewBox="0 0 320 160" ${SV}>
+   <g><rect x="8" y="12" width="146" height="122" rx="12" fill="#DDEEF6" stroke="#8FB6CE" stroke-width="2"/>
+    <path d="M8 106 q36 -18 72 -4 q38 14 74 0 v28 a12 12 0 0 1 -12 12 h-122 a12 12 0 0 1 -12 -12 z" fill="#F4FAFD"/>
+    <ellipse cx="76" cy="86" rx="40" ry="24" fill="#FBFBF6" stroke="#C9CDBE" stroke-width="2"/>
+    <circle cx="42" cy="70" r="15" fill="#FBFBF6" stroke="#C9CDBE" stroke-width="2"/>
+    <circle cx="34" cy="58" r="5" fill="#FBFBF6" stroke="#C9CDBE" stroke-width="2"/><circle cx="50" cy="56" r="5" fill="#FBFBF6" stroke="#C9CDBE" stroke-width="2"/>
+    <circle cx="38" cy="68" r="2" fill="#3A3A3A"/><ellipse cx="30" cy="74" rx="4" ry="3" fill="#3A3A3A"/>
+    <path d="M52 108 v14 M76 110 v12 M100 108 v14" stroke="#C9CDBE" stroke-width="7" stroke-linecap="round"/>
+    <text x="81" y="150" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">lông dày, mỡ dày &middot; xứ lạnh</text></g>
+   <g><rect x="166" y="12" width="146" height="122" rx="12" fill="#FBF0DC" stroke="#D9B267" stroke-width="2"/>
+    <path d="M166 108 q40 -16 72 -2 q34 14 74 -2 v18 a12 12 0 0 1 -12 12 h-122 a12 12 0 0 1 -12 -12 z" fill="#F0DEB0"/>
+    <ellipse cx="240" cy="82" rx="40" ry="20" fill="#D9AE6E" stroke="#A87C3C" stroke-width="2"/>
+    <path d="M216 66 q12 -20 24 0 z" fill="#D9AE6E" stroke="#A87C3C" stroke-width="2"/>
+    <path d="M246 64 q13 -22 26 0 z" fill="#D9AE6E" stroke="#A87C3C" stroke-width="2"/>
+    <path d="M200 76 q-14 -6 -16 -22 q-2 -8 6 -8 q8 0 8 10 q0 10 6 14 z" fill="#D9AE6E" stroke="#A87C3C" stroke-width="2"/>
+    <circle cx="190" cy="52" r="2" fill="#3A3A3A"/>
+    <path d="M216 100 v18 M240 102 v16 M266 100 v18" stroke="#A87C3C" stroke-width="6" stroke-linecap="round"/>
+    <text x="239" y="150" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">bướu tích mỡ &middot; sa mạc</text></g></svg>`}]
+});
+</script>
+
+<script>
+Object.assign(IMG, {
+s4:[
+ {en:"The two temperatures to remember", vi:"Nước đá tan ở 0°C, nước sôi ở 100°C. Hai mốc này gần như đề nào cũng hỏi",
+  svg:`<svg viewBox="0 0 320 200" ${SV}>
+   <rect x="140" y="14" width="26" height="150" rx="13" fill="#EEF2F6" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <circle cx="153" cy="172" r="18" fill="#D9484F" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <rect x="147" y="60" width="12" height="104" fill="#D9484F"/>
+   <g stroke="var(--ink-soft)" stroke-width="1.6">
+    <path d="M166 56 h14"/><path d="M166 86 h9"/><path d="M166 116 h14"/><path d="M166 146 h9"/></g>
+   <g font-family="JetBrains Mono,monospace" font-size="11" fill="var(--ink)">
+    <text x="186" y="60">100&deg;C</text><text x="186" y="120">0&deg;C</text></g>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink-soft)">
+    <text x="186" y="74">nước sôi &middot; boiling</text><text x="186" y="134">nước đá tan &middot; melting</text></g>
+   <g fill="none" stroke="#A8C6D8" stroke-width="2.5" stroke-linecap="round">
+    <path d="M62 54 q8 -12 0 -22 q-8 -10 0 -18"/><path d="M84 50 q8 -12 0 -22 q-8 -10 0 -18"/></g>
+   <text x="72" y="72" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">GAS</text>
+   <path d="M40 92 h64 v36 a6 6 0 0 1 -6 6 h-52 a6 6 0 0 1 -6 -6 z" fill="#78B4DC" stroke="#4E8FBF" stroke-width="2"/>
+   <text x="72" y="116" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="#fff">LIQUID</text>
+   <g fill="#BEDCEE" stroke="#8FB6CE" stroke-width="1.5"><rect x="46" y="148" width="20" height="20" rx="3"/><rect x="70" y="152" width="20" height="20" rx="3"/></g>
+   <text x="72" y="192" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">SOLID</text>
+   <text x="253" y="168" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Càng nóng, hạt càng<tspan x="253" dy="12">chuyển động nhanh</tspan></text></svg>`},
+ {en:"Sugar dissolves faster in hot water", vi:"Cùng một thìa đường: cốc nước nóng tan hết trước vì các hạt chuyển động nhanh hơn. Khuấy còn nhanh hơn nữa",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <g><path d="M30 44 h84 l-8 92 a10 10 0 0 1 -10 9 h-48 a10 10 0 0 1 -10 -9 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <path d="M34 82 h76 l-6 54 a10 10 0 0 1 -10 9 h-44 a10 10 0 0 1 -10 -9 z" fill="#F4C9A0" opacity=".8"/>
+    <g fill="none" stroke="#E0A47A" stroke-width="2" stroke-linecap="round"><path d="M56 36 q6 -10 0 -18"/><path d="M78 32 q6 -10 0 -18"/></g>
+    <path d="M92 46 v-16" stroke="#B8B8C0" stroke-width="4" stroke-linecap="round"/>
+    <text x="72" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--bad)">NƯỚC NÓNG</text>
+    <text x="72" y="178" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">tan hết sau 30 giây</text></g>
+   <g><path d="M206 44 h84 l-8 92 a10 10 0 0 1 -10 9 h-48 a10 10 0 0 1 -10 -9 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <path d="M210 82 h76 l-6 54 a10 10 0 0 1 -10 9 h-44 a10 10 0 0 1 -10 -9 z" fill="#CFE3F0" opacity=".9"/>
+    <g fill="#fff" stroke="#9FB8CC" stroke-width="1"><rect x="230" y="128" width="8" height="8"/><rect x="242" y="132" width="8" height="8"/><rect x="254" y="128" width="8" height="8"/><rect x="264" y="133" width="8" height="8"/></g>
+    <text x="248" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#4E8FBF">NƯỚC LẠNH</text>
+    <text x="248" y="178" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">đường còn ở đáy</text></g>
+   <g font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">
+    <text x="160" y="26" text-anchor="middle">Fair test: cùng lượng nước, cùng lượng đường, chỉ khác nhiệt độ</text></g></svg>`}],
+s5:[
+ {en:"A forcemeter measures force in newtons", vi:"Treo vật vào lực kế, lò xo giãn ra và kim chỉ số niutơn. Một bạn 30 kg có trọng lượng khoảng 300 N",
+  svg:`<svg viewBox="0 0 320 200" ${SV}>
+   <path d="M150 8 v10" stroke="var(--ink-soft)" stroke-width="4"/><circle cx="150" cy="8" r="7" fill="none" stroke="var(--ink-soft)" stroke-width="3"/>
+   <rect x="126" y="18" width="48" height="112" rx="8" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <path d="M150 26 l-9 8 18 8 -18 8 18 8 -18 8 18 8 -18 8 9 8" fill="none" stroke="#8FA0C0" stroke-width="2.5"/>
+   <g stroke="var(--ink-soft)" stroke-width="1.4">
+    <path d="M126 40 h10"/><path d="M126 58 h16"/><path d="M126 76 h10"/><path d="M126 94 h16"/><path d="M126 112 h10"/></g>
+   <g font-family="JetBrains Mono,monospace" font-size="8" fill="var(--ink-soft)">
+    <text x="112" y="43">0</text><text x="112" y="61">2</text><text x="112" y="79">4</text><text x="112" y="97">6</text><text x="110" y="115">8</text></g>
+   <path d="M142 94 h32" stroke="#D9484F" stroke-width="3"/>
+   <text x="184" y="98" font-family="JetBrains Mono,monospace" font-size="14" font-weight="700" fill="#D9484F">6 N</text>
+   <path d="M150 130 v14" stroke="var(--ink-soft)" stroke-width="3"/>
+   <path d="M124 144 h52 l10 42 h-72 z" fill="#C79468" stroke="#96683F" stroke-width="2.5"/>
+   <text x="150" y="172" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#fff">600 g</text>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="230" y="40">forcemeter</text><text x="230" y="53" font-size="8.5" fill="var(--ink-faint)">lực kế lò xo</text>
+    <text x="230" y="140">mass 600 g</text><text x="230" y="153" font-size="8.5" fill="var(--ink-faint)">khối lượng &rarr; kg</text>
+    <text x="230" y="170" fill="#D9484F">weight 6 N</text><text x="230" y="183" font-size="8.5" fill="var(--ink-faint)">trọng lượng &rarr; N</text></g></svg>`},
+ {en:"Why a parachute slows you down", vi:"Dù có diện tích lớn nên lực cản không khí rất mạnh, cân bằng dần với trọng lực. Quả bóng nhỏ thì cản ít nên rơi nhanh",
+  svg:`<svg viewBox="0 0 320 200" ${SV}>
+   <g><path d="M28 48 a54 40 0 0 1 108 0 q-54 16 -108 0 z" fill="#E86A5A" stroke="#B14434" stroke-width="2.5"/>
+    <path d="M64 50 a54 40 0 0 1 0 -30 M100 50 a54 40 0 0 0 0 -30" fill="none" stroke="#B14434" stroke-width="1.5"/>
+    <path d="M30 50 L78 98 M64 56 L78 98 M100 56 L78 98 M134 50 L78 98" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/>
+    <circle cx="78" cy="108" r="11" fill="#F2C9A8" stroke="#C79468" stroke-width="2"/>
+    <path d="M78 119 v20 M70 148 l8 -9 8 9" fill="none" stroke="#5C7FC9" stroke-width="4" stroke-linecap="round"/>
+    <g stroke="#2E8B57" stroke-width="3" fill="none" stroke-linecap="round">
+     <path d="M40 90 v-18"/><path d="M34 78 l6 -8 6 8"/><path d="M118 90 v-18"/><path d="M112 78 l6 -8 6 8"/></g>
+    <path d="M78 158 v20" stroke="#D9484F" stroke-width="3"/><path d="M72 172 l6 8 6 -8" fill="none" stroke="#D9484F" stroke-width="3"/>
+    <text x="78" y="194" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">rơi chậm &middot; lực cân bằng</text></g>
+   <line x1="160" y1="20" x2="160" y2="180" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="5 5"/>
+   <g><circle cx="240" cy="70" r="20" fill="#5C7FC9" stroke="#3B5A9A" stroke-width="2.5"/>
+    <g stroke="#2E8B57" stroke-width="3" fill="none" stroke-linecap="round">
+     <path d="M240 40 v-12"/><path d="M234 34 l6 -8 6 8"/></g>
+    <path d="M240 96 v56" stroke="#D9484F" stroke-width="4"/><path d="M232 144 l8 10 8 -10" fill="none" stroke="#D9484F" stroke-width="4"/>
+    <text x="240" y="176" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">rơi nhanh &middot; cản ít</text>
+    <text x="240" y="194" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">mũi tên xanh: lực cản không khí</text></g></svg>`}],
+s6:[
+ {en:"How a shadow is made", vi:"Ánh sáng đi thẳng nên bị vật cản chặn lại, tạo vùng tối phía sau đúng hình dạng vật. Đưa vật lại gần đèn thì bóng to ra",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <rect x="12" y="66" width="46" height="26" rx="6" fill="#4A4A52" stroke="#2E2E34" stroke-width="2"/>
+   <path d="M58 62 l14 -8 v50 l-14 -8 z" fill="#8A8A94" stroke="#2E2E34" stroke-width="2"/>
+   <circle cx="66" cy="79" r="6" fill="#FBE08A"/>
+   <g stroke="#F2C94C" stroke-width="1.8" opacity=".85">
+    <path d="M74 79 L150 34"/><path d="M74 79 L150 124"/><path d="M74 79 L150 60"/><path d="M74 79 L150 100"/></g>
+   <g><ellipse cx="164" cy="86" rx="16" ry="24" fill="#7A5C3E" stroke="#4E3A26" stroke-width="2"/>
+    <circle cx="164" cy="56" r="12" fill="#8C6B4A" stroke="#4E3A26" stroke-width="2"/>
+    <path d="M155 47 l-3 -10 9 5 z M173 47 l3 -10 -9 5 z" fill="#8C6B4A" stroke="#4E3A26" stroke-width="1.5"/>
+    <path d="M180 96 q14 10 8 24" fill="none" stroke="#4E3A26" stroke-width="3"/></g>
+   <g stroke="#F2C94C" stroke-width="1.8" opacity=".55">
+    <path d="M150 34 L262 14"/><path d="M150 124 L262 152"/></g>
+   <rect x="262" y="10" width="48" height="150" rx="4" fill="var(--card-2)" stroke="var(--line)" stroke-width="2"/>
+   <path d="M266 26 h40 v118 h-40 z" fill="#3A4250" opacity=".78"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="34" y="112" text-anchor="middle">torch &middot; đèn</text>
+    <text x="164" y="136" text-anchor="middle">opaque object</text><text x="164" y="148" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">vật cản sáng</text>
+    <text x="286" y="86" text-anchor="middle" fill="#fff" font-size="10">SHADOW</text><text x="286" y="99" text-anchor="middle" fill="#fff" font-size="8.5">bóng</text>
+    <text x="160" y="172" text-anchor="middle" font-size="9" fill="var(--ink-faint)">Ánh sáng truyền theo đường thẳng &mdash; light travels in straight lines</text></g></svg>`},
+ {en:"A straw that looks broken, and a rainbow", vi:"Ánh sáng bị bẻ cong khi đi từ nước ra không khí nên ống hút trông như gãy. Lăng kính tách ánh sáng trắng thành dải bảy màu",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <g><path d="M34 40 h72 l-6 106 a10 10 0 0 1 -10 9 h-40 a10 10 0 0 1 -10 -9 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <path d="M37 76 h66 l-5 70 a10 10 0 0 1 -10 9 h-36 a10 10 0 0 1 -10 -9 z" fill="#9FD0EC" opacity=".85"/>
+    <path d="M92 18 L74 76" stroke="#E8683C" stroke-width="7" stroke-linecap="round"/>
+    <path d="M60 148 L74 76" stroke="#E8683C" stroke-width="7" stroke-linecap="round"/>
+    <path d="M37 76 h66" stroke="#5FA8CE" stroke-width="2"/>
+    <text x="70" y="172" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">refraction &middot; khúc xạ</text></g>
+   <g><path d="M196 128 L232 46 L268 128 Z" fill="#E4EEF6" stroke="#9FB8CC" stroke-width="2.5" opacity=".95"/>
+    <path d="M148 84 L212 84" stroke="#F5F5F5" stroke-width="5" stroke-linecap="round"/>
+    <path d="M148 84 L212 84" stroke="var(--ink-faint)" stroke-width="1"/>
+    <g stroke-width="4" stroke-linecap="round" fill="none">
+     <path d="M250 92 L306 74" stroke="#E5484D"/><path d="M250 96 L306 84" stroke="#F2A03C"/>
+     <path d="M250 100 L306 94" stroke="#F5D442"/><path d="M250 104 L306 104" stroke="#4FA85C"/>
+     <path d="M250 108 L306 114" stroke="#3E7FD1"/><path d="M250 112 L306 124" stroke="#7A55C4"/></g>
+    <text x="176" y="72" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-soft)">white light</text>
+    <text x="232" y="172" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">prism &middot; lăng kính</text></g></svg>`}],
+s7:[
+ {en:"A real circuit on the bench", vi:"Pin, dây dẫn, công tắc và bóng đèn nối thành vòng kín. Mở công tắc là mạch hở, đèn tắt ngay",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <rect x="34" y="104" width="86" height="38" rx="7" fill="#3C4652" stroke="#232A33" stroke-width="2.5"/>
+   <rect x="44" y="112" width="30" height="22" rx="4" fill="#D9A03C"/><rect x="80" y="112" width="30" height="22" rx="4" fill="#D9A03C"/>
+   <text x="77" y="160" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">cell &middot; pin</text>
+   <path d="M120 116 C170 116 176 150 214 150" fill="none" stroke="#C0444C" stroke-width="4" stroke-linecap="round"/>
+   <path d="M34 116 C10 116 8 60 44 58" fill="none" stroke="#3B5A9A" stroke-width="4" stroke-linecap="round"/>
+   <g><rect x="44" y="44" width="58" height="28" rx="6" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <circle cx="56" cy="58" r="4" fill="var(--ink-soft)"/><circle cx="90" cy="58" r="4" fill="var(--ink-soft)"/>
+    <path d="M56 58 L88 44" stroke="#C0444C" stroke-width="4" stroke-linecap="round"/>
+    <text x="73" y="34" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">switch &middot; công tắc</text></g>
+   <path d="M102 58 C150 58 160 78 200 78" fill="none" stroke="#3B5A9A" stroke-width="4" stroke-linecap="round"/>
+   <g><circle cx="228" cy="78" r="26" fill="#FBE79A" stroke="#C9A32C" stroke-width="2.5"/>
+    <path d="M216 88 q12 -26 24 0" fill="none" stroke="#C9A32C" stroke-width="2.5"/>
+    <path d="M222 68 l6 -12 6 12" fill="none" stroke="#C9A32C" stroke-width="2.5"/>
+    <rect x="216" y="102" width="24" height="18" rx="3" fill="#A8A8B0" stroke="#70707A" stroke-width="2"/>
+    <path d="M216 108 h24 M216 114 h24" stroke="#70707A" stroke-width="1.2"/>
+    <path d="M228 120 v16" stroke="#3B5A9A" stroke-width="4"/>
+    <path d="M200 78 h2" stroke="#3B5A9A" stroke-width="4"/>
+    <path d="M228 136 C214 150 214 150 214 150" fill="none" stroke="#C0444C" stroke-width="4" stroke-linecap="round"/>
+    <g stroke="#F2C94C" stroke-width="2.5" stroke-linecap="round">
+     <path d="M228 40 v-12"/><path d="M258 56 l10 -7"/><path d="M198 56 l-10 -7"/></g>
+    <text x="228" y="172" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">lamp &middot; bóng đèn</text></g></svg>`},
+ {en:"Circuit symbols you must draw with a ruler", vi:"Vẽ mạch điện trong bài thi phải dùng các kí hiệu chuẩn này và kẻ bằng thước",
+  svg:`<svg viewBox="0 0 320 170" ${SV}><g stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round">
+   <path d="M22 34 h20 M42 22 v24 M54 28 v12 M54 34 h20"/>
+   <circle cx="140" cy="34" r="13"/><path d="M131 25 l18 18 M149 25 l-18 18"/><path d="M114 34 h13 M153 34 h13"/>
+   <circle cx="252" cy="34" r="13"/><path d="M243 34 h18"/><path d="M226 34 h13 M265 34 h13"/>
+   <path d="M22 104 h18"/><path d="M40 104 l22 -12"/><path d="M66 104 h18"/><circle cx="40" cy="104" r="2.5" fill="var(--ink)"/><circle cx="64" cy="104" r="2.5" fill="var(--ink)"/>
+   <circle cx="140" cy="104" r="13"/><path d="M133 104 a7 7 0 0 1 14 0 a7 7 0 0 0 -14 0" /><path d="M114 104 h13 M153 104 h13"/>
+   <circle cx="252" cy="104" r="13"/><path d="M247 99 h10 v10 h-10 z"/><path d="M226 104 h13 M265 104 h13"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9.5" text-anchor="middle" fill="var(--ink)">
+    <text x="48" y="62">cell &middot; pin</text><text x="140" y="62">lamp &middot; đèn</text><text x="252" y="62">wire join</text>
+    <text x="53" y="132">switch &middot; công tắc</text><text x="140" y="132">buzzer &middot; còi</text><text x="252" y="132">motor &middot; động cơ</text></g>
+   <text x="160" y="160" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Dây dẫn luôn vẽ bằng đoạn thẳng, gặp nhau ở góc vuông</text></svg>`}]
+});
+</script>
+
+<script>
+Object.assign(IMG, {
+s8:[
+ {en:"Day and night", vi:"Trái Đất tự quay quanh trục hết 24 giờ. Nửa hướng về Mặt Trời là ban ngày, nửa kia là ban đêm — Mặt Trời không hề di chuyển",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <circle cx="46" cy="90" r="34" fill="#F7C948" stroke="#D9A017" stroke-width="2.5"/>
+   <g stroke="#F7C948" stroke-width="3" stroke-linecap="round"><path d="M46 42 v-12"/><path d="M46 150 v12"/><path d="M12 56 l-9 -9"/><path d="M12 124 l-9 9"/></g>
+   <g stroke="#F2C94C" stroke-width="1.6" opacity=".8"><path d="M82 74 h96"/><path d="M82 90 h96"/><path d="M82 106 h96"/></g>
+   <circle cx="228" cy="90" r="52" fill="#2C4B7C"/>
+   <path d="M228 38 a52 52 0 0 0 0 104 z" fill="#4E8FBF"/>
+   <path d="M200 60 q16 -8 24 6 q-14 10 -24 -6 z" fill="#6FBF7A"/>
+   <path d="M196 106 q22 -10 30 8 q-18 12 -30 -8 z" fill="#6FBF7A"/>
+   <path d="M244 66 q18 -6 26 10 q-16 10 -26 -10 z" fill="#3E7A56"/>
+   <path d="M228 26 v-14 M228 154 v14" stroke="var(--ink-soft)" stroke-width="2" stroke-dasharray="4 4"/>
+   <path d="M262 40 a30 30 0 0 1 8 16" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+   <path d="M272 50 l-2 10 -8 -6 z" fill="var(--ink)"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="46" y="94" text-anchor="middle" fill="#8A6100" font-size="11">SUN</text>
+    <text x="198" y="94" text-anchor="middle" fill="#fff" font-size="9">DAY</text>
+    <text x="198" y="106" text-anchor="middle" fill="#fff" font-size="8">ngày</text>
+    <text x="258" y="94" text-anchor="middle" fill="#fff" font-size="9">NIGHT</text>
+    <text x="258" y="106" text-anchor="middle" fill="#fff" font-size="8">đêm</text>
+    <text x="292" y="34" text-anchor="end" font-size="8.5" fill="var(--ink-faint)">quay 1 vòng = 24 giờ</text>
+    <text x="228" y="176" text-anchor="middle" font-size="9" fill="var(--ink-faint)">trục nghiêng 23.5&deg;</text></g></svg>`},
+ {en:"The eight planets in order", vi:"Thuỷ, Kim, Trái Đất, Hoả, Mộc, Thổ, Thiên Vương, Hải Vương. Bốn hành tinh trong là đá, bốn hành tinh ngoài là khí",
+  svg:`<svg viewBox="0 0 320 150" ${SV}>
+   <path d="M0 78 a60 60 0 0 1 30 -52" fill="#F7C948" stroke="#D9A017" stroke-width="2.5"/>
+   <circle cx="0" cy="78" r="30" fill="#F7C948"/>
+   <g><circle cx="52" cy="78" r="5" fill="#A08C7A"/><circle cx="76" cy="78" r="8" fill="#D9A86C"/>
+    <circle cx="104" cy="78" r="9" fill="#4E8FBF"/><circle cx="130" cy="78" r="7" fill="#C4614A"/>
+    <circle cx="172" cy="78" r="20" fill="#D6A96C"/><path d="M156 72 q16 5 32 0 M156 82 q16 5 32 0" stroke="#B98B4A" stroke-width="2" fill="none"/>
+    <circle cx="228" cy="78" r="16" fill="#E0C078"/><ellipse cx="228" cy="78" rx="27" ry="7" fill="none" stroke="#B8983C" stroke-width="3"/>
+    <circle cx="272" cy="78" r="11" fill="#8FD0D8"/><circle cx="302" cy="78" r="10" fill="#5878C8"/></g>
+   <g font-family="Lexend,sans-serif" font-size="7.5" text-anchor="middle" fill="var(--ink-soft)">
+    <text x="52" y="100">Mercury</text><text x="76" y="100">Venus</text><text x="104" y="100">Earth</text><text x="130" y="100">Mars</text>
+    <text x="172" y="108">Jupiter</text><text x="228" y="102">Saturn</text><text x="272" y="100">Uranus</text><text x="302" y="100">Neptune</text></g>
+   <g font-family="Lexend,sans-serif" font-size="7" text-anchor="middle" fill="var(--ink-faint)">
+    <text x="52" y="110">Thuỷ</text><text x="76" y="110">Kim</text><text x="104" y="110">Trái Đất</text><text x="130" y="110">Hoả</text>
+    <text x="172" y="118">Mộc</text><text x="228" y="112">Thổ</text><text x="272" y="110">Thiên Vương</text><text x="302" y="110">Hải Vương</text></g>
+   <g font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink)">
+    <text x="90" y="26" text-anchor="middle">4 hành tinh đá</text><text x="238" y="26" text-anchor="middle">4 hành tinh khí</text>
+    <path d="M40 32 h100 M150 32 h160" stroke="var(--line)" stroke-width="1.5"/>
+    <text x="160" y="142" text-anchor="middle" font-size="9" fill="var(--ink-faint)">Hình không vẽ đúng tỉ lệ khoảng cách</text></g></svg>`},
+ {en:"The phases of the Moon", vi:"Mặt Trăng luôn có nửa được chiếu sáng. Khi nó quay quanh Trái Đất, ta thấy phần sáng đó ở các góc khác nhau — hết một vòng mất khoảng 28 ngày",
+  svg:`<svg viewBox="0 0 320 130" ${SV}>
+   <g>
+    <circle cx="30" cy="46" r="20" fill="#2C3444" stroke="var(--ink-faint)" stroke-width="1.5"/>
+    <circle cx="95" cy="46" r="20" fill="#2C3444" stroke="var(--ink-faint)" stroke-width="1.5"/>
+    <path d="M95 26 a20 20 0 0 1 0 40 z" fill="#E8E4D8"/>
+    <circle cx="160" cy="46" r="20" fill="#E8E4D8" stroke="var(--ink-faint)" stroke-width="1.5"/>
+    <circle cx="225" cy="46" r="20" fill="#2C3444" stroke="var(--ink-faint)" stroke-width="1.5"/>
+    <path d="M225 26 a20 20 0 0 0 0 40 z" fill="#E8E4D8"/>
+    <circle cx="290" cy="46" r="20" fill="#2C3444" stroke="var(--ink-faint)" stroke-width="1.5"/>
+   </g>
+   <g font-family="Lexend,sans-serif" font-size="8.5" text-anchor="middle" fill="var(--ink)">
+    <text x="30" y="82">New Moon</text><text x="95" y="82">First quarter</text><text x="160" y="82">Full Moon</text>
+    <text x="225" y="82">Last quarter</text><text x="290" y="82">New Moon</text></g>
+   <g font-family="Lexend,sans-serif" font-size="8" text-anchor="middle" fill="var(--ink-faint)">
+    <text x="30" y="94">không trăng</text><text x="95" y="94">trăng lưỡi liềm</text><text x="160" y="94">trăng tròn</text>
+    <text x="225" y="94">khuyết dần</text><text x="290" y="94">hết 1 vòng</text></g>
+   <g font-family="JetBrains Mono,monospace" font-size="8.5" text-anchor="middle" fill="var(--ac)">
+    <text x="30" y="112">ngày 0</text><text x="95" y="112">7</text><text x="160" y="112">14</text><text x="225" y="112">21</text><text x="290" y="112">28</text></g>
+   <path d="M30 118 h260" stroke="var(--ac)" stroke-width="1.5" stroke-dasharray="4 4"/></svg>`}],
+s9:[
+ {en:"A fair test: which cup keeps water warmest?", vi:"Chỉ đổi MỘT thứ là loại vật liệu bọc. Lượng nước, nhiệt độ đầu, thời gian và loại cốc đều phải giữ y nguyên",
+  svg:`<svg viewBox="0 0 320 190" ${SV}>
+   <g><path d="M24 60 h56 l-5 66 a9 9 0 0 1 -9 8 h-28 a9 9 0 0 1 -9 -8 z" fill="#CFE3F0" stroke="var(--ink-soft)" stroke-width="2"/>
+    <rect x="20" y="78" width="64" height="34" rx="4" fill="#E8CFA8" stroke="#B99A6C" stroke-width="2"/>
+    <path d="M52 34 v34" stroke="#D9484F" stroke-width="3"/><circle cx="52" cy="32" r="6" fill="#D9484F"/>
+    <text x="52" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">giấy</text></g>
+   <g><path d="M132 60 h56 l-5 66 a9 9 0 0 1 -9 8 h-28 a9 9 0 0 1 -9 -8 z" fill="#CFE3F0" stroke="var(--ink-soft)" stroke-width="2"/>
+    <rect x="128" y="78" width="64" height="34" rx="4" fill="#C8C8D2" stroke="#8C8C98" stroke-width="2"/>
+    <path d="M160 34 v34" stroke="#D9484F" stroke-width="3"/><circle cx="160" cy="32" r="6" fill="#D9484F"/>
+    <text x="160" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">nhôm</text></g>
+   <g><path d="M240 60 h56 l-5 66 a9 9 0 0 1 -9 8 h-28 a9 9 0 0 1 -9 -8 z" fill="#CFE3F0" stroke="var(--ink-soft)" stroke-width="2"/>
+    <rect x="236" y="78" width="64" height="34" rx="4" fill="#E0B0C0" stroke="#B07890" stroke-width="2"/>
+    <path d="M268 34 v34" stroke="#D9484F" stroke-width="3"/><circle cx="268" cy="32" r="6" fill="#D9484F"/>
+    <text x="268" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">len</text></g>
+   <g font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">
+    <text x="160" y="18" text-anchor="middle" fill="var(--ink)">Đổi 1 thứ &middot; đo 1 thứ &middot; giữ nguyên tất cả phần còn lại</text>
+    <text x="160" y="172" text-anchor="middle">đổi: vật liệu bọc &middot; đo: nhiệt độ sau 10 phút &middot; giữ nguyên: 200 ml nước ở 60&deg;C</text></g></svg>`},
+ {en:"Table first, then graph", vi:"Ghi số liệu vào bảng ba cột, đo mỗi giá trị ba lần rồi lấy trung bình. Số liệu liên tục thì vẽ đồ thị đường và kẻ đường xu hướng mượt",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <g><rect x="10" y="20" width="132" height="122" rx="8" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+    <g stroke="var(--line)" stroke-width="1.2"><path d="M10 44 h132"/><path d="M10 68 h132"/><path d="M10 92 h132"/><path d="M10 116 h132"/><path d="M54 20 v122"/><path d="M98 20 v122"/></g>
+    <g font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-soft)" text-anchor="middle">
+     <text x="32" y="36">phút</text><text x="76" y="36">lần 1</text><text x="120" y="36">TB</text></g>
+    <g font-family="JetBrains Mono,monospace" font-size="9" fill="var(--ink)" text-anchor="middle">
+     <text x="32" y="60">0</text><text x="76" y="60">60</text><text x="120" y="60">60</text>
+     <text x="32" y="84">5</text><text x="76" y="84">52</text><text x="120" y="84">51</text>
+     <text x="32" y="108">10</text><text x="76" y="108">45</text><text x="120" y="108">44</text>
+     <text x="32" y="132">15</text><text x="76" y="132">39</text><text x="120" y="132">39</text></g></g>
+   <g transform="translate(166,0)">
+    <path d="M22 130 h124 M22 130 v-108" fill="none" stroke="var(--ink)" stroke-width="2"/>
+    <g stroke="var(--line)" stroke-width="1"><path d="M22 104 h124"/><path d="M22 78 h124"/><path d="M22 52 h124"/></g>
+    <polyline points="28,30 62,54 96,80 130,98" fill="none" stroke="var(--ac)" stroke-width="2.5"/>
+    <g fill="var(--ac)"><circle cx="28" cy="30" r="3.5"/><circle cx="62" cy="54" r="3.5"/><circle cx="96" cy="80" r="3.5"/><circle cx="130" cy="98" r="3.5"/></g>
+    <g font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-soft)">
+     <text x="84" y="146" text-anchor="middle">thời gian (phút)</text>
+     <text x="22" y="76" text-anchor="middle" transform="rotate(-90 22 76)">nhiệt độ (&deg;C)</text></g></g>
+   <text x="160" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Kết luận: càng để lâu nước càng nguội, vì nhiệt truyền ra không khí</text></svg>`}],
+s12:[
+ {en:"Where ocean plastic comes from", vi:"Rác nhựa vứt trên đất liền theo sông ra biển, vỡ thành hạt vi nhựa và bị cá ăn nhầm",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <rect x="0" y="0" width="320" height="86" fill="#DCEBF5"/>
+   <path d="M0 86 h320 v84 h-320 z" fill="#8FC4E0"/>
+   <path d="M0 86 q20 -8 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#5FA8CE" stroke-width="2.5"/>
+   <path d="M0 60 q40 -22 80 -6 q30 12 46 32" fill="#7FA860" stroke="#5E8442" stroke-width="2"/>
+   <path d="M30 46 v-14 M44 42 v-16 M58 44 v-12" stroke="#4F7A34" stroke-width="3" stroke-linecap="round"/>
+   <g><rect x="52" y="52" width="9" height="16" rx="2" fill="#E8683C" transform="rotate(20 56 60)"/>
+    <rect x="72" y="60" width="8" height="14" rx="2" fill="#4FA85C" transform="rotate(-30 76 67)"/>
+    <path d="M62 74 q10 8 22 4" stroke="#B0B0BA" stroke-width="3" fill="none"/></g>
+   <path d="M96 74 C130 78 150 86 168 92" fill="none" stroke="#5FA8CE" stroke-width="4" stroke-linecap="round"/>
+   <g fill="#E8683C" opacity=".9"><rect x="132" y="102" width="7" height="12" rx="2" transform="rotate(24 135 108)"/>
+    <rect x="196" y="126" width="7" height="12" rx="2" transform="rotate(-16 199 132)"/></g>
+   <g fill="#4FA85C" opacity=".9"><rect x="164" y="140" width="6" height="11" rx="2" transform="rotate(40 167 145)"/></g>
+   <g fill="#B0B8C2"><circle cx="150" cy="126" r="2.5"/><circle cx="182" cy="112" r="2"/><circle cx="212" cy="150" r="2.5"/><circle cx="118" cy="140" r="2"/></g>
+   <g><path d="M232 118 q26 -18 52 0 q-26 18 -52 0 z" fill="#5C8FC9" stroke="#3B5A9A" stroke-width="2"/>
+    <path d="M284 118 l16 -11 v22 z" fill="#5C8FC9" stroke="#3B5A9A" stroke-width="2"/>
+    <circle cx="246" cy="115" r="2.5" fill="#123"/>
+    <circle cx="228" cy="118" r="2.5" fill="#B0B8C2"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">
+    <text x="42" y="24">rác trên đất liền</text>
+    <text x="150" y="80" font-size="8.5" fill="#3B7CA8">sông cuốn ra biển</text>
+    <text x="258" y="150" text-anchor="middle" font-size="8.5" fill="#1B3C5C">cá ăn nhầm vi nhựa</text></g></svg>`},
+ {en:"Sorting rubbish at home", vi:"Ba thùng, ba loại. Nhưng nhớ thứ tự: giảm dùng trước, tái dùng sau, tái chế là bước cuối",
+  svg:`<svg viewBox="0 0 320 160" ${SV}>
+   <g><path d="M22 52 h72 l-8 84 a10 10 0 0 1 -10 9 h-36 a10 10 0 0 1 -10 -9 z" fill="#4FA85C" stroke="#357A40" stroke-width="2.5"/>
+    <rect x="14" y="40" width="88" height="14" rx="5" fill="#357A40"/>
+    <g fill="#fff"><rect x="40" y="76" width="16" height="20" rx="2"/><rect x="60" y="80" width="12" height="16" rx="2"/></g>
+    <text x="58" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#fff">giấy</text>
+    <text x="58" y="156" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">PAPER</text></g>
+   <g><path d="M124 52 h72 l-8 84 a10 10 0 0 1 -10 9 h-36 a10 10 0 0 1 -10 -9 z" fill="#E8A33C" stroke="#B87C1E" stroke-width="2.5"/>
+    <rect x="116" y="40" width="88" height="14" rx="5" fill="#B87C1E"/>
+    <g fill="#fff"><rect x="146" y="72" width="10" height="24" rx="4"/><rect x="164" y="78" width="9" height="18" rx="4"/></g>
+    <text x="160" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#fff">nhựa</text>
+    <text x="160" y="156" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">PLASTIC</text></g>
+   <g><path d="M226 52 h72 l-8 84 a10 10 0 0 1 -10 9 h-36 a10 10 0 0 1 -10 -9 z" fill="#7A8794" stroke="#5A6570" stroke-width="2.5"/>
+    <rect x="218" y="40" width="88" height="14" rx="5" fill="#5A6570"/>
+    <g fill="#fff"><rect x="248" y="74" width="12" height="22" rx="5"/><rect x="266" y="80" width="11" height="16" rx="5"/></g>
+    <text x="262" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#fff">kim loại</text>
+    <text x="262" y="156" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">METAL</text></g>
+   <text x="160" y="24" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">REDUCE &rarr; REUSE &rarr; RECYCLE</text></svg>`}]
+});
+</script>
+
+<script>
+function figuresHTML(uid){
+  const figs = (typeof IMG!=="undefined" && IMG[uid]) || null;
+  if(!figs || !figs.length) return "";
+  return `<div><p class="label" style="margin:2px 0 9px 2px">&#128444; Hình minh hoạ &middot; ${figs.length} hình</p>
+    <div class="stack-s">${figs.map((f,i)=>`<figure class="fig" style="margin:0">
+      <div class="canvas">${f.svg}</div>
+      <figcaption class="cap"><span class="no">Hình ${i+1}</span><b>${f.en}</b><span>${f.vi}</span></figcaption>
+    </figure>`).join("")}</div></div>`;
+}
 ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
 render();
 </script>
