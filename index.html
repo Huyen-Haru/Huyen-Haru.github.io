@@ -1,0 +1,1980 @@
+<title>Lâm's Checkpoint Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Checkpoint Lab">
+<meta name="theme-color" content="#F2F5F9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,600&family=Lexend:wght@300;400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --paper:#F2F5F9; --card:#FFFFFF; --card-2:#F8FAFC;
+  --ink:#131B27; --ink-soft:#5A6879; --ink-faint:#8A97A8;
+  --line:#DCE3EC; --grid:rgba(19,27,39,.05);
+  --sci:#0E8A6E; --sci-bg:#E2F2ED;
+  --mat:#C94E26; --mat-bg:#FBE8E0;
+  --esl:#4A5CD1; --esl-bg:#E7EAFC;
+  --good:#0E8A6E; --good-bg:#E2F2ED;
+  --bad:#BF3A31;  --bad-bg:#FBE6E4;
+  --warn:#A9700E; --warn-bg:#FBF0DC;
+  --shadow:0 1px 2px rgba(19,27,39,.05), 0 10px 26px -16px rgba(19,27,39,.28);
+  --r:14px; --ac:var(--ink); --ac-bg:var(--card-2);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1219; --card:#161D27; --card-2:#1C242F;
+    --ink:#E7EDF6; --ink-soft:#98A5B7; --ink-faint:#6C7A8C;
+    --line:#26303D; --grid:rgba(255,255,255,.035);
+    --sci:#31C4A0; --sci-bg:#0F312B;
+    --mat:#F0865A; --mat-bg:#382017;
+    --esl:#8E9BF7; --esl-bg:#1C2145;
+    --good:#31C4A0; --good-bg:#0F312B;
+    --bad:#F0736A;  --bad-bg:#3A1E1B;
+    --warn:#E0A94A; --warn-bg:#332711;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1219; --card:#161D27; --card-2:#1C242F;
+  --ink:#E7EDF6; --ink-soft:#98A5B7; --ink-faint:#6C7A8C;
+  --line:#26303D; --grid:rgba(255,255,255,.035);
+  --sci:#31C4A0; --sci-bg:#0F312B;
+  --mat:#F0865A; --mat-bg:#382017;
+  --esl:#8E9BF7; --esl-bg:#1C2145;
+  --good:#31C4A0; --good-bg:#0F312B;
+  --bad:#F0736A;  --bad-bg:#3A1E1B;
+  --warn:#E0A94A; --warn-bg:#332711;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Lexend,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400; font-size:16px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3,h4{font-family:Literata,Georgia,serif; font-weight:700; margin:0; text-wrap:balance; letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit; color:inherit; cursor:pointer; border:0; background:none; text-align:left}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+:focus-visible{outline:2.5px solid var(--esl); outline-offset:2px; border-radius:6px}
+
+.app{max-width:480px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column;
+  background:color-mix(in srgb, var(--paper) 82%, transparent);
+  border-left:1px solid var(--line); border-right:1px solid var(--line)}
+@media(max-width:520px){.app{border:0}}
+.topbar{position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:10px;
+  padding:12px 16px; background:color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line); min-height:56px}
+.topbar h1{font-size:17px; letter-spacing:-.02em}
+.back{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+  display:grid;place-items:center;font-size:17px;flex:none}
+.spacer{flex:1}
+.streak{font-size:13px; padding:5px 10px; border-radius:99px; background:var(--mat-bg); color:var(--mat); font-weight:500}
+main{flex:1; padding:16px 16px 100px}
+.tabs{position:fixed; bottom:0; left:0; right:0; z-index:30; display:flex;
+  max-width:480px; margin:0 auto; background:color-mix(in srgb, var(--card) 94%, transparent);
+  backdrop-filter:blur(12px); border-top:1px solid var(--line); padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.tab{flex:1; padding:7px 2px 6px; border-radius:12px; display:flex; flex-direction:column; align-items:center; gap:2px;
+  font-size:10.5px; color:var(--ink-faint); font-weight:500; text-align:center; position:relative}
+.tab span:first-child{font-size:19px; line-height:1.1}
+.tab[aria-current="true"]{color:var(--ink); background:var(--card-2)}
+.tab .badge{position:absolute; top:3px; right:calc(50% - 22px); min-width:17px; height:17px; padding:0 4px;
+  border-radius:99px; background:var(--bad); color:#fff; font-size:10px; font-weight:700; line-height:17px; text-align:center}
+
+.eyebrow{font-family:Literata,serif; font-style:italic; font-size:13px; color:var(--ink-soft)}
+.label{font-size:11px; text-transform:uppercase; letter-spacing:.11em; font-weight:600; color:var(--ink-faint)}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow)}
+.stack{display:flex; flex-direction:column; gap:14px}
+.stack-s{display:flex; flex-direction:column; gap:9px}
+.row{display:flex; align-items:center; gap:10px}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+  padding:14px 18px; border-radius:12px; background:var(--ink); color:var(--paper); font-weight:500; font-size:15px}
+.btn:active{transform:translateY(1px)}
+.btn-ghost{background:var(--card); color:var(--ink); border:1px solid var(--line)}
+.btn-accent{background:var(--ac); color:#fff}
+:root[data-theme="dark"] .btn-accent{color:#0D1219}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn-accent{color:#0D1219}}
+.btn-sm{padding:9px 14px; font-size:13.5px; width:auto}
+.pill{display:inline-block; font-size:11.5px; font-weight:500; padding:3px 9px; border-radius:99px;
+  background:var(--card-2); color:var(--ink-soft); border:1px solid var(--line); white-space:nowrap}
+.pill.on{background:var(--ac-bg); color:var(--ac); border-color:transparent}
+.pill.warn{background:var(--warn-bg); color:var(--warn); border-color:transparent}
+.bar{height:6px; border-radius:99px; background:var(--line); overflow:hidden}
+.bar i{display:block; height:100%; background:var(--ac); border-radius:99px; transition:width .5s cubic-bezier(.2,.8,.2,1)}
+
+.hero{padding:18px; border-radius:18px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow)}
+.hero h2{font-size:22px; margin:2px 0 6px}
+.plan{display:flex; gap:8px; margin:14px 0 16px}
+.leg{flex:1; padding:9px 10px; border-radius:11px; background:var(--card-2); border:1px solid var(--line)}
+.leg b{display:block; font-family:Literata,serif; font-size:13px}
+.leg small{font-size:11px; color:var(--ink-faint)}
+.subj{display:block; width:100%; padding:15px 16px; border-radius:var(--r);
+  background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); border-left:4px solid var(--ac)}
+.subj h3{font-size:17px}
+.subj .n{font-size:13px; color:var(--ink-soft)}
+.dot{width:9px;height:9px;border-radius:99px;background:var(--ac);flex:none}
+.unit{display:block; width:100%; padding:13px 14px; border-radius:12px; background:var(--card); border:1px solid var(--line)}
+.unit.locked{opacity:.5; background:transparent; box-shadow:none; border-style:dashed}
+.unit h4{font-size:15px}
+.unit .en{font-size:12.5px; color:var(--ink-soft)}
+.num{width:28px;height:28px;border-radius:9px;background:var(--ac-bg);color:var(--ac);
+  display:grid;place-items:center;font-size:13px;font-weight:700;flex:none;font-family:"JetBrains Mono",monospace}
+
+.kp{padding:14px; border-radius:12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--ac)}
+.kp .en{font-family:Literata,serif; font-weight:600; font-size:15.5px; line-height:1.45}
+.kp .vi{font-size:14px; color:var(--ink-soft); margin-top:7px}
+.vi.veil{color:transparent; background:var(--card-2); border-radius:6px; cursor:pointer; user-select:none; position:relative}
+.vi.veil::after{content:"Chạm để xem tiếng Việt"; position:absolute; inset:0; display:grid; place-items:center;
+  color:var(--ink-faint); font-size:12.5px; letter-spacing:.02em}
+.spk{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--card-2);
+  display:grid;place-items:center;font-size:14px;flex:none}
+.spk:active{background:var(--ac-bg)}
+.voc{display:flex; align-items:center; gap:10px; padding:10px 13px; border-bottom:1px solid var(--line)}
+.voc:last-child{border-bottom:0}
+.voc b{font-family:Literata,serif; font-size:14.5px; font-weight:600}
+.voc i{font-style:normal; font-size:13.5px; color:var(--ink-soft); text-align:right; flex:1}
+.voc i.veil{color:transparent; background:var(--card-2); border-radius:6px; min-height:20px; cursor:pointer}
+.passage{padding:16px; border-radius:12px; background:var(--card-2); border:1px solid var(--line);
+  font-family:Literata,serif; font-size:15px; line-height:1.65}
+.passage p+p{margin-top:10px}
+
+.fc{min-height:230px; padding:22px; border-radius:18px; background:var(--card); border:1px solid var(--line);
+  box-shadow:var(--shadow); display:flex; flex-direction:column; justify-content:center; gap:12px; text-align:center}
+.fc .q{font-family:Literata,serif; font-size:19px; font-weight:700; line-height:1.35}
+.fc .a{font-size:14.5px; color:var(--ink-soft)}
+
+.qtext{font-family:Literata,serif; font-size:18px; font-weight:700; line-height:1.45; margin:6px 0 14px}
+.opt{display:flex; gap:11px; align-items:flex-start; width:100%; padding:13px 14px;
+  border-radius:12px; background:var(--card); border:1.5px solid var(--line); font-size:15px; line-height:1.4}
+.opt .k{width:24px;height:24px;border-radius:7px;background:var(--card-2);border:1px solid var(--line);
+  display:grid;place-items:center;font-size:12px;font-weight:700;flex:none;font-family:"JetBrains Mono",monospace}
+.opt[data-s="right"]{border-color:var(--good); background:var(--good-bg)}
+.opt[data-s="right"] .k{background:var(--good); color:var(--card); border-color:transparent}
+.opt[data-s="wrong"]{border-color:var(--bad); background:var(--bad-bg)}
+.opt[data-s="wrong"] .k{background:var(--bad); color:var(--card); border-color:transparent}
+.opt[data-s="pick"]{border-color:var(--ac); background:var(--ac-bg)}
+.opt[data-s="pick"] .k{background:var(--ac); color:var(--card); border-color:transparent}
+.expl{padding:14px; border-radius:12px; border:1px solid var(--line); background:var(--card-2)}
+.expl .v{font-weight:600; font-size:14px; margin-bottom:5px}
+.expl p{font-size:14px; color:var(--ink-soft)}
+.score{font-family:"JetBrains Mono",monospace; font-size:46px; font-weight:700; line-height:1; letter-spacing:-.03em}
+.rev{padding:12px 14px; border-radius:11px; border:1px solid var(--line); background:var(--card)}
+.rev .qq{font-family:Literata,serif; font-weight:600; font-size:14px}
+.rev .aa{font-size:13px; margin-top:4px}
+.tick{color:var(--good); font-weight:700}
+.cross{color:var(--bad); font-weight:700}
+
+.navgrid{display:grid; grid-template-columns:repeat(6,1fr); gap:7px}
+.navgrid button{aspect-ratio:1; border-radius:9px; border:1.5px solid var(--line); background:var(--card);
+  display:grid; place-items:center; font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700}
+.navgrid button[data-s="done"]{background:var(--ac-bg); border-color:transparent; color:var(--ac)}
+.navgrid button[data-s="now"]{border-color:var(--ac); border-width:2.5px}
+.navgrid button[data-s="right"]{background:var(--good-bg); color:var(--good); border-color:transparent}
+.navgrid button[data-s="wrong"]{background:var(--bad-bg); color:var(--bad); border-color:transparent}
+
+.chart{display:flex; align-items:flex-end; gap:7px; height:96px; padding:0 2px}
+.chart div{flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:5px; height:100%}
+.chart i{display:block; width:100%; border-radius:5px 5px 2px 2px; background:var(--ac-bg); min-height:3px}
+.chart i.has{background:var(--ac)}
+.chart small{font-size:10px; color:var(--ink-faint)}
+.kv{display:flex; justify-content:space-between; gap:12px; padding:11px 14px; border-bottom:1px solid var(--line); font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv b{font-weight:600}
+.sw{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 15px}
+.sw .t{font-size:14.5px}
+.sw .t small{display:block; font-size:12px; color:var(--ink-faint)}
+.toggle{width:46px; height:27px; border-radius:99px; background:var(--line); position:relative; flex:none; transition:background .2s}
+.toggle::after{content:""; position:absolute; top:3px; left:3px; width:21px; height:21px; border-radius:99px;
+  background:var(--card); box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .2s}
+.toggle[aria-pressed="true"]{background:var(--good)}
+.toggle[aria-pressed="true"]::after{transform:translateX(19px)}
+
+.note{padding:13px 15px; border-radius:12px; background:var(--esl-bg); font-size:13.5px; line-height:1.5}
+.timer{font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700; padding:5px 9px;
+  border-radius:8px; background:var(--card-2); border:1px solid var(--line)}
+.timer.low{background:var(--bad-bg); color:var(--bad); border-color:transparent}
+.fade{animation:fade .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes fade{from{opacity:0; transform:translateY(7px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <button class="back" id="back" hidden aria-label="Quay lại">&#8592;</button>
+    <h1 id="ttl">Checkpoint Lab</h1>
+    <div class="spacer"></div>
+    <div id="topright" class="row" style="gap:6px"></div>
+  </header>
+  <main id="view"></main>
+  <nav class="tabs" id="tabs"></nav>
+</div>
+
+<script>
+const DATA = {
+science: { name:"Science", vi:"Khoa học", icon:"&#129514;", ac:"--sci", acbg:"--sci-bg", units:[
+
+{ id:"s1", t:"Circulatory system & health", vi:"Hệ tuần hoàn và sức khoẻ",
+  kp:[
+    {en:"The circulatory system is the heart, the blood vessels and the blood.", vi:"Hệ tuần hoàn gồm tim, mạch máu và máu — vận chuyển oxygen và chất dinh dưỡng đi khắp cơ thể."},
+    {en:"The heart is a muscle with four chambers. It pumps blood all the time.", vi:"Tim là một khối cơ có 4 ngăn, bơm máu liên tục kể cả khi ta ngủ."},
+    {en:"Arteries carry blood AWAY from the heart. They have thick, muscular walls because the blood is at high pressure.", vi:"Động mạch đưa máu ĐI khỏi tim, thành dày và có cơ vì áp lực máu rất cao."},
+    {en:"Veins carry blood BACK to the heart. They have thinner walls and valves to stop blood flowing backwards.", vi:"Tĩnh mạch đưa máu VỀ tim, thành mỏng hơn và có van để máu không chảy ngược."},
+    {en:"Capillaries are only one cell thick, so oxygen and nutrients can pass into the body cells.", vi:"Mao mạch chỉ dày bằng một tế bào, nên oxygen và chất dinh dưỡng đi xuyên qua được vào tế bào."},
+    {en:"Blood is made of red blood cells (carry oxygen), white blood cells (fight disease), platelets (clotting) and plasma (liquid).", vi:"Máu gồm: hồng cầu chở oxygen, bạch cầu chống bệnh, tiểu cầu làm đông máu, huyết tương là phần lỏng."},
+    {en:"Blood picks up oxygen in the lungs and gives out carbon dioxide.", vi:"Máu nhận oxygen tại phổi và thải carbon dioxide ra ngoài."},
+    {en:"During exercise the pulse rate rises because muscles need more oxygen and glucose.", vi:"Khi vận động, nhịp mạch tăng vì cơ bắp cần nhiều oxygen và glucose hơn."}],
+  voc:[["heart","tim"],["artery","động mạch"],["vein","tĩnh mạch"],["capillary","mao mạch"],["valve","van (tim, tĩnh mạch)"],["red blood cell","hồng cầu"],["platelet","tiểu cầu"],["plasma","huyết tương"],["pulse rate","nhịp mạch (lần/phút)"],["oxygen","khí oxy"]],
+  quiz:[
+    {q:"Which blood vessel carries blood away from the heart?", o:["Artery","Vein","Capillary","Valve"], a:0,
+     e:"Động mạch (artery) mang máu ĐI khỏi tim. Mẹo nhớ: <b>A</b>rtery = <b>A</b>way. Tĩnh mạch (vein) mang máu về tim."},
+    {q:"Why do arteries have thicker walls than veins?", o:["They carry more blood","The blood in them is at higher pressure","They are closer to the skin","They carry carbon dioxide"], a:1,
+     e:"Tim bơm máu vào động mạch với áp lực rất mạnh, nên thành động mạch phải dày và có cơ để chịu được áp lực đó."},
+    {q:"Which part of the blood carries oxygen around the body?", o:["Plasma","Platelets","Red blood cells","White blood cells"], a:2,
+     e:"Hồng cầu chứa haemoglobin để gắn oxygen. Bạch cầu chống bệnh, tiểu cầu làm đông máu, huyết tương là phần lỏng."},
+    {q:"Where does the blood collect oxygen?", o:["In the stomach","In the lungs","In the muscles","In the liver"], a:1,
+     e:"Ở phổi, oxygen từ không khí đi vào máu và carbon dioxide đi ra — gọi là trao đổi khí (gas exchange)."},
+    {q:"Ha runs for two minutes. What happens to her pulse rate and why?", o:["It falls, because she is tired","It stays the same","It rises, because her muscles need more oxygen","It rises, because her blood gets thicker"], a:2,
+     e:"Cơ bắp hoạt động cần nhiều oxygen và glucose hơn nên tim đập nhanh hơn. Sau khi nghỉ, nhịp mạch giảm về bình thường."},
+    {q:"In an investigation about exercise and pulse rate, which is the variable you CHANGE?", o:["The type of exercise","The person being tested","The way you measure the pulse","The time you rest first"], a:0,
+     e:"Biến thay đổi (independent variable) là loại vận động. Các yếu tố còn lại phải giữ nguyên để bài thí nghiệm công bằng — fair test."}]},
+
+{ id:"s2", t:"Reversible & irreversible changes", vi:"Biến đổi thuận nghịch và không thuận nghịch",
+  kp:[
+    {en:"A reversible change can be changed back. The material stays the same substance.", vi:"Biến đổi thuận nghịch: có thể quay lại chất ban đầu, không tạo ra chất mới."},
+    {en:"Melting, freezing, evaporating, condensing and dissolving are all reversible.", vi:"Nóng chảy, đông đặc, bay hơi, ngưng tụ và hoà tan đều là thuận nghịch."},
+    {en:"An irreversible change makes a NEW substance and cannot be changed back.", vi:"Biến đổi không thuận nghịch tạo ra CHẤT MỚI và không quay lại được."},
+    {en:"Burning, cooking, rusting and mixing vinegar with bicarbonate of soda are irreversible.", vi:"Đốt cháy, nấu chín, gỉ sét, trộn giấm với baking soda — đều không thuận nghịch."},
+    {en:"Signs of an irreversible change: a gas is made, a colour change, heat or light is given out.", vi:"Dấu hiệu nhận biết: có khí hoặc bọt sinh ra, đổi màu, toả nhiệt hoặc phát sáng."},
+    {en:"Melting is not the same as dissolving. Melting needs heat; dissolving needs a solvent such as water.", vi:"Nóng chảy KHÁC hoà tan. Nóng chảy do nhiệt; hoà tan cần dung môi như nước."},
+    {en:"Rusting needs iron, oxygen and water together.", vi:"Gỉ sét cần đủ cả ba: sắt, oxygen và nước."},
+    {en:"Separate mixtures by sieving, filtering, evaporating or using a magnet.", vi:"Tách hỗn hợp: rây, lọc, làm bay hơi, hoặc dùng nam châm."}],
+  voc:[["reversible","thuận nghịch (quay lại được)"],["irreversible","không thuận nghịch"],["dissolve","hoà tan"],["solution","dung dịch"],["evaporate","bay hơi"],["condense","ngưng tụ"],["rusting","sự gỉ sét"],["filtering","lọc"],["soluble","tan được"],["mixture","hỗn hợp"]],
+  quiz:[
+    {q:"Which change is IRREVERSIBLE?", o:["Melting chocolate","Freezing water","Burning wood","Dissolving sugar"], a:2,
+     e:"Đốt gỗ tạo ra tro, khí carbon dioxide và hơi nước — chất mới, không thể biến lại thành gỗ. Ba đáp án còn lại quay lại được."},
+    {q:"Salt is stirred into water and disappears. How can you get the salt back?", o:["Filter the solution","Evaporate the water","Use a magnet","You cannot get it back"], a:1,
+     e:"Muối tan hoàn toàn nên lọc không giữ lại được. Làm nước bay hơi thì muối kết tinh trở lại — chứng minh hoà tan là thuận nghịch."},
+    {q:"An egg is fried. Which shows this is an irreversible change?", o:["It gets hot","A new substance is made and it cannot go back","It changes shape","It becomes lighter"], a:1,
+     e:"Nóng lên hay đổi hình dạng chưa đủ. Dấu hiệu quyết định là tạo ra chất mới và không thể trở lại trứng sống."},
+    {q:"Which three things are needed for iron to rust?", o:["Iron, heat and light","Iron, oxygen and water","Iron, salt and air","Iron, carbon dioxide and water"], a:1,
+     e:"Cần đủ sắt + oxygen + nước. Thiếu một yếu tố (ví dụ sơn phủ chặn nước và không khí) thì không gỉ."},
+    {q:"Sand is mixed with water. The best way to separate it is to:", o:["Evaporate the water","Filter the mixture","Use a magnet","Freeze the mixture"], a:1,
+     e:"Cát không tan nên bị giữ lại trên giấy lọc, nước chảy qua. Bay hơi chỉ dùng khi chất đã tan."},
+    {q:"Vinegar is added to bicarbonate of soda and bubbles appear. This tells you that:", o:["The mixture is dissolving","A gas is being made, so it is irreversible","The vinegar is evaporating","The change is reversible"], a:1,
+     e:"Bọt khí là dấu hiệu có khí mới sinh ra (carbon dioxide) — chất mới đã hình thành, nên là biến đổi không thuận nghịch."}]},
+
+{ id:"s3", t:"Classification, food chains & adaptation", vi:"Phân loại, chuỗi thức ăn và thích nghi",
+  kp:[
+    {en:"Living things are sorted into groups: vertebrates (with a backbone) and invertebrates (without one).", vi:"Sinh vật được chia nhóm: động vật có xương sống và không xương sống."},
+    {en:"The five vertebrate groups are fish, amphibians, reptiles, birds and mammals.", vi:"Năm nhóm có xương sống: cá, lưỡng cư, bò sát, chim và thú."},
+    {en:"A branching key (dichotomous key) sorts organisms using yes/no questions about visible features.", vi:"Khoá lưỡng phân dùng câu hỏi có/không về đặc điểm nhìn thấy được để phân loại."},
+    {en:"In a food chain, arrows show the flow of energy and always point TO the eater.", vi:"Trong chuỗi thức ăn, mũi tên chỉ chiều truyền năng lượng và luôn hướng VỀ con vật ăn."},
+    {en:"Producers (green plants) make their own food. Consumers eat other living things. Decomposers break down dead material.", vi:"Sinh vật sản xuất (cây xanh) tự tạo thức ăn; sinh vật tiêu thụ ăn sinh vật khác; sinh vật phân huỷ phân giải xác chết."},
+    {en:"A food web joins several food chains in the same habitat.", vi:"Lưới thức ăn là nhiều chuỗi thức ăn nối với nhau trong cùng một môi trường sống."},
+    {en:"An adaptation is a feature that helps an organism survive in its habitat — thick fur in cold places, deep roots in deserts.", vi:"Thích nghi là đặc điểm giúp sinh vật sống được trong môi trường của nó: lông dày ở xứ lạnh, rễ sâu ở sa mạc."},
+    {en:"If one species in a food web disappears, the numbers of the other species change too.", vi:"Nếu một loài trong lưới thức ăn biến mất, số lượng các loài khác cũng thay đổi theo."}],
+  voc:[["vertebrate","động vật có xương sống"],["invertebrate","động vật không xương sống"],["amphibian","lưỡng cư"],["habitat","môi trường sống"],["producer","sinh vật sản xuất"],["consumer","sinh vật tiêu thụ"],["predator / prey","kẻ săn mồi / con mồi"],["decomposer","sinh vật phân huỷ"],["adaptation","sự thích nghi"],["classify","phân loại"]],
+  quiz:[
+    {q:"In the food chain grass &rarr; rabbit &rarr; fox, what does the arrow mean?", o:["&ldquo;is eaten by&rdquo;","&ldquo;eats&rdquo;","&ldquo;lives near&rdquo;","&ldquo;is bigger than&rdquo;"], a:0,
+     e:"Mũi tên chỉ chiều năng lượng đi: cỏ <i>bị ăn bởi</i> thỏ. Nhiều bạn nhớ ngược thành &ldquo;ăn&rdquo; nên vẽ sai chiều mũi tên."},
+    {q:"Which animal group has a backbone, lays eggs and has dry scaly skin?", o:["Amphibians","Reptiles","Fish","Mammals"], a:1,
+     e:"Bò sát: da khô, có vảy, đẻ trứng trên cạn. Lưỡng cư da ẩm và đẻ trứng dưới nước; cá có vảy ướt và sống dưới nước."},
+    {q:"What is the producer in the chain: leaf &rarr; caterpillar &rarr; bird &rarr; cat?", o:["Cat","Bird","Caterpillar","Leaf"], a:3,
+     e:"Sinh vật sản xuất luôn đứng đầu chuỗi và là thực vật, vì nó tự tạo thức ăn nhờ quang hợp."},
+    {q:"A polar bear has thick white fur. This adaptation helps it to:", o:["Swim faster","Keep warm and stay hidden in snow","Find food underground","Breathe under water"], a:1,
+     e:"Lông dày giữ nhiệt trong khí hậu lạnh, màu trắng giúp nguỵ trang trên tuyết khi săn mồi — hai lợi ích cùng lúc."},
+    {q:"All the foxes in a food web are removed. What most likely happens to the rabbits?", o:["Their number falls","Their number rises","Nothing changes","They become producers"], a:1,
+     e:"Mất kẻ săn mồi thì số thỏ tăng lên. Sau đó cỏ bị ăn nhiều hơn nên có thể lại giảm — thay đổi lan ra cả lưới thức ăn."},
+    {q:"Which question is best for a branching key?", o:["Is the animal friendly?","Does the animal have six legs?","Is the animal happy?","Does the animal like water?"], a:1,
+     e:"Câu hỏi trong khoá phân loại phải quan sát được và trả lời chắc chắn có/không. &ldquo;Thân thiện&rdquo; hay &ldquo;vui&rdquo; là ý kiến, không đo được."}]},
+
+{ id:"s4", t:"Solids, liquids, gases & solutions", vi:"Chất rắn, lỏng, khí và dung dịch",
+  kp:[
+    {en:"Solids keep their shape and volume; liquids keep volume but take the shape of the container; gases fill all the space.", vi:"Rắn giữ nguyên hình dạng và thể tích; lỏng giữ thể tích nhưng theo hình bình chứa; khí lan đầy không gian."},
+    {en:"In solids the particles are packed and only vibrate. In liquids they slide past each other. In gases they move fast and far apart.", vi:"Hạt trong chất rắn xếp sát và chỉ rung; trong chất lỏng trượt lên nhau; trong chất khí bay nhanh và cách xa nhau."},
+    {en:"Water melts at 0&deg;C and boils at 100&deg;C.", vi:"Nước nóng chảy ở 0&deg;C và sôi ở 100&deg;C — hai mốc bắt buộc nhớ."},
+    {en:"Evaporation happens at any temperature and only at the surface. Boiling happens all through the liquid at its boiling point.", vi:"Bay hơi xảy ra ở mọi nhiệt độ và chỉ trên bề mặt; sôi xảy ra trong toàn khối chất lỏng tại nhiệt độ sôi."},
+    {en:"Evaporation is faster when it is hotter, windier, or the surface area is larger.", vi:"Bay hơi nhanh hơn khi nóng hơn, có gió, hoặc diện tích mặt thoáng lớn hơn."},
+    {en:"A solution = solute (the thing that dissolves) + solvent (usually water). Sugar is soluble; sand is insoluble.", vi:"Dung dịch = chất tan + dung môi (thường là nước). Đường tan được, cát không tan."},
+    {en:"More solute dissolves when the solvent is warmer or when you stir.", vi:"Chất tan tan nhiều và nhanh hơn khi nước ấm hơn hoặc khi khuấy."},
+    {en:"When a solution cannot dissolve any more solute it is saturated.", vi:"Khi dung dịch không hoà tan thêm được nữa thì gọi là dung dịch bão hoà."}],
+  voc:[["particle","hạt (phân tử)"],["melting point","nhiệt độ nóng chảy"],["boiling point","nhiệt độ sôi"],["evaporation","sự bay hơi"],["condensation","sự ngưng tụ"],["solute","chất tan"],["solvent","dung môi"],["insoluble","không tan"],["saturated","bão hoà"],["surface area","diện tích bề mặt"]],
+  quiz:[
+    {q:"Which state of matter has a fixed volume but no fixed shape?", o:["Solid","Liquid","Gas","None of them"], a:1,
+     e:"Chất lỏng giữ nguyên thể tích nhưng đổ vào bình nào thì mang hình bình đó. Rắn cố định cả hai; khí không cố định cái nào."},
+    {q:"Two identical puddles dry up. One is in the sun and one is in the shade. Which dries first and why?", o:["The shade one, it is cooler","The sun one, higher temperature speeds up evaporation","Both at the same time","The shade one, less wind"], a:1,
+     e:"Nhiệt độ cao cung cấp nhiều năng lượng hơn cho các hạt nước thoát khỏi bề mặt, nên vũng nước ngoài nắng khô trước."},
+    {q:"What is the difference between evaporation and boiling?", o:["Boiling only happens at the surface","Evaporation happens at any temperature; boiling only at the boiling point","Evaporation needs a lid","There is no difference"], a:1,
+     e:"Bay hơi xảy ra ở mọi nhiệt độ và chỉ ở mặt thoáng. Sôi chỉ xảy ra tại nhiệt độ sôi và diễn ra trong toàn khối chất lỏng."},
+    {q:"In a cup of sweet tea, what is the solvent?", o:["The sugar","The water","The cup","The steam"], a:1,
+     e:"Dung môi là chất hoà tan chất khác — ở đây là nước. Đường là chất tan (solute)."},
+    {q:"Why does sugar dissolve faster in hot water?", o:["Hot water is thinner","The particles move faster and mix more quickly","Hot water is heavier","Sugar melts in hot water"], a:1,
+     e:"Nước nóng có các hạt chuyển động nhanh hơn nên va chạm và tách các hạt đường nhanh hơn. Lưu ý: đường <i>tan</i> chứ không <i>nóng chảy</i>."},
+    {q:"At which temperature does ice melt?", o:["0&deg;C","10&deg;C","100&deg;C","&minus;10&deg;C"], a:0,
+     e:"Nước đá nóng chảy ở 0&deg;C, và cũng chính là nhiệt độ nước đóng băng. 100&deg;C là nhiệt độ sôi."}]},
+
+{ id:"s5", t:"Forces, friction & gravity", vi:"Lực, ma sát và trọng lực",
+  kp:[
+    {en:"A force is a push or a pull. It is measured in newtons (N) with a forcemeter.", vi:"Lực là sự đẩy hoặc kéo, đo bằng niutơn (N) với lực kế."},
+    {en:"Forces can make an object start moving, stop, speed up, slow down or change shape or direction.", vi:"Lực làm vật bắt đầu chuyển động, dừng lại, nhanh lên, chậm lại, đổi hướng hoặc đổi hình dạng."},
+    {en:"Gravity is the force that pulls everything towards the centre of the Earth. Weight is the pull of gravity.", vi:"Trọng lực kéo mọi vật về tâm Trái Đất. Trọng lượng chính là lực hút đó."},
+    {en:"Mass (kg) is how much matter is in an object; weight (N) changes with gravity. On the Moon your mass is the same but your weight is less.", vi:"Khối lượng (kg) không đổi; trọng lượng (N) thay đổi theo trọng lực. Lên Mặt Trăng khối lượng giữ nguyên nhưng trọng lượng nhỏ hơn."},
+    {en:"Friction is a force between two surfaces that are rubbing. It slows things down and makes heat.", vi:"Ma sát là lực giữa hai bề mặt cọ xát, làm vật chậm lại và sinh nhiệt."},
+    {en:"Rough surfaces give more friction; smooth or oiled surfaces give less.", vi:"Bề mặt nhám cho ma sát lớn; bề mặt nhẵn hoặc có dầu cho ma sát nhỏ."},
+    {en:"Air resistance and water resistance are friction from air and water. A streamlined shape reduces them.", vi:"Lực cản không khí và lực cản nước là ma sát của không khí và nước; hình dạng thuôn giúp giảm chúng."},
+    {en:"When forces on an object are balanced, it stays still or keeps moving at the same speed.", vi:"Khi các lực cân bằng, vật đứng yên hoặc chuyển động đều."}],
+  voc:[["force","lực"],["newton (N)","niutơn"],["forcemeter","lực kế"],["gravity","trọng lực"],["mass","khối lượng"],["weight","trọng lượng"],["friction","ma sát"],["air resistance","lực cản không khí"],["streamlined","có hình thuôn, giảm cản"],["balanced forces","lực cân bằng"]],
+  quiz:[
+    {q:"What unit is force measured in?", o:["Kilograms","Newtons","Metres","Litres"], a:1,
+     e:"Lực đo bằng niutơn (N). Kilôgam là đơn vị khối lượng — đừng nhầm hai đại lượng này."},
+    {q:"An astronaut travels to the Moon. What happens?", o:["Mass and weight both stay the same","Mass stays the same, weight decreases","Mass decreases, weight stays the same","Both increase"], a:1,
+     e:"Khối lượng là lượng vật chất nên không đổi. Trọng lực trên Mặt Trăng yếu hơn nên trọng lượng nhỏ hơn (khoảng 1/6)."},
+    {q:"Why do trainers have a rough pattern on the sole?", o:["To reduce friction","To increase friction so you do not slip","To make them lighter","To look nice only"], a:1,
+     e:"Đế nhám tăng ma sát với mặt sàn, giúp bám tốt và không trượt. Đây là ví dụ ma sát có lợi."},
+    {q:"A parachute makes a falling person slow down because it:", o:["Reduces gravity","Increases air resistance","Increases weight","Removes friction"], a:1,
+     e:"Dù có diện tích lớn nên hứng nhiều không khí, làm lực cản không khí tăng và cân bằng dần với trọng lực."},
+    {q:"A box rests on a table without moving. This is because:", o:["No forces act on it","The forces on it are balanced","Gravity has stopped","Friction has disappeared"], a:1,
+     e:"Vẫn có lực: trọng lực kéo xuống, mặt bàn đẩy lên bằng đúng độ lớn. Hai lực cân bằng nên hộp đứng yên."},
+    {q:"Which shape moves through water most easily?", o:["A flat square plate","A streamlined pointed shape","A wide open cup","A rough cube"], a:1,
+     e:"Hình thuôn nhọn rẽ nước dễ, giảm lực cản của nước — vì thế cá và tàu ngầm đều có dạng này."}]},
+
+{ id:"s6", t:"Light, shadows & reflection", vi:"Ánh sáng, bóng tối và phản xạ",
+  kp:[
+    {en:"Light travels in straight lines from a light source such as the Sun, a lamp or a flame.", vi:"Ánh sáng truyền theo đường thẳng từ nguồn sáng như Mặt Trời, đèn hoặc ngọn lửa."},
+    {en:"We see an object when light from it enters our eyes. The Moon is not a light source — it reflects sunlight.", vi:"Ta nhìn thấy vật khi ánh sáng từ vật đi vào mắt. Mặt Trăng không phải nguồn sáng, nó phản xạ ánh sáng Mặt Trời."},
+    {en:"Opaque materials block light, translucent ones let some through, transparent ones let light through clearly.", vi:"Vật cản sáng chặn hoàn toàn; vật mờ cho một phần ánh sáng qua; vật trong suốt cho ánh sáng qua rõ."},
+    {en:"A shadow forms when an opaque object blocks light. The shadow has the same shape as the object.", vi:"Bóng hình thành khi vật cản sáng chặn ánh sáng; bóng có hình dạng giống vật."},
+    {en:"Move the object closer to the light source and the shadow gets BIGGER; move it away and the shadow gets smaller.", vi:"Đưa vật lại gần nguồn sáng thì bóng TO ra; đưa ra xa thì bóng nhỏ lại."},
+    {en:"Light reflects off a smooth shiny surface. The angle of incidence equals the angle of reflection.", vi:"Ánh sáng phản xạ trên mặt nhẵn bóng: góc tới bằng góc phản xạ."},
+    {en:"In a mirror the image is the same size, the same distance behind the mirror, and left and right are swapped.", vi:"Ảnh trong gương cùng kích thước, cách gương một khoảng bằng vật, và trái phải bị đảo ngược."},
+    {en:"White light can be split into a spectrum of colours by a prism or by raindrops making a rainbow.", vi:"Ánh sáng trắng bị tách thành dải màu qua lăng kính hoặc hạt mưa tạo cầu vồng."}],
+  voc:[["light source","nguồn sáng"],["opaque","không cho ánh sáng qua"],["translucent","mờ, cho một phần qua"],["transparent","trong suốt"],["shadow","bóng"],["reflect","phản xạ"],["angle of incidence","góc tới"],["mirror image","ảnh trong gương"],["prism","lăng kính"],["spectrum","quang phổ, dải màu"]],
+  quiz:[
+    {q:"Which of these is NOT a light source?", o:["The Sun","A candle flame","The Moon","A torch bulb"], a:2,
+     e:"Mặt Trăng chỉ phản xạ ánh sáng Mặt Trời, nó không tự phát ra ánh sáng nên không phải nguồn sáng."},
+    {q:"A toy is moved closer to a torch. What happens to its shadow on the wall?", o:["It gets bigger","It gets smaller","It disappears","It stays the same"], a:0,
+     e:"Vật càng gần nguồn sáng thì chặn được nhiều tia sáng hơn và các tia loe rộng hơn, nên bóng trên tường to ra."},
+    {q:"Frosted bathroom glass lets some light through but you cannot see clearly. It is:", o:["Transparent","Translucent","Opaque","Reflective"], a:1,
+     e:"Kính mờ = translucent: ánh sáng đi qua nhưng bị tán xạ nên hình ảnh không rõ. Trong suốt là transparent, cản hẳn là opaque."},
+    {q:"Light hits a mirror at 30&deg; to the mirror's normal. At what angle does it reflect?", o:["15&deg;","30&deg;","60&deg;","90&deg;"], a:1,
+     e:"Định luật phản xạ: góc tới bằng góc phản xạ, nên vẫn là 30&deg;."},
+    {q:"Why can you see this page?", o:["Your eyes send out light","Light from the page enters your eyes","The page makes its own light","Shadows fall on it"], a:1,
+     e:"Ta nhìn thấy vật không tự phát sáng nhờ ánh sáng phản xạ từ vật đi vào mắt. Mắt không phát ra ánh sáng."},
+    {q:"You hold up your right hand in front of a mirror. In the image it looks like:", o:["The right hand","The left hand","No hand","Two hands"], a:1,
+     e:"Gương đảo trái - phải (lateral inversion), nên tay phải trông như tay trái. Kích thước và khoảng cách thì không đổi."}]},
+
+{ id:"s7", t:"Electricity & circuits", vi:"Điện và mạch điện",
+  kp:[
+    {en:"A circuit must be a complete loop from one end of the cell, through the components, and back to the other end.", vi:"Mạch điện phải là vòng kín từ cực này của pin, qua các bộ phận, rồi về cực kia."},
+    {en:"A switch works by making a gap in the circuit (off) or closing it (on).", vi:"Công tắc hoạt động bằng cách tạo khe hở (tắt) hoặc nối liền mạch (bật)."},
+    {en:"Conductors let electricity flow — metals, graphite. Insulators do not — plastic, rubber, wood, glass.", vi:"Vật dẫn cho điện đi qua (kim loại, than chì); vật cách điện thì không (nhựa, cao su, gỗ, thuỷ tinh)."},
+    {en:"Adding more cells makes the lamp brighter because the voltage is higher.", vi:"Thêm pin làm đèn sáng hơn vì hiệu điện thế lớn hơn."},
+    {en:"Adding more lamps in a series circuit makes each one dimmer.", vi:"Thêm bóng đèn vào mạch nối tiếp thì mỗi bóng tối đi."},
+    {en:"In a series circuit there is one path; if one lamp breaks, they all go out.", vi:"Mạch nối tiếp chỉ có một đường đi; một bóng hỏng là cả mạch tắt."},
+    {en:"Longer or thinner wire increases resistance, so the current is smaller and the lamp is dimmer.", vi:"Dây dài hơn hoặc mảnh hơn làm điện trở tăng, dòng điện nhỏ đi nên đèn tối hơn."},
+    {en:"Circuit symbols must be drawn with a ruler: cell, lamp, switch, buzzer, motor, wire.", vi:"Kí hiệu mạch điện phải vẽ bằng thước: pin, bóng đèn, công tắc, còi, động cơ, dây dẫn."}],
+  voc:[["circuit","mạch điện"],["cell / battery","pin / bộ pin"],["conductor","vật dẫn điện"],["insulator","vật cách điện"],["switch","công tắc"],["voltage","hiệu điện thế"],["current","dòng điện"],["resistance","điện trở"],["series circuit","mạch nối tiếp"],["component","bộ phận, linh kiện"]],
+  quiz:[
+    {q:"A lamp does not light up. Which is the most likely cause?", o:["The circuit has a gap in it","The wires are too short","The lamp is plastic","There is too much light in the room"], a:0,
+     e:"Mạch phải kín thì dòng điện mới chạy. Hở mạch (dây tuột, công tắc mở, pin lắp sai chiều) là nguyên nhân phổ biến nhất."},
+    {q:"Which material is an insulator?", o:["Copper","Aluminium","Rubber","Steel"], a:2,
+     e:"Cao su không cho điện đi qua nên dùng bọc dây dẫn. Đồng, nhôm, thép đều là kim loại nên dẫn điện."},
+    {q:"A second cell is added to a circuit with one lamp. The lamp will:", o:["Get dimmer","Get brighter","Stay the same","Go out"], a:1,
+     e:"Thêm pin làm hiệu điện thế tăng, dòng điện qua đèn lớn hơn nên đèn sáng hơn (nhưng dễ cháy nếu quá nhiều pin)."},
+    {q:"Two lamps are added to a series circuit that had one lamp. Each lamp now:", o:["Is brighter","Is dimmer","Is unchanged","Flashes"], a:1,
+     e:"Cùng một nguồn phải chia cho nhiều bóng hơn, điện trở tổng tăng nên dòng điện giảm và mỗi bóng tối hơn."},
+    {q:"Why is the handle of a screwdriver made of plastic?", o:["It is cheaper","Plastic is an insulator, so it protects the user","Plastic conducts better","To make it heavier"], a:1,
+     e:"Nhựa cách điện nên ngăn dòng điện truyền vào tay người dùng — đây là ứng dụng an toàn điện."},
+    {q:"In a fair test on wire length and lamp brightness, what must stay the SAME?", o:["The length of the wire","The number of cells","The brightness","The type of measurement"], a:1,
+     e:"Chỉ được thay đổi chiều dài dây. Số pin, loại dây và bóng đèn phải giữ nguyên; độ sáng là kết quả đo được."}]},
+
+{ id:"s8", t:"Earth and Space", vi:"Trái Đất và Vũ trụ",
+  kp:[
+    {en:"The Earth spins on its axis once every 24 hours. This gives day and night.", vi:"Trái Đất tự quay quanh trục hết 24 giờ, tạo ra ngày và đêm."},
+    {en:"The Sun does not move across the sky — it looks that way because the Earth is turning.", vi:"Mặt Trời không thực sự đi ngang bầu trời; đó là do Trái Đất quay."},
+    {en:"The Earth orbits the Sun once every 365&frac14; days. That is one year.", vi:"Trái Đất quay quanh Mặt Trời hết 365 ngày 1/4 — đó là một năm."},
+    {en:"The Earth's axis is tilted. This tilt causes the seasons, not the distance from the Sun.", vi:"Trục Trái Đất nghiêng, và chính độ nghiêng này tạo ra các mùa — không phải do xa gần Mặt Trời."},
+    {en:"It is summer in the hemisphere tilted towards the Sun: longer days and more direct sunlight.", vi:"Bán cầu nghiêng về phía Mặt Trời là mùa hè: ngày dài hơn và nắng chiếu thẳng hơn."},
+    {en:"The Moon orbits the Earth about every 28 days, giving the phases of the Moon.", vi:"Mặt Trăng quay quanh Trái Đất khoảng 28 ngày, tạo ra các pha của Mặt Trăng."},
+    {en:"The eight planets in order from the Sun: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.", vi:"Tám hành tinh theo thứ tự từ Mặt Trời: Thuỷ, Kim, Trái Đất, Hoả, Mộc, Thổ, Thiên Vương, Hải Vương."},
+    {en:"Shadows are longest in the early morning and late afternoon, and shortest at midday.", vi:"Bóng dài nhất vào sáng sớm và chiều muộn, ngắn nhất vào giữa trưa."}],
+  voc:[["axis","trục quay"],["rotate / spin","tự quay"],["orbit","quỹ đạo, quay quanh"],["tilt","độ nghiêng"],["hemisphere","bán cầu"],["phases of the Moon","các pha Mặt Trăng"],["solar system","hệ Mặt Trời"],["star","ngôi sao"],["satellite","vệ tinh"],["sunrise / sunset","bình minh / hoàng hôn"]],
+  quiz:[
+    {q:"What causes day and night?", o:["The Sun moving round the Earth","The Earth spinning on its axis","The Moon blocking the Sun","The Earth orbiting the Sun"], a:1,
+     e:"Trái Đất tự quay quanh trục trong 24 giờ; nửa hướng về Mặt Trời là ban ngày, nửa kia là ban đêm."},
+    {q:"What causes the seasons?", o:["The Earth being closer to the Sun in summer","The tilt of the Earth's axis","The Moon's orbit","Clouds in winter"], a:1,
+     e:"Đây là câu hay bị sai. Nguyên nhân là trục nghiêng, nên các bán cầu nhận ánh nắng thẳng hoặc xiên vào từng thời điểm trong năm."},
+    {q:"How long does the Earth take to orbit the Sun once?", o:["24 hours","28 days","365&frac14; days","10 years"], a:2,
+     e:"Một vòng quanh Mặt Trời là một năm. 24 giờ là một vòng tự quay; 28 ngày là chu kỳ Mặt Trăng."},
+    {q:"When is a shadow shortest during the day?", o:["At sunrise","At midday","At sunset","At night"], a:1,
+     e:"Giữa trưa Mặt Trời lên cao nhất nên tia sáng gần như chiếu thẳng xuống, bóng ngắn nhất."},
+    {q:"Which planet is fourth from the Sun?", o:["Venus","Mars","Jupiter","Mercury"], a:1,
+     e:"Thứ tự: Thuỷ (1), Kim (2), Trái Đất (3), Hoả (4). Sao Hoả là hành tinh thứ tư."},
+    {q:"Why does the Moon appear to change shape during a month?", o:["Clouds cover part of it","We see different amounts of its sunlit side as it orbits Earth","The Moon really changes shape","The Earth's shadow always covers it"], a:1,
+     e:"Mặt Trăng luôn có nửa được chiếu sáng; khi nó quay quanh Trái Đất, ta thấy phần sáng đó ở những góc khác nhau nên hình dạng thay đổi."}]},
+
+{ id:"s9", t:"Scientific enquiry & fair tests", vi:"Phương pháp thí nghiệm và bài kiểm chứng công bằng",
+  kp:[
+    {en:"A prediction says what you think will happen AND uses science to say why.", vi:"Dự đoán phải nói điều gì sẽ xảy ra VÀ giải thích bằng kiến thức khoa học."},
+    {en:"The independent variable is the ONE thing you change. The dependent variable is what you measure.", vi:"Biến độc lập là điều duy nhất ta thay đổi; biến phụ thuộc là điều ta đo được."},
+    {en:"Control variables are everything you keep the same. Keeping them the same makes the test fair.", vi:"Biến kiểm soát là những gì phải giữ nguyên — đó chính là điều làm bài thí nghiệm công bằng."},
+    {en:"Repeat each measurement three times and take an average to make results more reliable.", vi:"Lặp lại phép đo 3 lần rồi lấy trung bình để kết quả đáng tin cậy hơn."},
+    {en:"A result that does not fit the pattern is an anomalous result. Check it or leave it out of the average.", vi:"Kết quả lệch hẳn khỏi quy luật gọi là kết quả bất thường; nên kiểm tra lại hoặc bỏ khi tính trung bình."},
+    {en:"Use a line graph for continuous data (time, temperature) and a bar chart for groups (types of material).", vi:"Dùng đồ thị đường cho số liệu liên tục (thời gian, nhiệt độ); dùng biểu đồ cột cho các nhóm (loại vật liệu)."},
+    {en:"A conclusion answers the question using the evidence: &ldquo;The longer the wire, the dimmer the lamp, because...&rdquo;", vi:"Kết luận phải trả lời câu hỏi dựa trên số liệu: &ldquo;Dây càng dài thì đèn càng tối, vì...&rdquo;"},
+    {en:"An evaluation says what went well, what could be improved and how.", vi:"Đánh giá: điều gì làm tốt, điều gì cần cải thiện và cải thiện bằng cách nào."}],
+  voc:[["prediction","dự đoán"],["variable","biến số"],["independent variable","biến độc lập (thay đổi)"],["dependent variable","biến phụ thuộc (đo)"],["control variable","biến giữ nguyên"],["fair test","thí nghiệm công bằng"],["reliable","đáng tin cậy"],["anomalous result","kết quả bất thường"],["evidence","bằng chứng"],["conclusion","kết luận"]],
+  quiz:[
+    {q:"In a test on how the length of a pendulum affects its swing time, what is the independent variable?", o:["The swing time","The length of the pendulum","The mass of the bob","The number of swings"], a:1,
+     e:"Biến độc lập là thứ ta chủ động thay đổi — chiều dài dây. Thời gian dao động là biến phụ thuộc (đo được)."},
+    {q:"Why should a measurement be repeated three times?", o:["To use up more time","To make the results more reliable and spot mistakes","To change the answer","Because the teacher says so"], a:1,
+     e:"Lặp lại giúp phát hiện phép đo sai và lấy trung bình, làm kết quả đáng tin cậy hơn."},
+    {q:"Results for water cooling every minute are best shown on:", o:["A bar chart","A pie chart","A line graph","A branching key"], a:2,
+     e:"Nhiệt độ theo thời gian là số liệu liên tục nên dùng đồ thị đường, và có thể nối điểm để thấy xu hướng."},
+    {q:"Four readings are 21, 22, 21, 45. Which is the anomalous result?", o:["21","22","45","There is none"], a:2,
+     e:"45 lệch hẳn khỏi ba giá trị còn lại nên là kết quả bất thường; cần đo lại hoặc loại khỏi trung bình."},
+    {q:"Which is a good prediction?", o:["Something will happen","The ice will melt faster in the warm room because heat gives particles more energy","I think it will be interesting","The experiment will work"], a:1,
+     e:"Dự đoán tốt phải nêu rõ kết quả mong đợi VÀ lý do khoa học. Các đáp án khác quá mơ hồ."},
+    {q:"In a fair test on which material keeps water warmest, which must stay the same?", o:["The type of material","The starting temperature of the water","The final temperature","The colour of the material"], a:1,
+     e:"Chỉ thay đổi loại vật liệu. Nhiệt độ ban đầu, lượng nước và thời gian phải giữ nguyên; nhiệt độ cuối là kết quả đo."}]}
+]},
+
+math: { name:"Mathematics", vi:"Toán", icon:"&#128208;", ac:"--mat", acbg:"--mat-bg", units:[
+
+{ id:"m1", t:"Place value, decimals & rounding", vi:"Giá trị theo vị trí, số thập phân, làm tròn",
+  kp:[
+    {en:"Each column is 10 times the column on its right: 1 000 000 &rarr; 100 000 &rarr; ... &rarr; 0.1 &rarr; 0.01 &rarr; 0.001.", vi:"Mỗi cột gấp 10 lần cột bên phải nó, kéo dài cả sang phần thập phân."},
+    {en:"In 3.671 the 6 means 6 tenths, the 7 means 7 hundredths, the 1 means 1 thousandth.", vi:"Đọc đúng vị trí: phần mười, phần trăm, phần nghìn."},
+    {en:"Multiplying by 10 or 100 moves the digits LEFT; dividing moves them RIGHT.", vi:"Nhân 10 hoặc 100 thì các chữ số dịch sang TRÁI; chia thì dịch sang PHẢI."},
+    {en:"To round, look at the digit just after the place you are rounding to. 5 or more &rarr; round up.", vi:"Làm tròn: nhìn chữ số NGAY SAU vị trí cần làm tròn; từ 5 trở lên thì tăng thêm 1."},
+    {en:"To compare decimals, line up the decimal points and compare from the left. 0.5 is bigger than 0.45.", vi:"So sánh số thập phân: so từ trái sang, thêm số 0 cho bằng chữ số. 0.5 > 0.45."},
+    {en:"On a number line, &minus;7 is less than &minus;3. Numbers get smaller as you move left.", vi:"Trên trục số, càng sang trái càng nhỏ, nên &minus;7 < &minus;3."},
+    {en:"Estimate first by rounding, then check your exact answer is sensible.", vi:"Ước lượng trước bằng cách làm tròn, rồi kiểm tra kết quả chính xác có hợp lý không."}],
+  voc:[["place value","giá trị theo vị trí"],["tenths","phần mười"],["hundredths","phần trăm"],["thousandths","phần nghìn"],["round to 1 d.p.","làm tròn 1 chữ số thập phân"],["estimate","ước lượng"],["ascending order","thứ tự tăng dần"],["negative number","số âm"]],
+  quiz:[
+    {q:"What is the value of the digit 7 in 3.671?", o:["7 tenths","7 hundredths","7 thousandths","7 units"], a:1,
+     e:"Đếm từ dấu thập phân: 6 là phần mười, 7 là phần trăm (0.07), 1 là phần nghìn."},
+    {q:"Round 4.687 to two decimal places.", o:["4.68","4.69","4.7","4.6"], a:1,
+     e:"Giữ 2 chữ số thập phân, nhìn chữ số thứ ba là 7 (&ge;5) nên tăng 8 lên 9 &rarr; 4.69."},
+    {q:"0.4 &divide; 100 =", o:["0.04","0.004","4","40"], a:1,
+     e:"Chia 100 thì các chữ số dịch sang phải 2 cột: 0.4 &rarr; 0.04 &rarr; 0.004."},
+    {q:"Which number is the largest?", o:["0.5","0.45","0.505","0.55"], a:3,
+     e:"Viết đều 3 chữ số: 0.500 / 0.450 / 0.505 / 0.550 &rarr; 0.550 lớn nhất. Số dài hơn không có nghĩa là lớn hơn."},
+    {q:"Round 24 953 to the nearest thousand.", o:["24 000","24 900","25 000","30 000"], a:2,
+     e:"Cột nghìn là 4, chữ số ngay sau là 9 (&ge;5) nên tăng lên 25 &rarr; 25 000."},
+    {q:"The temperature is &minus;6&deg;C. It rises by 9&deg;C. What is the new temperature?", o:["3&deg;C","&minus;3&deg;C","&minus;15&deg;C","15&deg;C"], a:0,
+     e:"Đi lên 9 đơn vị từ &minus;6: từ &minus;6 lên 0 mất 6, còn 3 nữa &rarr; +3&deg;C."}]},
+
+{ id:"m2", t:"Fractions, decimals & percentages", vi:"Phân số, số thập phân và phần trăm",
+  kp:[
+    {en:"Learn by heart: 1/2 = 0.5 = 50%, 1/4 = 0.25 = 25%, 1/5 = 0.2 = 20%, 1/8 = 0.125 = 12.5%.", vi:"Học thuộc bảng quy đổi này — đề Checkpoint dùng liên tục."},
+    {en:"Fraction to decimal: divide the top by the bottom. 3 &divide; 8 = 0.375.", vi:"Đổi phân số sang thập phân: lấy tử chia mẫu."},
+    {en:"Decimal to percentage: multiply by 100. 0.375 &rarr; 37.5%.", vi:"Đổi thập phân sang phần trăm: nhân 100."},
+    {en:"Quick percentages: 10% = &divide;10, 1% = &divide;100, 50% = &divide;2, 25% = &divide;4. Build others from these.", vi:"Mẹo tính nhanh: ghép các mốc 10%, 1%, 50%, 25%. Ví dụ 15% = 10% + 5%."},
+    {en:"Equivalent fractions: multiply or divide top AND bottom by the same number.", vi:"Phân số bằng nhau: nhân hoặc chia CẢ tử và mẫu cho cùng một số."},
+    {en:"To add or subtract fractions you need the same denominator first.", vi:"Cộng trừ phân số phải quy đồng mẫu số trước."},
+    {en:"Simplify by dividing top and bottom by their highest common factor.", vi:"Rút gọn bằng cách chia cả tử và mẫu cho ước chung lớn nhất."}],
+  voc:[["numerator","tử số"],["denominator","mẫu số"],["equivalent","tương đương, bằng nhau"],["simplify","rút gọn"],["percentage","phần trăm"],["discount","giảm giá"],["improper fraction","phân số lớn hơn 1"],["mixed number","hỗn số"]],
+  quiz:[
+    {q:"What is 15% of 60?", o:["6","9","12","15"], a:1,
+     e:"10% của 60 = 6. 5% là một nửa của 10% = 3. Cộng lại: 6 + 3 = 9."},
+    {q:"Write 3/8 as a decimal.", o:["0.38","0.375","0.83","3.8"], a:1,
+     e:"3 &divide; 8 = 0.375. Nhớ 1/8 = 0.125 nên 3/8 = 3 &times; 0.125."},
+    {q:"Which is bigger: 2/5 or 0.45?", o:["2/5","0.45","They are equal","Cannot tell"], a:1,
+     e:"2/5 = 0.4, so với 0.45 thì 0.45 lớn hơn. Luôn đổi về cùng một dạng rồi mới so sánh."},
+    {q:"Simplify 18/24 to its simplest form.", o:["9/12","6/8","3/4","2/3"], a:2,
+     e:"Ước chung lớn nhất của 18 và 24 là 6: 18&divide;6 = 3, 24&divide;6 = 4 &rarr; 3/4. Các đáp án khác đúng giá trị nhưng chưa rút gọn hết."},
+    {q:"1/4 + 1/3 =", o:["2/7","7/12","1/7","5/12"], a:1,
+     e:"Quy đồng mẫu 12: 3/12 + 4/12 = 7/12. Không được cộng tử với tử và mẫu với mẫu."},
+    {q:"A jacket costs $80. In a sale it has 25% off. What is the sale price?", o:["$20","$55","$60","$75"], a:2,
+     e:"25% của 80 = 20 (số tiền giảm). Giá phải trả = 80 &minus; 20 = $60. Câu hỏi hỏi giá bán chứ không hỏi số tiền giảm."}]},
+
+{ id:"m3", t:"Ratio and proportion", vi:"Tỉ số và tỉ lệ",
+  kp:[
+    {en:"A ratio compares two amounts, e.g. 2 : 3. It has no units.", vi:"Tỉ số so sánh hai lượng, ví dụ 2 : 3, và không có đơn vị."},
+    {en:"The ratio 2 : 3 means the whole is split into 2 + 3 = 5 equal parts.", vi:"Tỉ số 2 : 3 nghĩa là toàn bộ chia thành 2 + 3 = 5 phần bằng nhau."},
+    {en:"To share 30 in the ratio 2 : 3: 30 &divide; 5 = 6 per part, so 12 and 18.", vi:"Chia 30 theo tỉ số 2 : 3: lấy 30 &divide; 5 = 6 cho mỗi phần, được 12 và 18."},
+    {en:"Simplify a ratio by dividing both sides by the same number: 10 : 15 = 2 : 3.", vi:"Rút gọn tỉ số bằng cách chia hai vế cho cùng một số: 10 : 15 = 2 : 3."},
+    {en:"Proportion compares a part with the whole, often as a fraction or percentage.", vi:"Tỉ lệ so sánh một phần với toàn bộ, thường viết dạng phân số hoặc phần trăm."},
+    {en:"Recipe scaling: if a recipe for 4 people needs 200 g, then for 6 people find one person first (50 g), then multiply.", vi:"Bài công thức nấu ăn: tìm lượng cho 1 người trước (unitary method), rồi nhân lên."},
+    {en:"Direct proportion: if one amount doubles, the other doubles too.", vi:"Tỉ lệ thuận: một đại lượng gấp đôi thì đại lượng kia cũng gấp đôi."}],
+  voc:[["ratio","tỉ số"],["proportion","tỉ lệ"],["share in the ratio","chia theo tỉ số"],["for every","cứ mỗi"],["scale up / down","tăng / giảm theo tỉ lệ"],["unitary method","phương pháp quy về đơn vị"],["equivalent ratio","tỉ số bằng nhau"],["per","mỗi"]],
+  quiz:[
+    {q:"Share $40 between Mai and Nam in the ratio 3 : 5. How much does Nam get?", o:["$15","$24","$25","$16"], a:2,
+     e:"Tổng số phần: 3 + 5 = 8. Mỗi phần: 40 &divide; 8 = 5. Nam có 5 phần &rarr; 5 &times; 5 = $25 (Mai được $15)."},
+    {q:"Simplify the ratio 12 : 18.", o:["6 : 9","2 : 3","1 : 2","4 : 6"], a:1,
+     e:"Chia cả hai vế cho ước chung lớn nhất là 6 &rarr; 2 : 3. 6 : 9 và 4 : 6 đúng nhưng chưa rút gọn hết."},
+    {q:"A recipe for 4 people uses 200 g of rice. How much for 6 people?", o:["250 g","300 g","350 g","400 g"], a:1,
+     e:"Quy về 1 người: 200 &divide; 4 = 50 g. Với 6 người: 50 &times; 6 = 300 g."},
+    {q:"In a class of 30, the ratio of girls to boys is 2 : 3. How many girls are there?", o:["10","12","15","18"], a:1,
+     e:"Tổng phần: 5. Mỗi phần: 30 &divide; 5 = 6. Số nữ = 2 &times; 6 = 12."},
+    {q:"For every 3 red beads there are 4 blue beads. There are 21 red beads. How many blue?", o:["24","28","18","32"], a:1,
+     e:"21 &divide; 3 = 7 nhóm. Mỗi nhóm có 4 hạt xanh &rarr; 7 &times; 4 = 28."},
+    {q:"5 pens cost $3.50. What do 8 pens cost?", o:["$5.20","$5.60","$4.90","$6.00"], a:1,
+     e:"Giá 1 bút: 3.50 &divide; 5 = $0.70. Tám bút: 0.70 &times; 8 = $5.60."}]},
+
+{ id:"m4", t:"Mental & written calculation", vi:"Tính nhẩm và tính viết bốn phép",
+  kp:[
+    {en:"Order of operations: brackets, then &times; and &divide;, then + and &minus;.", vi:"Thứ tự phép tính: ngoặc trước, rồi nhân chia, cuối cùng cộng trừ."},
+    {en:"Mental strategy: round then adjust. 199 + 46 = 200 + 46 &minus; 1 = 245.", vi:"Mẹo nhẩm: làm tròn rồi bù trừ. 199 + 46 = 200 + 46 &minus; 1."},
+    {en:"To multiply by 5, multiply by 10 then halve. To multiply by 4, double twice.", vi:"Nhân 5: nhân 10 rồi chia đôi. Nhân 4: gấp đôi hai lần."},
+    {en:"Long multiplication: split the number by place value, e.g. 34 &times; 26 = 34&times;20 + 34&times;6.", vi:"Nhân số lớn: tách theo hàng, ví dụ 34 &times; 26 = 34&times;20 + 34&times;6."},
+    {en:"Check a division with multiplication: if 96 &divide; 8 = 12, then 12 &times; 8 must be 96.", vi:"Kiểm tra phép chia bằng phép nhân ngược lại."},
+    {en:"A remainder must be smaller than the divisor.", vi:"Số dư luôn phải nhỏ hơn số chia."},
+    {en:"Estimate first: 297 &times; 4 is about 300 &times; 4 = 1200, so an answer near 1188 is sensible.", vi:"Ước lượng trước để biết kết quả có hợp lý không."}],
+  voc:[["sum / total","tổng"],["difference","hiệu"],["product","tích"],["quotient","thương"],["remainder","số dư"],["multiple","bội số"],["factor","ước số"],["brackets","dấu ngoặc"]],
+  quiz:[
+    {q:"5 + 3 &times; 4 =", o:["32","17","23","12"], a:1,
+     e:"Nhân trước: 3 &times; 4 = 12, rồi cộng 5 &rarr; 17. Nếu tính từ trái sang sẽ ra 32 — đó là lỗi phổ biến nhất."},
+    {q:"(8 + 2) &times; 3 &minus; 5 =", o:["25","19","30","21"], a:0,
+     e:"Ngoặc trước: 10. Rồi nhân: 10 &times; 3 = 30. Cuối cùng trừ 5 &rarr; 25."},
+    {q:"What is 34 &times; 26?", o:["784","884","874","904"], a:1,
+     e:"34 &times; 20 = 680 và 34 &times; 6 = 204. Cộng lại: 680 + 204 = 884. Ước lượng 34&times;26 &asymp; 30&times;26 = 780 nên 884 hợp lý."},
+    {q:"What is 137 &divide; 6?", o:["22 r 5","23 r 1","22 r 4","21 r 6"], a:0,
+     e:"6 &times; 22 = 132, còn dư 5. Số dư 5 nhỏ hơn số chia 6 nên hợp lệ. Đáp án 21 r 6 sai vì dư bằng số chia."},
+    {q:"A quick way to work out 48 &times; 5 is:", o:["48 &times; 10 &divide; 2","48 + 5","48 &divide; 10 &times; 2","48 &times; 2 &times; 2"], a:0,
+     e:"48 &times; 10 = 480, chia đôi được 240. Nhân 10 rồi chia đôi luôn nhanh hơn nhân 5 trực tiếp."},
+    {q:"Estimate 612 &minus; 289.", o:["About 200","About 300","About 400","About 900"], a:1,
+     e:"Làm tròn: 600 &minus; 300 = 300. Kết quả chính xác là 323, rất gần ước lượng."}]},
+
+{ id:"m5", t:"Sequences, rules & simple algebra", vi:"Dãy số, quy luật và đại số đơn giản",
+  kp:[
+    {en:"A sequence follows a rule. Find the difference between terms first.", vi:"Dãy số theo một quy luật; hãy tìm hiệu giữa các số hạng trước tiên."},
+    {en:"The rule can be described in words: &lsquo;add 4 each time&rsquo; or &lsquo;multiply by 2&rsquo;.", vi:"Quy luật có thể mô tả bằng lời: cộng 4 mỗi lần, hoặc nhân 2 mỗi lần."},
+    {en:"In algebra a letter stands for an unknown number: n + 5, 3n, n &divide; 2.", vi:"Trong đại số, chữ cái thay cho số chưa biết: n + 5, 3n, n &divide; 2."},
+    {en:"3n means 3 &times; n. Never write the multiplication sign.", vi:"3n nghĩa là 3 &times; n; không viết dấu nhân."},
+    {en:"To solve n + 7 = 12, do the opposite operation: n = 12 &minus; 7 = 5.", vi:"Giải n + 7 = 12 bằng phép ngược lại: n = 12 &minus; 7 = 5."},
+    {en:"To solve 4n = 20, divide both sides by 4: n = 5.", vi:"Giải 4n = 20: chia hai vế cho 4 &rarr; n = 5."},
+    {en:"For a pattern of matchstick shapes, count how many are added each time — that number goes with n.", vi:"Với dãy hình que diêm, đếm số que thêm mỗi lần — con số đó đi kèm với n."}],
+  voc:[["sequence","dãy số"],["term","số hạng"],["rule","quy luật"],["expression","biểu thức"],["equation","phương trình"],["unknown","ẩn số"],["substitute","thay số vào"],["inverse operation","phép tính ngược"]],
+  quiz:[
+    {q:"What is the next number: 4, 9, 14, 19, ___?", o:["23","24","25","20"], a:1,
+     e:"Hiệu giữa các số là 5 &rarr; 19 + 5 = 24."},
+    {q:"Solve n &minus; 8 = 15.", o:["n = 7","n = 23","n = 120","n = 22"], a:1,
+     e:"Làm phép ngược lại: n = 15 + 8 = 23. Kiểm tra: 23 &minus; 8 = 15 &#10003;"},
+    {q:"Solve 6n = 42.", o:["n = 6","n = 7","n = 36","n = 48"], a:1,
+     e:"6n nghĩa là 6 &times; n. Chia hai vế cho 6: n = 42 &divide; 6 = 7."},
+    {q:"If n = 5, what is 3n + 2?", o:["10","17","32","15"], a:1,
+     e:"Thay n = 5: 3 &times; 5 = 15, cộng 2 &rarr; 17. Đừng viết liền thành 35 rồi cộng 2."},
+    {q:"A pattern uses 4 sticks for 1 square, 7 for 2 squares, 10 for 3 squares. How many for 10 squares?", o:["31","40","34","37"], a:0,
+     e:"Mỗi hình vuông thêm 3 que, hình đầu tiên có 4. Quy luật: 3n + 1 &rarr; 3 &times; 10 + 1 = 31."},
+    {q:"Which sequence has the rule &lsquo;multiply by 3&rsquo;?", o:["2, 5, 8, 11","2, 6, 18, 54","3, 6, 9, 12","1, 3, 5, 7"], a:1,
+     e:"2 &rarr; 6 &rarr; 18 &rarr; 54 mỗi lần nhân 3. Dãy 3, 6, 9, 12 là cộng 3 chứ không phải nhân 3."}]},
+
+{ id:"m6", t:"2D and 3D shapes, angles", vi:"Hình phẳng, hình khối và góc",
+  kp:[
+    {en:"Angles on a straight line add up to 180&deg;. Angles around a point add up to 360&deg;.", vi:"Các góc trên một đường thẳng cộng lại 180&deg;; các góc quanh một điểm cộng lại 360&deg;."},
+    {en:"The angles in any triangle add up to 180&deg;. In any quadrilateral they add up to 360&deg;.", vi:"Tổng ba góc trong tam giác là 180&deg;; tổng bốn góc trong tứ giác là 360&deg;."},
+    {en:"Acute < 90&deg;, right = 90&deg;, obtuse is between 90&deg; and 180&deg;, reflex is more than 180&deg;.", vi:"Góc nhọn < 90&deg;, góc vuông = 90&deg;, góc tù từ 90&deg; đến 180&deg;, góc phản > 180&deg;."},
+    {en:"An equilateral triangle has 3 equal sides and 3 angles of 60&deg;. An isosceles triangle has 2 equal sides and 2 equal angles.", vi:"Tam giác đều: 3 cạnh bằng nhau, mỗi góc 60&deg;. Tam giác cân: 2 cạnh và 2 góc bằng nhau."},
+    {en:"A prism has the same cross-section all the way through; a pyramid comes to a point.", vi:"Hình lăng trụ có mặt cắt giống nhau suốt chiều dài; hình chóp thu về một đỉnh."},
+    {en:"A cube has 6 faces, 12 edges and 8 vertices.", vi:"Hình lập phương có 6 mặt, 12 cạnh và 8 đỉnh."},
+    {en:"A net is the flat shape that folds up into a 3D solid.", vi:"Hình khai triển (net) là hình phẳng gấp lại thành hình khối."}],
+  voc:[["acute angle","góc nhọn"],["obtuse angle","góc tù"],["reflex angle","góc phản"],["parallel","song song"],["perpendicular","vuông góc"],["vertex / vertices","đỉnh"],["face","mặt"],["edge","cạnh"],["net","hình khai triển"],["quadrilateral","tứ giác"]],
+  quiz:[
+    {q:"Two angles on a straight line are 115&deg; and x. What is x?", o:["65&deg;","75&deg;","85&deg;","245&deg;"], a:0,
+     e:"Tổng các góc kề bù trên đường thẳng là 180&deg;, nên x = 180 &minus; 115 = 65&deg;."},
+    {q:"A triangle has angles 40&deg; and 75&deg;. What is the third angle?", o:["55&deg;","65&deg;","75&deg;","115&deg;"], a:1,
+     e:"Tổng ba góc là 180&deg;: 180 &minus; (40 + 75) = 180 &minus; 115 = 65&deg;."},
+    {q:"How many edges does a cube have?", o:["6","8","12","24"], a:2,
+     e:"Lập phương có 6 mặt, 8 đỉnh và 12 cạnh. Nhiều bạn nhầm 6 (số mặt) với số cạnh."},
+    {q:"An angle of 200&deg; is called:", o:["Acute","Obtuse","Reflex","Right"], a:2,
+     e:"Góc lớn hơn 180&deg; là góc phản (reflex). Góc tù chỉ từ 90&deg; đến dưới 180&deg;."},
+    {q:"Each angle of an equilateral triangle is:", o:["45&deg;","60&deg;","90&deg;","30&deg;"], a:1,
+     e:"Ba góc bằng nhau và tổng 180&deg; &rarr; mỗi góc 180 &divide; 3 = 60&deg;."},
+    {q:"Which shape has 2 pairs of parallel sides and 4 right angles?", o:["Trapezium","Rhombus","Rectangle","Kite"], a:2,
+     e:"Hình chữ nhật có hai cặp cạnh song song và bốn góc vuông. Hình thoi có cạnh song song nhưng góc không nhất thiết vuông."}]},
+
+{ id:"m7", t:"Coordinates, reflection & translation", vi:"Toạ độ, đối xứng và tịnh tiến",
+  kp:[
+    {en:"A coordinate is written (x, y): go ALONG the corridor first, then UP the stairs.", vi:"Toạ độ viết (x, y): đi NGANG trước rồi mới đi LÊN."},
+    {en:"The first quadrant has positive x and y. Stage 6 also uses negative coordinates in all four quadrants.", vi:"Góc phần tư thứ nhất có x, y dương; lớp 6 dùng cả toạ độ âm ở bốn góc phần tư."},
+    {en:"A reflection flips a shape over a mirror line. Every point stays the same distance from the line.", vi:"Phép đối xứng lật hình qua trục; mỗi điểm cách trục một khoảng không đổi."},
+    {en:"A translation slides a shape without turning it, e.g. 3 right and 2 down.", vi:"Phép tịnh tiến trượt hình mà không quay, ví dụ sang phải 3 và xuống 2."},
+    {en:"A rotation turns a shape about a centre, e.g. 90&deg; clockwise.", vi:"Phép quay xoay hình quanh một tâm, ví dụ 90&deg; theo chiều kim đồng hồ."},
+    {en:"After reflection, translation or rotation the shape stays the SAME SIZE — these are congruent.", vi:"Sau khi lật, trượt hay quay, hình vẫn GIỮ NGUYÊN kích thước — gọi là hai hình bằng nhau."},
+    {en:"A line of symmetry cuts a shape into two matching halves. A square has 4.", vi:"Trục đối xứng chia hình thành hai nửa khớp nhau; hình vuông có 4 trục."}],
+  voc:[["coordinate","toạ độ"],["x-axis / y-axis","trục hoành / trục tung"],["origin","gốc toạ độ (0, 0)"],["quadrant","góc phần tư"],["reflection","phép đối xứng"],["translation","phép tịnh tiến"],["rotation","phép quay"],["mirror line","trục đối xứng"],["clockwise","theo chiều kim đồng hồ"],["congruent","bằng nhau (cùng hình dạng và kích thước)"]],
+  quiz:[
+    {q:"Which point is 3 to the right and 2 up from the origin?", o:["(2, 3)","(3, 2)","(&minus;3, 2)","(2, &minus;3)"], a:1,
+     e:"Toạ độ là (x, y): sang phải 3 nên x = 3, lên 2 nên y = 2 &rarr; (3, 2). Đảo thứ tự là lỗi hay gặp."},
+    {q:"Point A is at (4, 1). It is translated 2 left and 3 up. Where is it now?", o:["(6, 4)","(2, 4)","(2, &minus;2)","(6, &minus;2)"], a:1,
+     e:"Sang trái 2 thì x giảm: 4 &minus; 2 = 2. Lên 3 thì y tăng: 1 + 3 = 4 &rarr; (2, 4)."},
+    {q:"A shape is reflected in a mirror line. Which is true?", o:["It becomes smaller","It stays the same size","It rotates 90&deg;","It doubles in size"], a:1,
+     e:"Phép đối xứng chỉ lật hình, không đổi kích thước — hình mới và hình cũ bằng nhau (congruent)."},
+    {q:"How many lines of symmetry does a square have?", o:["1","2","4","8"], a:2,
+     e:"Hình vuông có 4 trục đối xứng: hai đường qua trung điểm các cạnh và hai đường chéo."},
+    {q:"Point B is at (&minus;3, 2). Which quadrant is it in?", o:["First (top right)","Second (top left)","Third (bottom left)","Fourth (bottom right)"], a:1,
+     e:"x âm nên nằm bên trái, y dương nên nằm phía trên &rarr; góc phần tư thứ hai."},
+    {q:"A shape is rotated 90&deg; clockwise then 90&deg; clockwise again. This is the same as:", o:["No turn","A 180&deg; turn","A 270&deg; turn","A reflection"], a:1,
+     e:"Hai lần quay 90&deg; cùng chiều cộng lại thành 180&deg;."}]},
+
+{ id:"m8", t:"Measures: length, mass, capacity, time", vi:"Đo lường: độ dài, khối lượng, dung tích và thời gian",
+  kp:[
+    {en:"1 km = 1000 m, 1 m = 100 cm, 1 cm = 10 mm.", vi:"1 km = 1000 m; 1 m = 100 cm; 1 cm = 10 mm."},
+    {en:"1 kg = 1000 g, 1 tonne = 1000 kg, 1 litre = 1000 ml.", vi:"1 kg = 1000 g; 1 tấn = 1000 kg; 1 lít = 1000 ml."},
+    {en:"To change a big unit to a small unit, MULTIPLY. Small to big, DIVIDE.", vi:"Đổi từ đơn vị lớn sang nhỏ thì NHÂN; từ nhỏ sang lớn thì CHIA."},
+    {en:"1 cm&sup3; holds exactly 1 ml of water.", vi:"1 cm&sup3; chứa đúng 1 ml nước."},
+    {en:"24-hour clock: 14:30 is 2:30 pm. Add 12 to afternoon times.", vi:"Giờ 24h: 14:30 là 2:30 chiều. Buổi chiều cộng thêm 12."},
+    {en:"Time calculations use 60, not 100: 1 h 45 min + 30 min = 2 h 15 min.", vi:"Tính thời gian dùng hệ 60 chứ không phải 100: 1 giờ 45 phút + 30 phút = 2 giờ 15 phút."},
+    {en:"Read a scale by working out what one small division is worth first.", vi:"Đọc vạch chia: tính giá trị của một vạch nhỏ trước đã."}],
+  voc:[["length","độ dài"],["mass","khối lượng"],["capacity","dung tích"],["convert","đổi đơn vị"],["scale","vạch chia, thang đo"],["timetable","thời gian biểu"],["duration","khoảng thời gian"],["approximately","xấp xỉ"]],
+  quiz:[
+    {q:"How many millimetres are there in 3.5 cm?", o:["3.5 mm","35 mm","350 mm","0.35 mm"], a:1,
+     e:"1 cm = 10 mm, nên 3.5 &times; 10 = 35 mm. Đổi sang đơn vị nhỏ hơn nên phải nhân."},
+    {q:"A bottle holds 1.5 litres. How many millilitres is that?", o:["150 ml","1500 ml","15 ml","15 000 ml"], a:1,
+     e:"1 lít = 1000 ml, nên 1.5 &times; 1000 = 1500 ml."},
+    {q:"A film starts at 19:45 and lasts 1 hour 40 minutes. When does it end?", o:["21:25","20:85","21:15","20:25"], a:0,
+     e:"19:45 + 1 giờ = 20:45; cộng thêm 40 phút: 20:45 + 15 = 21:00, còn 25 phút &rarr; 21:25. Không có &ldquo;20:85&rdquo; vì phút chỉ đến 59."},
+    {q:"2500 g is the same as:", o:["25 kg","2.5 kg","250 kg","0.25 kg"], a:1,
+     e:"1000 g = 1 kg, nên 2500 &divide; 1000 = 2.5 kg. Từ đơn vị nhỏ sang lớn thì chia."},
+    {q:"14:20 on a 24-hour clock is:", o:["2:20 am","2:20 pm","4:20 pm","12:20 pm"], a:1,
+     e:"14 &minus; 12 = 2, và vì lớn hơn 12 nên là buổi chiều &rarr; 2:20 pm."},
+    {q:"A jug scale goes from 0 to 500 ml with 10 marks. What is one mark worth?", o:["10 ml","50 ml","5 ml","100 ml"], a:1,
+     e:"500 &divide; 10 = 50 ml mỗi vạch. Luôn tính giá trị một vạch trước khi đọc mực chất lỏng."}]},
+
+{ id:"m9", t:"Area, perimeter and volume", vi:"Diện tích, chu vi và thể tích",
+  kp:[
+    {en:"Perimeter is the distance all the way round. Add all the sides. Units: cm, m.", vi:"Chu vi là độ dài đường bao quanh; cộng tất cả các cạnh. Đơn vị: cm, m."},
+    {en:"Area of a rectangle = length &times; width. Units are squared: cm&sup2;, m&sup2;.", vi:"Diện tích hình chữ nhật = dài &times; rộng. Đơn vị có mũ 2: cm&sup2;, m&sup2;."},
+    {en:"Area of a triangle = (base &times; height) &divide; 2.", vi:"Diện tích tam giác = (đáy &times; chiều cao) &divide; 2."},
+    {en:"For an L-shape, split it into rectangles, find each area, then add.", vi:"Với hình chữ L, chia thành các hình chữ nhật, tính từng phần rồi cộng lại."},
+    {en:"Volume of a cuboid = length &times; width &times; height. Units are cubed: cm&sup3;, m&sup3;.", vi:"Thể tích hình hộp chữ nhật = dài &times; rộng &times; cao. Đơn vị có mũ 3."},
+    {en:"Two shapes can have the same area but different perimeters.", vi:"Hai hình có thể cùng diện tích nhưng khác chu vi."},
+    {en:"Always write the correct unit — losing the unit loses a mark.", vi:"Luôn ghi đúng đơn vị; thiếu đơn vị là mất điểm."}],
+  voc:[["perimeter","chu vi"],["area","diện tích"],["volume","thể tích"],["cuboid","hình hộp chữ nhật"],["base","đáy"],["height","chiều cao"],["square centimetre","xăng-ti-mét vuông"],["dimensions","kích thước"]],
+  quiz:[
+    {q:"A rectangle is 8 cm by 5 cm. What is its area?", o:["13 cm&sup2;","26 cm&sup2;","40 cm&sup2;","40 cm"], a:2,
+     e:"Diện tích = 8 &times; 5 = 40, đơn vị cm&sup2;. Đáp án &ldquo;40 cm&rdquo; sai đơn vị nên không được điểm."},
+    {q:"What is the perimeter of the same 8 cm by 5 cm rectangle?", o:["13 cm","26 cm","40 cm","30 cm"], a:1,
+     e:"Chu vi = 2 &times; (8 + 5) = 26 cm. Nhớ cộng đủ cả bốn cạnh."},
+    {q:"A triangle has base 10 cm and height 6 cm. Its area is:", o:["60 cm&sup2;","30 cm&sup2;","16 cm&sup2;","32 cm&sup2;"], a:1,
+     e:"(10 &times; 6) &divide; 2 = 30 cm&sup2;. Quên chia đôi là lỗi phổ biến nhất ở dạng bài này."},
+    {q:"A box is 4 cm &times; 3 cm &times; 2 cm. What is its volume?", o:["9 cm&sup3;","24 cm&sup3;","12 cm&sup3;","24 cm&sup2;"], a:1,
+     e:"4 &times; 3 &times; 2 = 24, đơn vị cm&sup3; vì thể tích đo bằng đơn vị mũ ba."},
+    {q:"A square has a perimeter of 36 cm. What is its area?", o:["81 cm&sup2;","36 cm&sup2;","144 cm&sup2;","9 cm&sup2;"], a:0,
+     e:"Cạnh = 36 &divide; 4 = 9 cm. Diện tích = 9 &times; 9 = 81 cm&sup2;."},
+    {q:"Which statement is true?", o:["Shapes with the same area always have the same perimeter","Shapes with the same area can have different perimeters","Area and perimeter are the same thing","Perimeter uses cm&sup2;"], a:1,
+     e:"Ví dụ: hình 1&times;12 và hình 3&times;4 đều có diện tích 12 cm&sup2; nhưng chu vi lần lượt là 26 cm và 14 cm."}]},
+
+{ id:"m10", t:"Handling data: mode, median, mean, range", vi:"Xử lí số liệu và biểu đồ",
+  kp:[
+    {en:"Mode = the value that appears most often. There can be more than one mode.", vi:"Mốt (mode) là giá trị xuất hiện nhiều lần nhất; có thể có nhiều mốt."},
+    {en:"Median = the middle value AFTER putting the numbers in order.", vi:"Trung vị là giá trị ở giữa SAU KHI đã sắp xếp các số theo thứ tự."},
+    {en:"If there are two middle values, the median is halfway between them.", vi:"Nếu có hai số ở giữa thì trung vị là số nằm chính giữa hai số đó."},
+    {en:"Mean = total &divide; how many values.", vi:"Trung bình cộng = tổng &divide; số lượng giá trị."},
+    {en:"Range = largest &minus; smallest. It shows how spread out the data is.", vi:"Khoảng biến thiên = lớn nhất &minus; nhỏ nhất, cho biết dữ liệu phân tán ra sao."},
+    {en:"Bar charts compare groups; line graphs show change over time; pie charts show parts of a whole.", vi:"Biểu đồ cột so sánh nhóm; đồ thị đường thể hiện thay đổi theo thời gian; biểu đồ tròn thể hiện phần của tổng thể."},
+    {en:"Always read the scale on the axis before answering a graph question.", vi:"Luôn đọc kỹ thang chia trên trục trước khi trả lời câu hỏi về biểu đồ."}],
+  voc:[["mode","mốt (giá trị hay gặp nhất)"],["median","trung vị"],["mean / average","trung bình cộng"],["range","khoảng biến thiên"],["frequency","tần số"],["data set","tập số liệu"],["axis / axes","trục"],["tally chart","bảng kiểm đếm"]],
+  quiz:[
+    {q:"Find the mode of: 3, 7, 4, 7, 5, 7, 2.", o:["3","5","7","4"], a:2,
+     e:"Số 7 xuất hiện 3 lần, nhiều hơn mọi số khác, nên mốt là 7."},
+    {q:"Find the median of: 8, 3, 5, 9, 4.", o:["4","5","8","5.8"], a:1,
+     e:"Sắp xếp trước: 3, 4, 5, 8, 9. Số ở giữa là 5. Nếu không sắp xếp sẽ chọn nhầm số 5 ở vị trí bất kỳ."},
+    {q:"Find the mean of: 6, 10, 8, 12.", o:["8","9","10","36"], a:1,
+     e:"Tổng = 36; có 4 số &rarr; 36 &divide; 4 = 9."},
+    {q:"Find the range of: 12, 5, 20, 9.", o:["5","15","20","11.5"], a:1,
+     e:"Lớn nhất 20 trừ nhỏ nhất 5 &rarr; 15."},
+    {q:"Which chart best shows how a plant's height changed over 6 weeks?", o:["Pie chart","Bar chart","Line graph","Tally chart"], a:2,
+     e:"Thay đổi theo thời gian là số liệu liên tục nên dùng đồ thị đường để thấy xu hướng."},
+    {q:"Four children have a mean of 7 sweets. What is the total number of sweets?", o:["7","11","28","1.75"], a:2,
+     e:"Từ trung bình suy ngược ra tổng: tổng = trung bình &times; số lượng = 7 &times; 4 = 28."}]},
+
+{ id:"m11", t:"Probability", vi:"Xác suất",
+  kp:[
+    {en:"Probability is how likely something is: impossible, unlikely, even chance, likely, certain.", vi:"Xác suất mô tả khả năng xảy ra: không thể, ít khả năng, khả năng ngang nhau, nhiều khả năng, chắc chắn."},
+    {en:"Probability is measured from 0 (impossible) to 1 (certain).", vi:"Xác suất nhận giá trị từ 0 (không thể) đến 1 (chắc chắn)."},
+    {en:"Probability = number of ways it can happen &divide; total number of outcomes.", vi:"Xác suất = số cách xảy ra &divide; tổng số kết quả có thể."},
+    {en:"For a fair six-sided dice, P(rolling a 3) = 1/6.", vi:"Với xúc xắc 6 mặt cân đối, xác suất ra mặt 3 là 1/6."},
+    {en:"The probabilities of all possible outcomes add up to 1.", vi:"Tổng xác suất của tất cả kết quả có thể bằng 1."},
+    {en:"P(not happening) = 1 &minus; P(happening).", vi:"Xác suất không xảy ra = 1 &minus; xác suất xảy ra."},
+    {en:"Past results do not change the next result: a coin has no memory.", vi:"Kết quả trước không ảnh hưởng lần sau — đồng xu không có trí nhớ."}],
+  voc:[["probability","xác suất"],["outcome","kết quả có thể"],["fair","cân đối, công bằng"],["certain","chắc chắn"],["impossible","không thể"],["even chance","khả năng ngang nhau"],["likely","nhiều khả năng"],["at random","một cách ngẫu nhiên"]],
+  quiz:[
+    {q:"What is the probability of rolling an even number on a fair six-sided dice?", o:["1/6","1/3","1/2","2/3"], a:2,
+     e:"Số chẵn là 2, 4, 6 &rarr; 3 trong 6 kết quả = 3/6 = 1/2."},
+    {q:"A bag has 3 red and 7 blue balls. What is P(red)?", o:["3/7","3/10","7/10","1/3"], a:1,
+     e:"Tổng số bóng là 10, trong đó 3 bóng đỏ &rarr; 3/10. Mẫu số phải là TỔNG, không phải số bóng còn lại."},
+    {q:"The probability it rains is 0.3. What is the probability it does not rain?", o:["0.3","0.5","0.7","1.3"], a:2,
+     e:"Xác suất không xảy ra = 1 &minus; 0.3 = 0.7."},
+    {q:"A coin lands on heads 5 times in a row. What is P(heads) on the next throw?", o:["Less than 1/2","1/2","More than 1/2","0"], a:1,
+     e:"Mỗi lần tung là độc lập nên vẫn là 1/2. Đồng xu không &ldquo;nhớ&rdquo; những lần trước."},
+    {q:"Which event is certain?", o:["It will snow in Hanoi tomorrow","A dice will land on 7","The Sun will set today","You will roll a 6"], a:2,
+     e:"Mặt Trời lặn mỗi ngày nên xác suất bằng 1. Xúc xắc 6 mặt không thể ra 7, đó là biến cố không thể (xác suất 0)."},
+    {q:"A spinner has 8 equal sections: 4 red, 2 blue, 2 green. P(blue) is:", o:["1/2","1/4","2/8 = 1/4","1/8"], a:2,
+     e:"2 phần xanh trên tổng 8 phần &rarr; 2/8, rút gọn thành 1/4."}]},
+
+{ id:"m12", t:"Word problems & problem solving", vi:"Giải toán có lời văn",
+  kp:[
+    {en:"Read the whole question twice. Underline the numbers AND what is actually being asked.", vi:"Đọc kỹ đề hai lần; gạch chân các số VÀ câu hỏi thật sự yêu cầu gì."},
+    {en:"Decide the operation from the words: altogether/total (+), left/fewer (&minus;), each/per group (&times; or &divide;).", vi:"Chọn phép tính theo từ khoá: tổng cộng (+), còn lại (&minus;), mỗi (&times; hoặc &divide;)."},
+    {en:"Many Checkpoint problems need TWO steps. Write down the answer to step 1 before going on.", vi:"Nhiều bài Checkpoint cần HAI bước; hãy viết kết quả bước 1 ra trước khi làm tiếp."},
+    {en:"Show your working — method marks are given even if the final answer is wrong.", vi:"Trình bày cách làm — vẫn có điểm cho phương pháp dù đáp số sai."},
+    {en:"Check the answer makes sense: money to 2 decimal places, people as whole numbers.", vi:"Kiểm tra đáp án hợp lý: tiền lấy 2 chữ số thập phân, số người phải là số nguyên."},
+    {en:"Drawing a bar model or a quick sketch makes a hard problem much easier.", vi:"Vẽ sơ đồ đoạn thẳng hoặc hình phác giúp bài khó trở nên dễ hiểu hơn nhiều."},
+    {en:"Always write the unit in your answer: $, cm, kg, minutes.", vi:"Luôn ghi đơn vị vào đáp số: $, cm, kg, phút."}],
+  voc:[["altogether","tổng cộng"],["remaining","còn lại"],["share equally","chia đều"],["twice as many","gấp đôi"],["change (money)","tiền thối lại"],["working","phần trình bày cách làm"],["reasonable","hợp lý"],["step","bước giải"]],
+  quiz:[
+    {q:"A pen costs $2.40. Mai buys 3 pens and pays with a $10 note. How much change does she get?", o:["$7.20","$2.80","$7.60","$2.60"], a:1,
+     e:"Bước 1: 3 &times; 2.40 = $7.20. Bước 2: 10 &minus; 7.20 = $2.80. Bài hai bước — dừng ở bước 1 là chọn nhầm $7.20."},
+    {q:"A bus holds 45 people. How many buses are needed for 200 people?", o:["4","4.4","5","6"], a:2,
+     e:"200 &divide; 45 = 4 dư 20, nên vẫn cần thêm một xe cho 20 người &rarr; 5 xe. Đáp án phải làm tròn LÊN vì không thể có 4.4 xe."},
+    {q:"A rope 12 m long is cut into pieces of 80 cm. How many pieces?", o:["15","12","150","96"], a:0,
+     e:"Đổi cùng đơn vị trước: 12 m = 1200 cm. Rồi 1200 &divide; 80 = 15 đoạn."},
+    {q:"Nam has twice as many stickers as Lan. Together they have 36. How many does Lan have?", o:["18","12","24","9"], a:1,
+     e:"Coi Lan là 1 phần, Nam là 2 phần &rarr; 3 phần bằng 36, mỗi phần 12. Lan có 12, Nam có 24."},
+    {q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Both A and B","1750 ml"], a:2,
+     e:"4.5 lít = 4500 ml; 4500 &minus; 1750 = 2750 ml, cũng chính là 2.75 lít. Hai cách viết đều đúng."},
+    {q:"Why should you show your working?", o:["It looks tidy","You can earn method marks even if the answer is wrong","It uses more paper","The examiner asks for it"], a:1,
+     e:"Đề Checkpoint chấm cả phương pháp; trình bày rõ ràng vẫn ghi điểm dù đáp số cuối bị sai."}]}
+]},
+
+esl: { name:"English (ESL)", vi:"Tiếng Anh", icon:"&#128218;", ac:"--esl", acbg:"--esl-bg", units:[
+
+{ id:"e1", t:"Present perfect vs past simple", vi:"Hiện tại hoàn thành và quá khứ đơn",
+  kp:[
+    {en:"Past simple = a finished action at a stated past time: <i>She went to Da Nang last summer.</i>", vi:"Quá khứ đơn: việc đã xong, CÓ mốc thời gian quá khứ rõ ràng."},
+    {en:"Present perfect (have/has + past participle) = the past action still matters now: <i>I have finished my homework.</i>", vi:"Hiện tại hoàn thành: việc trong quá khứ nhưng còn liên quan tới hiện tại."},
+    {en:"Signal words for present perfect: just, already, yet, ever, never, since, for, recently, so far.", vi:"Từ tín hiệu của hiện tại hoàn thành — thấy là dùng have/has + V3."},
+    {en:"<b>since</b> + a point in time (since 2019). <b>for</b> + a length of time (for three years).", vi:"since đi với MỐC thời gian; for đi với KHOẢNG thời gian."},
+    {en:"Never use present perfect with a finished past time. &#10007; <i>I have seen him yesterday.</i>", vi:"Lỗi thường gặp: dùng hiện tại hoàn thành với yesterday, last week, in 2020."},
+    {en:"<b>yet</b> goes at the end of questions and negatives. <b>already</b> goes in positive sentences.", vi:"yet dùng ở câu hỏi và phủ định, đứng cuối câu; already dùng ở câu khẳng định."},
+    {en:"<b>has been to</b> = went and came back. <b>has gone to</b> = is still there.", vi:"has been to: đã đi và đã về. has gone to: đang còn ở đó."}],
+  voc:[["past participle","động từ cột 3 (V3)"],["so far","cho đến giờ"],["recently","gần đây"],["experience","trải nghiệm"],["duration","khoảng thời gian"],["ever / never","đã từng / chưa bao giờ"],["already","đã rồi"],["yet","chưa (trong câu hỏi, phủ định)"]],
+  quiz:[
+    {q:"I ______ my homework, so I can play now.", o:["finish","finished","have finished","was finishing"], a:2,
+     e:"Việc làm xong bài tập ảnh hưởng tới hiện tại (nên giờ mới được chơi) &rarr; dùng hiện tại hoàn thành."},
+    {q:"She ______ to Paris last summer.", o:["has gone","has been","went","goes"], a:2,
+     e:"Có mốc thời gian quá khứ rõ ràng <i>last summer</i> nên bắt buộc dùng quá khứ đơn: went."},
+    {q:"We have lived in Hanoi ______ 2019.", o:["for","since","from","during"], a:1,
+     e:"2019 là một MỐC thời gian nên dùng since. Nếu nói &ldquo;for six years&rdquo; (khoảng thời gian) thì mới dùng for."},
+    {q:"Have you finished your project ______?", o:["already","yet","just","ever"], a:1,
+     e:"Trong câu hỏi và câu phủ định dùng <i>yet</i> ở cuối câu; <i>already</i> chỉ dùng ở câu khẳng định."},
+    {q:"Dad has ______ to the market; he will be back in ten minutes.", o:["been","gone","went","being"], a:1,
+     e:"Bố vẫn đang ở chợ, chưa về &rarr; has gone to. Nếu bố đã về rồi mới nói &ldquo;has been to&rdquo;."},
+    {q:"Which sentence is INCORRECT?", o:["I have never eaten durian.","They have just arrived.","I have met her yesterday.","She has lived here for a year."], a:2,
+     e:"Không dùng hiện tại hoàn thành với <i>yesterday</i>. Câu đúng là: <i>I met her yesterday.</i>"},
+    {q:"They ______ the film three times so far this year.", o:["watched","have watched","watch","were watching"], a:1,
+     e:"&ldquo;so far this year&rdquo; là khoảng thời gian chưa kết thúc, nên dùng hiện tại hoàn thành: have watched."}]},
+
+{ id:"e2", t:"Reading: skim, scan & infer", vi:"Đọc hiểu: đọc lướt, tìm chi tiết, suy luận",
+  passage:{title:"Plastic in our oceans", text:[
+    "Every year, about eight million tonnes of plastic end up in the world's oceans. Much of it comes from bottles, bags and food packaging that people throw away on land. Rivers then carry the rubbish out to sea.",
+    "Plastic does not rot away like a banana skin. Instead, sunlight and waves break it into tiny pieces called microplastics. Fish and seabirds mistake these pieces for food. Scientists in Indonesia found plastic in the stomachs of more than half of the fish they studied.",
+    "The good news is that the problem can be reduced. Some countries now charge shoppers for plastic bags, and many schools have replaced plastic bottles with refillable ones. Small changes, made by millions of people, add up."]},
+  kp:[
+    {en:"<b>Skim</b> first: read the title and the first sentence of each paragraph to get the main idea. Take 30 seconds.", vi:"Đọc lướt trước: tiêu đề và câu đầu mỗi đoạn để nắm ý chính, chỉ mất 30 giây."},
+    {en:"<b>Scan</b> for details: run your eyes over the text looking only for the key word, number or name in the question.", vi:"Tìm chi tiết: rà mắt tìm đúng từ khoá, con số hoặc tên riêng, không đọc lại cả bài."},
+    {en:"Underline the key word in every question BEFORE you look back at the text.", vi:"Gạch chân từ khoá trong câu hỏi TRƯỚC khi quay lại bài đọc."},
+    {en:"For &lsquo;What does the word ... mean?&rsquo;, read the whole sentence around it &mdash; the meaning comes from the context.", vi:"Câu hỏi nghĩa của từ: đọc cả câu chứa nó và đoán nghĩa theo ngữ cảnh."},
+    {en:"An <b>inference</b> question asks for something true but not written word for word. Look for the evidence.", vi:"Câu suy luận: đáp án không có sẵn nguyên văn, phải tìm bằng chứng trong bài."},
+    {en:"Answer in your own words when asked to explain, and use full sentences for long answers.", vi:"Câu trả lời dài phải viết thành câu đầy đủ, diễn đạt bằng lời của mình."},
+    {en:"Never leave a question blank &mdash; a sensible guess based on the text can still earn a mark.", vi:"Không bỏ trống câu nào; đoán có căn cứ vẫn có thể được điểm."}],
+  voc:[["skim","đọc lướt lấy ý chính"],["scan","rà tìm chi tiết"],["infer","suy luận"],["main idea","ý chính"],["evidence","bằng chứng"],["packaging","bao bì"],["microplastics","hạt vi nhựa"],["refillable","dùng lại được"],["rot away","phân huỷ"],["reduce","giảm bớt"]],
+  quiz:[
+    {q:"What is the main idea of the whole text?", o:["Fish in Indonesia are dangerous to eat","Plastic pollutes the oceans, but people can reduce it","Rivers are dirtier than oceans","Plastic bags should be free"], a:1,
+     e:"Ý chính phải bao trùm cả ba đoạn: nêu vấn đề, tác hại, rồi giải pháp. Các đáp án khác chỉ là chi tiết của một đoạn."},
+    {q:"How much plastic reaches the oceans each year?", o:["Eight thousand tonnes","Half of all fish","About eight million tonnes","Millions of bottles"], a:2,
+     e:"Đây là câu SCAN — tìm con số trong đoạn 1: &ldquo;about eight million tonnes&rdquo;."},
+    {q:"In paragraph 2, what does &ldquo;mistake these pieces for food&rdquo; mean?", o:["They refuse to eat them","They think the pieces are food","They spit the pieces out","They store the pieces"], a:1,
+     e:"Đọc cả câu: cá và chim biển ăn nhầm vi nhựa vì tưởng là thức ăn. &ldquo;mistake A for B&rdquo; = nhầm A là B."},
+    {q:"Why does the writer mention the banana skin?", o:["To show plastic does not break down naturally","To suggest eating more fruit","Because bananas pollute the sea","To explain what fish eat"], a:0,
+     e:"Câu suy luận: vỏ chuối phân huỷ tự nhiên còn nhựa thì không — tác giả dùng so sánh để làm nổi bật điều đó."},
+    {q:"What can you infer about the writer's opinion?", o:["The problem cannot be solved","Only scientists can help","Ordinary people's actions matter","Plastic bags should be banned everywhere"], a:2,
+     e:"Câu cuối &ldquo;Small changes, made by millions of people, add up&rdquo; cho thấy tác giả tin hành động của mỗi người là quan trọng."},
+    {q:"Which paragraph tells you what is being done about the problem?", o:["Paragraph 1","Paragraph 2","Paragraph 3","None of them"], a:2,
+     e:"Đoạn 3 mở đầu bằng &ldquo;The good news is...&rdquo; và nêu giải pháp. Câu đầu mỗi đoạn thường cho biết đoạn đó nói gì."},
+    {q:"Where does most ocean plastic come from, according to the text?", o:["Ships at sea","Rubbish thrown away on land","Factories in Indonesia","Fish and seabirds"], a:1,
+     e:"Đoạn 1 nói rác từ đất liền (chai, túi, bao bì) được sông cuốn ra biển. Đừng chọn theo phỏng đoán mà phải bám vào chữ trong bài."}]},
+
+{ id:"e3", t:"Passive voice", vi:"Câu bị động",
+  kp:[
+    {en:"The passive is formed with the verb <b>be</b> + past participle: <i>The window was broken.</i>", vi:"Bị động = động từ <b>be</b> chia thì + V3: <i>The window was broken.</i>"},
+    {en:"Use the passive when the person who did the action is unknown or not important.", vi:"Dùng bị động khi không biết hoặc không cần nói ai làm."},
+    {en:"Present simple passive: <i>Rice is grown in Vietnam.</i> Past simple passive: <i>The letter was sent yesterday.</i>", vi:"Bị động hiện tại đơn: is/are + V3. Bị động quá khứ đơn: was/were + V3."},
+    {en:"The <b>be</b> verb must match the subject: <i>The books <u>are</u> kept here.</i>", vi:"Động từ be phải hợp với chủ ngữ số ít hay số nhiều."},
+    {en:"Add <b>by</b> + the doer only if it adds useful information: <i>The book was written by Dahl.</i>", vi:"Chỉ thêm <b>by</b> + người làm khi thông tin đó thực sự cần thiết."},
+    {en:"To change active to passive: the object of the active sentence becomes the subject.", vi:"Đổi chủ động sang bị động: tân ngữ của câu chủ động trở thành chủ ngữ."},
+    {en:"Science and report writing use the passive a lot: <i>The water was heated for five minutes.</i>", vi:"Bài báo cáo khoa học dùng bị động rất nhiều — rất hữu ích cho môn Science."}],
+  voc:[["passive voice","câu bị động"],["active voice","câu chủ động"],["agent","người/vật thực hiện hành động"],["be + V3","cấu trúc bị động"],["is made of","được làm từ"],["was built","đã được xây"],["are grown","được trồng"],["report","bài báo cáo"]],
+  quiz:[
+    {q:"Change to the passive: &lsquo;Someone stole my bike.&rsquo;", o:["My bike stole.","My bike was stolen.","My bike is stealing.","My bike has stole."], a:1,
+     e:"Tân ngữ &lsquo;my bike&rsquo; thành chủ ngữ, dùng was + V3 (stolen). Không cần &lsquo;by someone&rsquo; vì không rõ ai."},
+    {q:"Rice ______ in many parts of Vietnam.", o:["grows","is grown","is growing","grew"], a:1,
+     e:"Lúa được người ta trồng nên dùng bị động hiện tại đơn: is grown."},
+    {q:"The bridge ______ in 1998.", o:["was built","is built","built","has built"], a:0,
+     e:"Có mốc quá khứ 1998 nên dùng bị động quá khứ đơn: was built."},
+    {q:"Which sentence is passive?", o:["The chef cooked the fish.","The fish was cooked by the chef.","The chef is cooking.","The fish tastes good."], a:1,
+     e:"Chỉ câu B có be + V3 (was cooked) và chủ ngữ là vật nhận hành động."},
+    {q:"These toys ______ made in China.", o:["is","are","was","be"], a:1,
+     e:"Chủ ngữ &lsquo;these toys&rsquo; số nhiều nên dùng are. Lỗi hay gặp là không hợp chủ ngữ với động từ be."},
+    {q:"Why is the passive often used in science reports?", o:["It is shorter","The method matters more than who did it","It sounds friendlier","It is easier to spell"], a:1,
+     e:"Trong báo cáo khoa học, điều quan trọng là cách làm chứ không phải ai làm — nên dùng bị động."},
+    {q:"Complete: &lsquo;The homework ______ by all the students last night.&rsquo;", o:["was finished","were finished","finished","is finishing"], a:0,
+     e:"&lsquo;The homework&rsquo; là danh từ không đếm được, số ít, và ở quá khứ &rarr; was finished."}]},
+
+{ id:"e4", t:"Conditionals (0, 1, 2)", vi:"Câu điều kiện loại 0, 1, 2",
+  kp:[
+    {en:"Zero conditional (always true): <i>If you heat ice, it melts.</i> if + present, present.", vi:"Điều kiện loại 0 (luôn đúng): if + hiện tại đơn, hiện tại đơn."},
+    {en:"First conditional (a real future possibility): <i>If it rains, we will stay at home.</i> if + present, will + verb.", vi:"Loại 1 (có thể xảy ra trong tương lai): if + hiện tại đơn, will + V."},
+    {en:"Second conditional (imaginary now): <i>If I had a million dollars, I would travel.</i> if + past, would + verb.", vi:"Loại 2 (tưởng tượng, không có thật): if + quá khứ đơn, would + V."},
+    {en:"Never write <b>will</b> in the if-clause. &#10007; <i>If it will rain...</i>", vi:"Không bao giờ dùng <b>will</b> trong mệnh đề if."},
+    {en:"In the second conditional, use <b>were</b> for all subjects: <i>If I were you...</i>", vi:"Ở loại 2, dùng <b>were</b> cho mọi chủ ngữ: <i>If I were you...</i>"},
+    {en:"If the if-clause comes first, put a comma after it. If it comes second, no comma.", vi:"Mệnh đề if đứng trước thì có dấu phẩy; đứng sau thì không."},
+    {en:"<b>unless</b> means &lsquo;if not&rsquo;: <i>Unless you hurry, you will be late.</i>", vi:"<b>unless</b> nghĩa là &lsquo;nếu không&rsquo;."}],
+  voc:[["condition","điều kiện"],["result","kết quả"],["unless","trừ khi, nếu không"],["imaginary","tưởng tượng"],["possibility","khả năng"],["advice","lời khuyên"],["would","sẽ (giả định)"],["comma","dấu phẩy"]],
+  quiz:[
+    {q:"If you heat water to 100&deg;C, it ______.", o:["will boil","boils","would boil","boiled"], a:1,
+     e:"Đây là sự thật khoa học luôn đúng &rarr; điều kiện loại 0: cả hai vế dùng hiện tại đơn."},
+    {q:"If it ______ tomorrow, we will cancel the picnic.", o:["will rain","rains","rained","would rain"], a:1,
+     e:"Loại 1: mệnh đề if dùng hiện tại đơn, mệnh đề chính dùng will. Không được viết &lsquo;if it will rain&rsquo;."},
+    {q:"If I ______ a bird, I would fly to the sea.", o:["am","was","were","will be"], a:2,
+     e:"Loại 2 (tưởng tượng) dùng <i>were</i> cho mọi chủ ngữ — đây là dạng chuẩn trong bài thi."},
+    {q:"Which is a second conditional sentence?", o:["If you press this, the light comes on.","If she studies, she will pass.","If I lived in Japan, I would eat sushi every day.","If it is cold, wear a coat."], a:2,
+     e:"Loại 2 có if + quá khứ đơn (lived) và would + V (would eat), diễn tả điều không có thật ở hiện tại."},
+    {q:"______ you leave now, you will miss the bus.", o:["If","Unless","When","Because"], a:1,
+     e:"Unless = if not. &lsquo;Unless you leave now&rsquo; nghĩa là &lsquo;nếu bạn không đi ngay&rsquo;."},
+    {q:"Where does the comma go? &lsquo;If I finish early I will call you.&rsquo;", o:["After &lsquo;early&rsquo;","After &lsquo;If&rsquo;","After &lsquo;call&rsquo;","No comma is needed"], a:0,
+     e:"Mệnh đề if đứng đầu câu nên có dấu phẩy sau nó: <i>If I finish early, I will call you.</i>"},
+    {q:"If I were you, I ______ that jacket.", o:["will buy","would buy","bought","buy"], a:1,
+     e:"&lsquo;If I were you&rsquo; là cấu trúc khuyên nhủ dạng loại 2, nên vế sau dùng would + V."}]},
+
+{ id:"e5", t:"Reported speech", vi:"Câu tường thuật",
+  kp:[
+    {en:"When you report what someone said, the tense usually moves one step back: present &rarr; past.", vi:"Khi tường thuật, thì thường lùi một bậc: hiện tại thành quá khứ."},
+    {en:"&lsquo;I am tired,&rsquo; she said. &rarr; She said (that) she <b>was</b> tired.", vi:"am &rarr; was; is/are &rarr; was/were; do/does &rarr; did."},
+    {en:"will &rarr; would, can &rarr; could, must &rarr; had to.", vi:"will &rarr; would; can &rarr; could; must &rarr; had to."},
+    {en:"Pronouns change too: <i>I</i> &rarr; <i>he/she</i>, <i>my</i> &rarr; <i>his/her</i>.", vi:"Đại từ cũng đổi theo người nói: I &rarr; he/she, my &rarr; his/her."},
+    {en:"Time words change: today &rarr; that day, tomorrow &rarr; the next day, yesterday &rarr; the day before.", vi:"Từ chỉ thời gian đổi: today &rarr; that day, tomorrow &rarr; the next day."},
+    {en:"Reported questions use normal word order and no question mark: <i>He asked where I lived.</i>", vi:"Câu hỏi tường thuật dùng trật tự câu kể và KHÔNG có dấu hỏi."},
+    {en:"Use <b>told</b> + person, but <b>said</b> without a person: <i>She told me... / She said that...</i>", vi:"<b>told</b> phải có tân ngữ người; <b>said</b> thì không cần."}],
+  voc:[["reported speech","câu tường thuật"],["direct speech","câu trực tiếp"],["say / tell","nói / bảo ai"],["ask","hỏi"],["backshift","lùi thì"],["pronoun","đại từ"],["that day","ngày hôm đó"],["the next day","ngày hôm sau"]],
+  quiz:[
+    {q:"&lsquo;I am hungry,&rsquo; said Nam. &rarr; Nam said that he ______ hungry.", o:["is","was","were","has been"], a:1,
+     e:"Lùi thì: am &rarr; was. Đại từ I cũng đổi thành he."},
+    {q:"&lsquo;We will help you,&rsquo; they said. &rarr; They said they ______ help me.", o:["will","would","can","did"], a:1,
+     e:"will lùi thành would khi tường thuật."},
+    {q:"Which is correct?", o:["She told that she was busy.","She said me she was busy.","She told me she was busy.","She said to she was busy."], a:2,
+     e:"<b>tell</b> phải đi kèm tân ngữ chỉ người (tell <u>me</u>); <b>say</b> thì không có tân ngữ người."},
+    {q:"&lsquo;Where do you live?&rsquo; he asked. &rarr; He asked where I ______.", o:["live","lived","did live","do live"], a:1,
+     e:"Câu hỏi tường thuật dùng trật tự câu kể (I lived) và lùi thì; bỏ trợ động từ do."},
+    {q:"&lsquo;I saw her yesterday,&rsquo; he said. &rarr; He said he had seen her ______.", o:["yesterday","the day before","tomorrow","that day"], a:1,
+     e:"yesterday khi tường thuật đổi thành <i>the day before</i>."},
+    {q:"&lsquo;I can swim,&rsquo; she said. &rarr; She said she ______ swim.", o:["can","could","will","might"], a:1,
+     e:"can lùi thành could."},
+    {q:"Which sentence needs NO question mark?", o:["Where are you going?","He asked where I was going","Are you ready?","Can you help?"], a:1,
+     e:"Câu hỏi tường thuật là câu kể nên kết thúc bằng dấu chấm, không dùng dấu hỏi."}]},
+
+{ id:"e6", t:"Relative clauses", vi:"Mệnh đề quan hệ",
+  kp:[
+    {en:"A relative clause adds information about a noun, using who, which, that, where, whose.", vi:"Mệnh đề quan hệ bổ sung thông tin cho danh từ, dùng who, which, that, where, whose."},
+    {en:"<b>who</b> for people, <b>which</b> for things and animals, <b>that</b> for both.", vi:"<b>who</b> cho người, <b>which</b> cho vật và con vật, <b>that</b> dùng được cho cả hai."},
+    {en:"<b>where</b> for places, <b>when</b> for times, <b>whose</b> for possession.", vi:"<b>where</b> cho nơi chốn, <b>when</b> cho thời gian, <b>whose</b> chỉ sở hữu."},
+    {en:"The relative pronoun comes straight after the noun it describes: <i>the boy <u>who</u> lives next door</i>.", vi:"Đại từ quan hệ đứng ngay sau danh từ mà nó bổ nghĩa."},
+    {en:"Do not repeat the subject: &#10007; <i>The man who he called me...</i>", vi:"Không lặp lại chủ ngữ: sai khi viết &lsquo;The man who he called me&rsquo;."},
+    {en:"Extra information between commas can be left out and the sentence still makes sense.", vi:"Thông tin thêm nằm giữa hai dấu phẩy — bỏ đi câu vẫn đủ nghĩa."},
+    {en:"Joining two short sentences with a relative clause makes writing sound more advanced.", vi:"Nối hai câu ngắn bằng mệnh đề quan hệ giúp bài viết trưởng thành hơn — rất được điểm ở phần Writing."}],
+  voc:[["relative clause","mệnh đề quan hệ"],["relative pronoun","đại từ quan hệ"],["who","người mà"],["which","cái mà"],["whose","của người/vật mà"],["describe","miêu tả"],["combine","kết hợp"],["extra information","thông tin bổ sung"]],
+  quiz:[
+    {q:"The girl ______ won the prize is my sister.", o:["which","who","where","whose"], a:1,
+     e:"&lsquo;The girl&rsquo; là người nên dùng who (hoặc that)."},
+    {q:"This is the book ______ I told you about.", o:["who","whose","which","where"], a:2,
+     e:"&lsquo;Book&rsquo; là vật nên dùng which hoặc that, không dùng who."},
+    {q:"That is the village ______ my grandmother was born.", o:["which","who","where","when"], a:2,
+     e:"Nói về nơi chốn nên dùng where."},
+    {q:"I met a boy ______ father is a pilot.", o:["who","whose","which","that"], a:1,
+     e:"Chỉ sự sở hữu (bố CỦA cậu bé) nên dùng whose."},
+    {q:"Which sentence is INCORRECT?", o:["The man who called is my uncle.","The car which I bought is red.","The dog that barks is loud.","The teacher who she teaches us is kind."], a:3,
+     e:"Câu D lặp chủ ngữ: đã có &lsquo;who&rsquo; thì không dùng thêm &lsquo;she&rsquo;. Viết đúng: <i>The teacher who teaches us is kind.</i>"},
+    {q:"Combine: &lsquo;I have a friend. He lives in Hue.&rsquo;", o:["I have a friend who lives in Hue.","I have a friend which lives in Hue.","I have a friend where lives in Hue.","I have a friend he lives in Hue."], a:0,
+     e:"Thay &lsquo;He&rsquo; bằng đại từ quan hệ who để nối hai câu thành một câu mượt hơn."},
+    {q:"In &lsquo;My bike, which is new, was expensive&rsquo;, the part between commas is:", o:["The main idea","Extra information that can be removed","A question","A mistake"], a:1,
+     e:"Thông tin giữa hai dấu phẩy là phần bổ sung; bỏ đi vẫn còn câu đủ nghĩa: <i>My bike was expensive.</i>"}]},
+
+{ id:"e7", t:"Modal verbs & obligation", vi:"Động từ khuyết thiếu",
+  kp:[
+    {en:"A modal verb is followed by the bare infinitive: <i>can go</i>, not <i>can to go</i>.", vi:"Sau động từ khuyết thiếu là động từ nguyên thể KHÔNG có <i>to</i>."},
+    {en:"<b>can / could</b> = ability or permission. <i>She can swim. Could I borrow this?</i>", vi:"can / could: khả năng hoặc xin phép."},
+    {en:"<b>must</b> = strong obligation from the speaker. <b>have to</b> = obligation from a rule outside.", vi:"must là bắt buộc do người nói; have to là bắt buộc do quy định bên ngoài."},
+    {en:"<b>mustn't</b> = it is forbidden. <b>don't have to</b> = it is not necessary. These are very different.", vi:"mustn't là CẤM; don't have to là KHÔNG CẦN. Hai nghĩa hoàn toàn khác nhau."},
+    {en:"<b>should / shouldn't</b> gives advice: <i>You should drink more water.</i>", vi:"should / shouldn't dùng để khuyên."},
+    {en:"<b>might / may</b> = possibility: <i>It might rain later.</i>", vi:"might / may diễn tả khả năng có thể xảy ra."},
+    {en:"Modals never take <i>-s</i> in the third person: &#10007; <i>He cans.</i>", vi:"Động từ khuyết thiếu không thêm <i>-s</i> ở ngôi thứ ba."}],
+  voc:[["ability","khả năng"],["permission","sự cho phép"],["obligation","nghĩa vụ, bắt buộc"],["forbidden","bị cấm"],["advice","lời khuyên"],["possibility","khả năng xảy ra"],["bare infinitive","động từ nguyên thể không to"],["rule","quy định"]],
+  quiz:[
+    {q:"You ______ touch that wire. It is very dangerous.", o:["mustn't","don't have to","should","might"], a:0,
+     e:"Nguy hiểm nên là điều CẤM &rarr; mustn't. &lsquo;don't have to&rsquo; chỉ nghĩa là không cần, sẽ sai hoàn toàn ở đây."},
+    {q:"It is Sunday, so we ______ get up early.", o:["mustn't","don't have to","can't","shouldn't"], a:1,
+     e:"Chủ nhật thì KHÔNG CẦN dậy sớm (nhưng vẫn được phép) &rarr; don't have to."},
+    {q:"Which sentence is correct?", o:["He can to swim.","He cans swim.","He can swim.","He can swimming."], a:2,
+     e:"Sau modal là động từ nguyên thể không &lsquo;to&rsquo;, và modal không thêm -s."},
+    {q:"You look tired. You ______ go to bed early.", o:["must","should","might","can"], a:1,
+     e:"Đây là lời khuyên nhẹ nhàng nên dùng should."},
+    {q:"Take an umbrella. It ______ rain this afternoon.", o:["must","might","should","has to"], a:1,
+     e:"Chỉ là khả năng chưa chắc chắn &rarr; might."},
+    {q:"In this school students ______ wear a uniform. It is a rule.", o:["have to","might","could","don't have to"], a:0,
+     e:"Quy định của trường (bên ngoài áp đặt) nên dùng have to."},
+    {q:"______ I open the window, please?", o:["Must","May","Should","Would"], a:1,
+     e:"Xin phép lịch sự dùng May I (hoặc Could I)."}]},
+
+{ id:"e8", t:"Writing: emails, stories & reports", vi:"Viết: email, truyện và báo cáo",
+  kp:[
+    {en:"Plan for two minutes first: jot down the main ideas and the order of paragraphs.", vi:"Dành 2 phút lập dàn ý: ghi nhanh ý chính và thứ tự các đoạn."},
+    {en:"An informal email starts <i>Dear Minh / Hi Minh</i> and ends <i>Best wishes / See you soon</i>.", vi:"Email thân mật mở đầu Dear/Hi + tên, kết thúc Best wishes hoặc See you soon."},
+    {en:"A formal letter starts <i>Dear Sir or Madam</i> and ends <i>Yours faithfully</i>.", vi:"Thư trang trọng mở đầu Dear Sir or Madam, kết thúc Yours faithfully."},
+    {en:"A story needs a beginning (setting and characters), a middle (a problem) and an end (how it is solved).", vi:"Truyện cần mở đầu (bối cảnh, nhân vật), diễn biến (vấn đề) và kết thúc (giải quyết ra sao)."},
+    {en:"Use paragraphs: one idea per paragraph, and start a new line for each.", vi:"Chia đoạn: mỗi đoạn một ý, và xuống dòng cho đoạn mới."},
+    {en:"Link ideas with connectives: <i>however, because, after that, finally, although</i>.", vi:"Nối ý bằng từ liên kết: however, because, after that, finally, although."},
+    {en:"Leave two minutes at the end to check capital letters, full stops and spelling.", vi:"Chừa 2 phút cuối để soát chữ hoa, dấu chấm và chính tả."}],
+  voc:[["greeting","lời chào mở đầu"],["closing","lời kết"],["formal / informal","trang trọng / thân mật"],["paragraph","đoạn văn"],["connective","từ nối"],["setting","bối cảnh"],["draft","bản nháp"],["proofread","soát lỗi"]],
+  quiz:[
+    {q:"Which greeting is right for an email to a friend?", o:["Dear Sir or Madam","Hi Minh","To whom it may concern","Yours faithfully"], a:1,
+     e:"Email cho bạn là văn phong thân mật nên dùng Hi hoặc Dear + tên riêng."},
+    {q:"How should a formal letter to a company end?", o:["See you soon","Love","Yours faithfully","Bye"], a:2,
+     e:"Thư trang trọng gửi người không quen tên kết thúc bằng Yours faithfully."},
+    {q:"Which connective shows contrast?", o:["and","because","however","finally"], a:2,
+     e:"however diễn tả sự tương phản. because chỉ nguyên nhân, finally chỉ thứ tự."},
+    {q:"When should you start a new paragraph?", o:["Every three lines","When you start a new idea","When the page is full","Never"], a:1,
+     e:"Mỗi đoạn trình bày một ý; sang ý mới thì xuống dòng — đây là tiêu chí chấm điểm Writing."},
+    {q:"What should a story's middle part contain?", o:["The greeting","A problem or exciting event","The address","The conclusion of a report"], a:1,
+     e:"Phần giữa của truyện là nơi xuất hiện vấn đề hoặc tình huống gay cấn để dẫn tới cách giải quyết."},
+    {q:"What is the FIRST thing to do in a writing task?", o:["Start writing immediately","Plan the ideas and paragraphs","Count the words","Draw a picture"], a:1,
+     e:"Lập dàn ý ngắn giúp bài viết mạch lạc và đủ ý — chỉ tốn khoảng 2 phút nhưng được rất nhiều điểm."},
+    {q:"Why leave time at the end of a writing task?", o:["To rest","To check spelling, capital letters and full stops","To count pages","To rewrite everything"], a:1,
+     e:"Soát lỗi cuối bài giúp lấy lại điểm ngữ pháp và chính tả bị mất do vội."}]},
+
+{ id:"e9", t:"Word building & vocabulary", vi:"Cấu tạo từ và từ vựng",
+  kp:[
+    {en:"A prefix goes before a word and changes its meaning: <b>un</b>happy, <b>re</b>write, <b>dis</b>agree.", vi:"Tiền tố đứng trước từ và làm đổi nghĩa: unhappy, rewrite, disagree."},
+    {en:"A suffix goes after a word and often changes its word class: care &rarr; care<b>ful</b>, help &rarr; help<b>less</b>.", vi:"Hậu tố đứng sau từ và thường đổi loại từ."},
+    {en:"Common noun suffixes: -tion, -ment, -ness, -er. <i>inform &rarr; information</i>.", vi:"Hậu tố tạo danh từ thường gặp: -tion, -ment, -ness, -er."},
+    {en:"Common adjective suffixes: -ful, -less, -able, -ive. <i>use &rarr; useful / useless</i>.", vi:"Hậu tố tạo tính từ: -ful, -less, -able, -ive."},
+    {en:"Synonyms mean nearly the same (big / large). Antonyms mean the opposite (big / small).", vi:"Từ đồng nghĩa gần giống nghĩa; từ trái nghĩa là ngược nghĩa."},
+    {en:"A compound word joins two words: <i>foot + ball = football</i>.", vi:"Từ ghép là hai từ ghép lại thành một: football, playground."},
+    {en:"When you meet a new word, use the sentence around it and the word parts to work out its meaning.", vi:"Gặp từ mới: dựa vào câu văn xung quanh và các thành phần của từ để đoán nghĩa."}],
+  voc:[["prefix","tiền tố"],["suffix","hậu tố"],["synonym","từ đồng nghĩa"],["antonym","từ trái nghĩa"],["compound word","từ ghép"],["word class","loại từ"],["root word","từ gốc"],["context","ngữ cảnh"]],
+  quiz:[
+    {q:"Which prefix means &lsquo;not&rsquo;?", o:["re-","un-","pre-","-ful"], a:1,
+     e:"un- mang nghĩa phủ định: unhappy = không vui. re- nghĩa là làm lại; -ful là hậu tố chứ không phải tiền tố."},
+    {q:"What is the noun form of &lsquo;decide&rsquo;?", o:["decided","deciding","decision","decisive"], a:2,
+     e:"Thêm hậu tố -sion tạo danh từ: decision. decisive là tính từ."},
+    {q:"Choose the antonym of &lsquo;ancient&rsquo;.", o:["old","modern","historic","huge"], a:1,
+     e:"ancient nghĩa là rất cổ xưa, trái nghĩa là modern (hiện đại). old là từ đồng nghĩa chứ không phải trái nghĩa."},
+    {q:"&lsquo;Careless&rsquo; means:", o:["Full of care","Without care","Caring a lot","Able to care"], a:1,
+     e:"Hậu tố -less nghĩa là &lsquo;không có&rsquo;, nên careless = bất cẩn. -ful mới nghĩa là &lsquo;đầy&rsquo;."},
+    {q:"Which is a compound word?", o:["Unkind","Playground","Quickly","Happiness"], a:1,
+     e:"playground = play + ground, hai từ đầy đủ ghép lại. Các từ còn lại chỉ có tiền tố hoặc hậu tố."},
+    {q:"&lsquo;The path was <u>treacherous</u>, so we walked very slowly and held the rail.&rsquo; Treacherous probably means:", o:["Beautiful","Dangerous","Short","Crowded"], a:1,
+     e:"Manh mối trong câu: đi rất chậm và bám lan can &rarr; con đường nguy hiểm. Đây là kỹ năng đoán nghĩa theo ngữ cảnh."},
+    {q:"Choose the synonym of &lsquo;enormous&rsquo;.", o:["Tiny","Huge","Narrow","Empty"], a:1,
+     e:"enormous nghĩa là rất to lớn, đồng nghĩa với huge."}]},
+
+{ id:"e10", t:"Listening strategies", vi:"Chiến lược nghe hiểu",
+  kp:[
+    {en:"Read the questions BEFORE the recording starts and underline the key words.", vi:"Đọc câu hỏi TRƯỚC khi băng chạy và gạch chân từ khoá."},
+    {en:"Predict what kind of answer is needed: a number, a name, a place or a time.", vi:"Đoán trước dạng câu trả lời: con số, tên, nơi chốn hay thời gian."},
+    {en:"You will hear the recording twice: get the main answers first, check details second.", vi:"Băng được nghe hai lần: lần đầu bắt ý chính, lần hai kiểm tra chi tiết."},
+    {en:"Listen for the speaker correcting themselves: &lsquo;It's at four... no, sorry, half past four.&rsquo; The last one is the answer.", vi:"Chú ý khi người nói tự sửa lại — thông tin SAU CÙNG mới là đáp án."},
+    {en:"Do not just pick a word you heard. Distractors are words that appear but are not the answer.", vi:"Đừng chọn chỉ vì nghe thấy từ đó; đề luôn cài từ gây nhiễu (distractor)."},
+    {en:"Spell names and places carefully &mdash; a wrong letter loses the mark.", vi:"Viết đúng chính tả tên riêng và địa danh; sai một chữ là mất điểm."},
+    {en:"If you miss an answer, move on immediately or you will lose the next one too.", vi:"Nếu lỡ một câu, bỏ qua ngay để không mất luôn câu tiếp theo."}],
+  voc:[["recording","đoạn ghi âm"],["predict","dự đoán"],["distractor","đáp án gây nhiễu"],["detail","chi tiết"],["gist","ý chính"],["correct oneself","tự sửa lời"],["spelling","chính tả"],["instruction","hướng dẫn"]],
+  quiz:[
+    {q:"What should you do before the recording starts?", o:["Close your eyes","Read the questions and underline key words","Write any answer","Ask the teacher"], a:1,
+     e:"Đọc trước câu hỏi giúp biết cần nghe thông tin gì, tiết kiệm thời gian khi băng chạy."},
+    {q:"The speaker says: &lsquo;We meet at six... sorry, at seven.&rsquo; What is the answer?", o:["Six","Seven","Both","Neither"], a:1,
+     e:"Khi người nói tự sửa, thông tin sau cùng mới đúng &rarr; seven."},
+    {q:"Why should you predict the type of answer?", o:["To finish early","So you know whether to listen for a number, name or time","To copy your friend","To avoid reading"], a:1,
+     e:"Biết trước dạng đáp án giúp tai tập trung đúng loại thông tin cần bắt."},
+    {q:"You hear the word &lsquo;museum&rsquo; but the question asks where they finally went. This word might be:", o:["The answer for certain","A distractor","A spelling test","An instruction"], a:1,
+     e:"Đề thường nhắc tới nhiều địa điểm; chỉ nơi họ THỰC SỰ đến mới là đáp án, còn lại là từ gây nhiễu."},
+    {q:"What should you do if you miss one answer?", o:["Stop and think about it","Move on to the next question","Start again","Guess every answer"], a:1,
+     e:"Dừng lại để tiếc một câu sẽ khiến em mất luôn câu sau. Hãy đi tiếp và quay lại ở lần nghe thứ hai."},
+    {q:"How many times will you usually hear a Checkpoint listening text?", o:["Once","Twice","Three times","As many as you like"], a:1,
+     e:"Thường được nghe hai lần: lần một nắm ý chính, lần hai kiểm tra và bổ sung chi tiết."},
+    {q:"You write &lsquo;Jonson&rsquo; but the speaker spelt &lsquo;J-O-H-N-S-O-N&rsquo;. What happens?", o:["It is still correct","The mark is lost because of the spelling","Half a mark","It does not matter"], a:1,
+     e:"Với tên riêng được đánh vần, chính tả phải chính xác tuyệt đối mới được điểm."}]},
+
+{ id:"e11", t:"Speaking: describe & give opinions", vi:"Nói: miêu tả và nêu ý kiến",
+  kp:[
+    {en:"Answer in full sentences, not one word. <i>&lsquo;Do you like sport?&rsquo; &rarr; &lsquo;Yes, I love football because...&rsquo;</i>", vi:"Trả lời thành câu đầy đủ, không đáp một từ."},
+    {en:"Always give a reason with <b>because</b> &mdash; it turns a short answer into a good one.", vi:"Luôn thêm lý do với <b>because</b> để câu trả lời trở nên đầy đủ."},
+    {en:"To describe a picture, start with the general view, then details: <i>In the picture I can see... On the left there is...</i>", vi:"Miêu tả tranh: nói tổng quát trước, rồi tới chi tiết."},
+    {en:"Use position phrases: <i>in the background, on the right, in the middle, next to</i>.", vi:"Dùng cụm chỉ vị trí: in the background, on the right, in the middle, next to."},
+    {en:"Give opinions with: <i>I think..., In my opinion..., I would rather...</i>", vi:"Nêu ý kiến bằng: I think..., In my opinion..., I would rather..."},
+    {en:"If you do not know a word, describe it instead: <i>&lsquo;It's a thing you use for...&rsquo;</i>", vi:"Không nhớ từ thì hãy miêu tả vòng: &lsquo;It's a thing you use for...&rsquo;"},
+    {en:"Speak slowly and clearly. Fluency matters more than using difficult words.", vi:"Nói chậm, rõ ràng; nói trôi chảy quan trọng hơn dùng từ khó."}],
+  voc:[["in my opinion","theo ý tôi"],["I would rather","tôi thích hơn"],["in the background","ở phía sau"],["on the right","ở bên phải"],["describe","miêu tả"],["fluency","sự trôi chảy"],["give a reason","đưa ra lý do"],["agree / disagree","đồng ý / không đồng ý"]],
+  quiz:[
+    {q:"Which is the best answer to &lsquo;Do you enjoy reading?&rsquo;", o:["Yes.","Yes, I do.","Yes, I love adventure stories because they are exciting.","Reading."], a:2,
+     e:"Câu trả lời tốt phải có câu đầy đủ + lý do. Trả lời một từ sẽ bị trừ điểm phần Speaking."},
+    {q:"Which phrase starts a picture description well?", o:["I don't know","In the picture I can see...","Maybe nothing","The end"], a:1,
+     e:"Bắt đầu bằng cái nhìn tổng quát: &lsquo;In the picture I can see...&rsquo; rồi mới đi vào chi tiết."},
+    {q:"Which phrase gives an opinion?", o:["There is a dog.","In my opinion, city life is better.","It is raining.","He went home."], a:1,
+     e:"&lsquo;In my opinion&rsquo; là cụm nêu quan điểm cá nhân; các câu còn lại chỉ nêu sự việc."},
+    {q:"You forget the word &lsquo;umbrella&rsquo;. What is the best strategy?", o:["Stop talking","Say it in Vietnamese","Describe it: &lsquo;the thing you use when it rains&rsquo;","Change the subject"], a:2,
+     e:"Miêu tả vòng giúp giữ mạch nói và vẫn ghi điểm giao tiếp — dừng lại hoặc chuyển sang tiếng Việt thì mất điểm."},
+    {q:"Which phrase describes position in a picture?", o:["Last year","On the right","Because","However"], a:1,
+     e:"&lsquo;On the right&rsquo; chỉ vị trí trong tranh; because và however là từ nối ý."},
+    {q:"What matters most in the speaking test?", o:["Using very difficult words","Speaking clearly and keeping going","Speaking as fast as possible","Being silent to think"], a:1,
+     e:"Giám khảo chấm sự rõ ràng và trôi chảy. Dùng từ khó nhưng ngập ngừng sẽ không được điểm cao hơn."},
+    {q:"Complete: &lsquo;I ______ play outside than watch TV.&rsquo;", o:["would rather","would like","prefer to rather","am rather"], a:0,
+     e:"Cấu trúc &lsquo;would rather + V nguyên thể + than&rsquo; dùng để nêu điều mình thích hơn."}]}
+]}
+};
+</script>
+
+<script>
+/* Câu hỏi bổ sung để mỗi unit có SỐ CÂU QUIZ = SỐ Ý CHÍNH */
+const EXTRA = {
+s1:[{q:"Which blood vessel has valves inside it?", o:["Artery","Vein","Capillary","Aorta"], a:1,
+     e:"Máu trong tĩnh mạch chảy chậm và áp lực thấp nên cần van một chiều để không chảy ngược."},
+    {q:"Why are capillary walls only one cell thick?", o:["To make them strong","So oxygen and nutrients can pass into the cells","To carry more blood","To keep blood warm"], a:1,
+     e:"Thành cực mỏng cho phép oxygen và chất dinh dưỡng khuếch tán ra tế bào, đồng thời nhận lại chất thải."}],
+s2:[{q:"Which of these is a REVERSIBLE change?", o:["Baking a cake","Melting butter","Burning paper","Frying an egg"], a:1,
+     e:"Bơ tan chảy rồi để nguội lại đông cứng — vẫn là bơ, không tạo chất mới."},
+    {q:"How do you separate salt from a mixture of sand and salt?", o:["Use a magnet","Add water, filter, then evaporate","Burn the mixture","Freeze it"], a:1,
+     e:"Ba bước: hoà tan muối vào nước, lọc bỏ cát, rồi cho nước bay hơi để thu lại muối."}],
+s3:[{q:"Which group has moist skin and lays eggs in water?", o:["Reptiles","Amphibians","Birds","Mammals"], a:1,
+     e:"Lưỡng cư (ếch, cóc) có da ẩm và đẻ trứng dưới nước; bò sát thì da khô có vảy và đẻ trứng trên cạn."},
+    {q:"What is the job of a decomposer?", o:["To make its own food","To hunt other animals","To break down dead plants and animals","To pollinate flowers"], a:2,
+     e:"Sinh vật phân huỷ (nấm, vi khuẩn) phân giải xác sinh vật, trả chất dinh dưỡng lại cho đất."}],
+s4:[{q:"In which state are the particles far apart and moving very fast?", o:["Solid","Liquid","Gas","All the same"], a:2,
+     e:"Chất khí có các hạt cách xa nhau và chuyển động rất nhanh, nên khí lan đầy mọi không gian."},
+    {q:"Washing dries faster on a windy day because:", o:["Wind is cold","Wind carries away water vapour so evaporation speeds up","Wind adds heat","Wind makes clothes heavier"], a:1,
+     e:"Gió cuốn hơi nước đi khỏi bề mặt, giúp thêm nhiều hạt nước tiếp tục bay hơi."}],
+s5:[{q:"Which force pulls a dropped ball towards the ground?", o:["Friction","Gravity","Air resistance","Magnetism"], a:1,
+     e:"Trọng lực kéo mọi vật về tâm Trái Đất. Lực cản không khí thì chống lại chuyển động rơi."},
+    {q:"Which change INCREASES friction?", o:["Adding oil","Polishing the surface","Making the surface rougher","Using wheels"], a:2,
+     e:"Bề mặt càng nhám thì ma sát càng lớn. Dầu, đánh bóng và bánh xe đều làm giảm ma sát."}],
+s6:[{q:"Which material is opaque?", o:["Clear glass","Thin paper","A wooden door","Cling film"], a:2,
+     e:"Cửa gỗ chặn hoàn toàn ánh sáng nên là vật cản sáng (opaque), vì thế nó tạo bóng rõ nét."},
+    {q:"How does light travel?", o:["In curves","In straight lines","In circles","Only downwards"], a:1,
+     e:"Ánh sáng truyền thẳng — đó là lý do bóng có hình giống vật và ta không nhìn được qua góc tường."}],
+s7:[{q:"What happens when a switch is turned off?", o:["It makes a gap so the current stops","It adds more voltage","It removes the cell","It cools the wire"], a:0,
+     e:"Công tắc tắt tạo khe hở, mạch không còn kín nên dòng điện ngừng chạy."},
+    {q:"A longer wire is put into a circuit. The lamp will:", o:["Get brighter","Get dimmer","Stay the same","Explode"], a:1,
+     e:"Dây dài hơn có điện trở lớn hơn nên dòng điện nhỏ đi, đèn sáng yếu hơn."}],
+s8:[{q:"How long does the Moon take to orbit the Earth?", o:["24 hours","About 28 days","365 days","12 hours"], a:1,
+     e:"Khoảng 28 ngày — chu kỳ này tạo ra các pha của Mặt Trăng trong một tháng."},
+    {q:"When is a shadow longest?", o:["At midday","Early morning and late afternoon","At midnight","It never changes"], a:1,
+     e:"Sáng sớm và chiều muộn Mặt Trời ở thấp, tia sáng chiếu xiên nên bóng đổ dài nhất."}],
+s9:[{q:"What must a conclusion do?", o:["List the equipment","Answer the question using the evidence","Say the experiment was fun","Repeat the method"], a:1,
+     e:"Kết luận phải trả lời câu hỏi nghiên cứu và dựa trên số liệu thu được, không phải kể lại cách làm."},
+    {q:"Which chart shows how well four DIFFERENT materials insulate?", o:["Line graph","Bar chart","Pie chart","Scatter graph"], a:1,
+     e:"Bốn loại vật liệu là các nhóm riêng biệt nên dùng biểu đồ cột; đồ thị đường chỉ dùng cho số liệu liên tục."}],
+m1:[{q:"0.3 + 0.07 =", o:["0.1","0.37","0.10","1.0"], a:1,
+     e:"Xếp thẳng hàng thập phân: 0.30 + 0.07 = 0.37. Đừng cộng như số nguyên thành 0.10."}],
+m2:[{q:"Which fraction is equal to 0.2?", o:["1/2","1/5","2/5","1/20"], a:1,
+     e:"1 &divide; 5 = 0.2. Còn 1/2 = 0.5, 2/5 = 0.4, 1/20 = 0.05."}],
+m3:[{q:"A map scale is 1 : 100. A wall is 4 cm on the map. How long is it really?", o:["4 m","40 cm","400 cm","104 cm"], a:2,
+     e:"Tỉ lệ 1 : 100 nghĩa là 1 cm trên bản đồ ứng với 100 cm thật &rarr; 4 &times; 100 = 400 cm (tức 4 m)."}],
+m4:[{q:"20 &minus; 4 &times; 3 =", o:["48","8","12","16"], a:1,
+     e:"Nhân trước: 4 &times; 3 = 12, rồi 20 &minus; 12 = 8. Tính từ trái sang sẽ ra 48 và sai."}],
+m5:[{q:"What comes next: 100, 50, 25, ___?", o:["20","12.5","15","0"], a:1,
+     e:"Quy luật là chia đôi mỗi lần &rarr; 25 &divide; 2 = 12.5."}],
+m6:[{q:"How many faces does a triangular prism have?", o:["3","4","5","6"], a:2,
+     e:"Hai mặt tam giác ở hai đầu và ba mặt chữ nhật ở thân &rarr; tổng 5 mặt."}],
+m7:[{q:"Point (2, 3) is reflected in the y-axis. Where does it land?", o:["(&minus;2, 3)","(2, &minus;3)","(3, 2)","(&minus;2, &minus;3)"], a:0,
+     e:"Đối xứng qua trục tung thì x đổi dấu, y giữ nguyên &rarr; (&minus;2, 3)."}],
+m8:[{q:"How many minutes are there in 2.5 hours?", o:["120","150","250","145"], a:1,
+     e:"2 giờ = 120 phút, nửa giờ = 30 phút &rarr; 150 phút. Không phải 250 vì giờ dùng hệ 60."}],
+m9:[{q:"A rectangle has an area of 48 cm&sup2; and a length of 8 cm. What is its width?", o:["6 cm","40 cm","384 cm","4 cm"], a:0,
+     e:"Từ diện tích suy ngược: 48 &divide; 8 = 6 cm."}],
+m10:[{q:"Find the median of: 4, 6, 8, 10.", o:["6","7","8","28"], a:1,
+     e:"Có hai số ở giữa là 6 và 8; trung vị là số chính giữa chúng: (6 + 8) &divide; 2 = 7."}],
+m11:[{q:"A spinner has 10 equal sections and 3 are red. What is P(not red)?", o:["3/10","7/10","1/3","1"], a:1,
+     e:"P(đỏ) = 3/10, nên P(không đỏ) = 1 &minus; 3/10 = 7/10."}],
+m12:[{q:"Apples cost $1.20 a kilogram. Lan buys 2.5 kg and pays with $5. How much change?", o:["$3.00","$2.00","$1.80","$2.50"], a:1,
+     e:"Bước 1: 1.20 &times; 2.5 = $3.00. Bước 2: 5.00 &minus; 3.00 = $2.00."}]
+};
+
+/* Nhánh mindmap cho từng unit: "Tiếng Anh|Tiếng Việt" */
+const MM = {
+s1:["Heart, vessels, blood|Tim, mạch máu và máu","Heart pumps blood|Tim bơm máu liên tục","Arteries carry away|Động mạch đưa máu đi","Veins carry back|Tĩnh mạch đưa máu về","Capillaries feed cells|Mao mạch nuôi tế bào","Blood has 4 parts|Máu có 4 thành phần","Lungs add oxygen|Phổi cấp oxygen","Exercise raises pulse|Vận động tăng nhịp mạch"],
+s2:["Reversible: back again|Thuận nghịch: quay lại được","Rust needs 3 things|Gỉ sét cần đủ ba yếu tố","Melt, freeze, dissolve|Nóng chảy, đông, hoà tan","Irreversible: new substance|Không thuận nghịch: chất mới","Burn, cook, rust|Đốt, nấu, gỉ sét","Signs: gas, colour, heat|Dấu hiệu: khí, màu, nhiệt","Melting &ne; dissolving|Nóng chảy khác hoà tan","Separate: filter, evaporate|Tách: lọc, bay hơi"],
+s3:["Vertebrate or not|Có xương sống hay không","Lose one species|Mất một loài, cả lưới đổi","Five vertebrate groups|Năm nhóm có xương sống","Branching key|Khoá lưỡng phân","Arrows = energy flow|Mũi tên = dòng năng lượng","Producer &rarr; consumer|Sản xuất &rarr; tiêu thụ","Food web links chains|Lưới thức ăn nối các chuỗi","Adaptation to habitat|Thích nghi với môi trường"],
+s4:["Solid, liquid, gas|Rắn, lỏng, khí","Warm or stir to dissolve|Ấm hoặc khuấy tan nhanh","Particle arrangement|Cách sắp xếp hạt","0&deg;C melt, 100&deg;C boil|0&deg;C tan, 100&deg;C sôi","Evaporation at surface|Bay hơi ở bề mặt","Faster: hot, windy, wide|Nhanh hơn: nóng, gió, rộng","Solute + solvent|Chất tan + dung môi","Saturated solution|Dung dịch bão hoà"],
+s5:["Force = push or pull|Lực = đẩy hoặc kéo","Rough = more friction|Nhám thì ma sát lớn","Measured in newtons|Đo bằng niutơn","Gravity pulls down|Trọng lực kéo xuống","Mass &ne; weight|Khối lượng khác trọng lượng","Friction slows things|Ma sát làm chậm lại","Air resistance|Lực cản không khí","Balanced forces|Lực cân bằng"],
+s6:["Travels in straight lines|Truyền theo đường thẳng","Prism splits white light|Lăng kính tách ánh sáng","Light enters our eyes|Ánh sáng vào mắt ta","Opaque blocks light|Vật cản chặn ánh sáng","Shadow shape = object|Bóng giống hình vật","Closer = bigger shadow|Gần hơn = bóng to hơn","Angle in = angle out|Góc tới = góc phản xạ","Mirror swaps left/right|Gương đảo trái phải"],
+s7:["Complete loop needed|Cần mạch kín","Draw circuit symbols|Vẽ kí hiệu bằng thước","Switch makes a gap|Công tắc tạo khe hở","Conductor vs insulator|Vật dẫn và cách điện","More cells = brighter|Thêm pin = sáng hơn","More lamps = dimmer|Thêm đèn = tối hơn","Series: one path|Nối tiếp: một đường","Long wire = resistance|Dây dài = điện trở"],
+s8:["Spin gives day/night|Tự quay tạo ngày đêm","The Sun only seems to move|Mặt Trời chỉ trông như di chuyển","Orbit gives the year|Quay quanh tạo năm","Tilt gives seasons|Trục nghiêng tạo mùa","Moon orbits in 28 days|Mặt Trăng 28 ngày","Phases of the Moon|Các pha Mặt Trăng","Eight planets in order|Tám hành tinh theo thứ tự","Shadows shortest at noon|Bóng ngắn nhất giữa trưa"],
+s9:["Prediction with a reason|Dự đoán kèm lý do","Evaluation: what to improve|Đánh giá: cần cải thiện gì","Change ONE thing|Chỉ đổi MỘT yếu tố","Keep the rest same|Giữ nguyên phần còn lại","Repeat three times|Lặp lại ba lần","Spot anomalous results|Phát hiện kết quả lạ","Line vs bar chart|Đồ thị đường hay cột","Conclusion + evaluation|Kết luận và đánh giá"],
+m1:["Columns &times;10 each step|Mỗi cột gấp 10 lần","Tenths, hundredths|Phần mười, phần trăm","&times;10 left, &divide;10 right|Nhân trái, chia phải","Look at the next digit|Nhìn chữ số kế tiếp","Line up decimal points|Thẳng hàng dấu phẩy","Negatives on number line|Số âm trên trục số","Estimate to check|Ước lượng để kiểm tra"],
+m2:["Know 1/2, 1/4, 1/5, 1/8|Thuộc các mốc quen","Top &divide; bottom|Tử chia mẫu","Decimal &times;100 = %|Thập phân &times;100 ra %","10%, 1%, 25% tricks|Mẹo 10%, 1%, 25%","Equivalent fractions|Phân số bằng nhau","Same denominator to add|Quy đồng rồi cộng","Simplify with HCF|Rút gọn bằng ƯCLN"],
+m3:["Ratio has no units|Tỉ số không có đơn vị","2 : 3 means 5 parts|2 : 3 là 5 phần","Find one part first|Tìm giá trị một phần","Simplify both sides|Rút gọn cả hai vế","Proportion = part of whole|Tỉ lệ = phần của tổng","Unitary method|Quy về một đơn vị","Direct proportion|Tỉ lệ thuận"],
+m4:["Brackets first|Ngoặc trước tiên","&times; and &divide; before + and &minus;|Nhân chia trước cộng trừ","Round then adjust|Làm tròn rồi bù","&times;5 = &times;10 then halve|Nhân 5 = nhân 10 chia đôi","Split by place value|Tách theo hàng","Check with inverse|Kiểm tra bằng phép ngược","Remainder < divisor|Số dư nhỏ hơn số chia"],
+m5:["Find the difference|Tìm hiệu các số hạng","Describe the rule|Mô tả quy luật","Letter = unknown|Chữ cái là ẩn số","3n means 3 &times; n|3n là 3 nhân n","Use inverse to solve|Dùng phép ngược để giải","Divide both sides|Chia cả hai vế","Pattern rule: 3n + 1|Quy luật hình: 3n + 1"],
+m6:["Straight line = 180&deg;|Đường thẳng = 180&deg;","Triangle = 180&deg;|Tam giác = 180&deg;","Acute, right, obtuse|Nhọn, vuông, tù","Equilateral = 60&deg; each|Tam giác đều 60&deg;","Prism vs pyramid|Lăng trụ và chóp","Cube: 6, 12, 8|Lập phương: 6 mặt 12 cạnh 8 đỉnh","Nets fold into solids|Hình khai triển gấp lại"],
+m7:["(x, y): along then up|(x, y): ngang rồi lên","Four quadrants|Bốn góc phần tư","Reflection flips|Đối xứng lật hình","Translation slides|Tịnh tiến trượt hình","Rotation turns|Phép quay xoay hình","Size never changes|Kích thước không đổi","Lines of symmetry|Trục đối xứng"],
+m8:["km, m, cm, mm|Bậc thang độ dài","kg, g and litre, ml|Khối lượng và dung tích","Big to small: multiply|Lớn sang nhỏ: nhân","1 cm&sup3; = 1 ml|1 cm khối = 1 ml","24-hour clock|Đồng hồ 24 giờ","Time works in 60s|Thời gian theo hệ 60","Read one division first|Tính giá trị một vạch"],
+m9:["Perimeter = all sides|Chu vi = tổng các cạnh","Area = length &times; width|Diện tích = dài &times; rộng","Triangle &divide; 2|Tam giác chia đôi","Split L-shapes|Chia nhỏ hình chữ L","Volume = l &times; w &times; h|Thể tích = d &times; r &times; c","Same area, different perimeter|Cùng diện tích khác chu vi","Units: cm, cm&sup2;, cm&sup3;|Đơn vị mũ 1, 2, 3"],
+m10:["Mode = most often|Mốt = hay gặp nhất","Median = middle, in order|Trung vị = giữa, đã sắp xếp","Mean = total &divide; number|Trung bình = tổng chia số lượng","Range = biggest &minus; smallest|Khoảng = lớn nhất trừ nhỏ nhất","Bar chart for groups|Cột cho các nhóm","Line graph over time|Đường theo thời gian","Read the scale first|Đọc thang chia trước"],
+m11:["From 0 to 1|Từ 0 đến 1","Ways &divide; total outcomes|Số cách chia tổng kết quả","Dice: P(3) = 1/6|Xúc xắc: 1/6","All outcomes add to 1|Tổng xác suất bằng 1","P(not) = 1 &minus; P|Không xảy ra = 1 trừ P","Coins have no memory|Đồng xu không có trí nhớ","Impossible &rarr; certain|Không thể đến chắc chắn"],
+m12:["Read the question twice|Đọc đề hai lần","Underline key words|Gạch chân từ khoá","Spot two-step problems|Nhận ra bài hai bước","Show your working|Trình bày cách làm","Draw a bar model|Vẽ sơ đồ đoạn thẳng","Check it makes sense|Kiểm tra tính hợp lý","Always write the unit|Luôn ghi đơn vị"],
+e1:["Past simple: finished time|QK đơn: thời gian đã xong","Present perfect: matters now|HTHT: liên quan hiện tại","just, already, yet, ever|Từ tín hiệu","since + point, for + length|since mốc, for khoảng","No past time with perfect|Không dùng với yesterday","yet: questions, negatives|yet ở câu hỏi, phủ định","been = back, gone = there|been đã về, gone còn ở đó"],
+e2:["Skim for the main idea|Đọc lướt lấy ý chính","Scan for details|Rà tìm chi tiết","Underline key words|Gạch chân từ khoá","Meaning from context|Nghĩa theo ngữ cảnh","Inference needs evidence|Suy luận cần bằng chứng","Full sentences for long answers|Câu đầy đủ cho câu dài","Never leave it blank|Không bỏ trống"],
+e3:["be + past participle|be + V3","Doer unknown or unimportant|Không rõ hoặc không cần ai làm","is/are grown, was built|Hiện tại và quá khứ","be must match subject|be hợp với chủ ngữ","by + doer if useful|by khi cần thiết","Object becomes subject|Tân ngữ thành chủ ngữ","Used in science reports|Dùng trong báo cáo"],
+e4:["Type 0: always true|Loại 0: luôn đúng","Type 1: real future|Loại 1: tương lai có thật","Type 2: imaginary|Loại 2: tưởng tượng","No will after if|Không có will sau if","If I were you|Dùng were cho mọi ngôi","Comma when if is first|Phẩy khi if đứng đầu","unless = if not|unless nghĩa là nếu không"],
+e5:["Tense steps back|Lùi một thì","will &rarr; would, can &rarr; could|Đổi modal","Pronouns change|Đại từ thay đổi","Time words change|Từ chỉ thời gian đổi","Questions lose the ?|Câu hỏi mất dấu hỏi","told + person|told cần tân ngữ người","said without person|said không cần người"],
+e6:["who for people|who cho người","which for things|which cho vật","where, when, whose|Nơi chốn, thời gian, sở hữu","Right after the noun|Ngay sau danh từ","Do not repeat subject|Không lặp chủ ngữ","Commas = extra info|Dấu phẩy = thông tin thêm","Join short sentences|Nối câu ngắn lại"],
+e7:["Modal + bare infinitive|Modal + V nguyên thể","can / could: ability|Khả năng, xin phép","must vs have to|Bắt buộc trong hay ngoài","mustn't &ne; don't have to|Cấm khác không cần","should = advice|should là lời khuyên","might = possibility|might là có thể","Never add -s|Không thêm -s"],
+e8:["Plan for two minutes|Lập dàn ý 2 phút","Informal: Hi + name|Thân mật: Hi + tên","Formal: Yours faithfully|Trang trọng: Yours faithfully","Story: start, problem, end|Truyện: mở, vấn đề, kết","One idea per paragraph|Mỗi đoạn một ý","Connectives link ideas|Từ nối liên kết ý","Check spelling at the end|Soát lỗi cuối bài"],
+e9:["Prefix changes meaning|Tiền tố đổi nghĩa","Suffix changes word class|Hậu tố đổi loại từ","-tion, -ment, -ness|Hậu tố danh từ","-ful, -less, -able|Hậu tố tính từ","Synonym and antonym|Đồng nghĩa, trái nghĩa","Compound words|Từ ghép","Guess from context|Đoán theo ngữ cảnh"],
+e10:["Read questions first|Đọc câu hỏi trước","Predict the answer type|Đoán dạng đáp án","You hear it twice|Được nghe hai lần","Last correction wins|Thông tin sửa sau mới đúng","Beware distractors|Cẩn thận từ gây nhiễu","Spell names exactly|Viết đúng chính tả tên","Move on if you miss one|Lỡ thì bỏ qua"],
+e11:["Full sentences|Trả lời thành câu","Always add because|Luôn thêm lý do","General then detail|Tổng quát rồi chi tiết","Position phrases|Cụm chỉ vị trí","I think / In my opinion|Cách nêu ý kiến","Describe unknown words|Miêu tả khi quên từ","Fluency beats hard words|Trôi chảy hơn từ khó"]
+};
+</script>
+
+<script>
+/* Sơ đồ minh hoạ vẽ bằng SVG nội tuyến — hiển thị đúng ở cả nền sáng và nền tối */
+const SVGO = 'style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg"';
+const DIA = {
+s1:`<svg viewBox="0 0 320 150" ${SVGO}><g fill="none" stroke-width="2.5" stroke-linecap="round">
+<rect x="16" y="46" width="70" height="58" rx="10" fill="var(--ac-bg)" stroke="var(--ac)"/>
+<rect x="125" y="46" width="70" height="58" rx="10" fill="var(--card-2)" stroke="var(--ink-soft)"/>
+<rect x="234" y="46" width="70" height="58" rx="10" fill="var(--ac-bg)" stroke="var(--ac)"/>
+<path d="M86 62 h39" stroke="var(--bad)"/><path d="M118 58 l8 4 -8 4" fill="var(--bad)" stroke="var(--bad)"/>
+<path d="M195 62 h39" stroke="var(--bad)"/><path d="M227 58 l8 4 -8 4" fill="var(--bad)" stroke="var(--bad)"/>
+<path d="M234 90 h-39" stroke="var(--esl)"/><path d="M202 86 l-8 4 8 4" fill="var(--esl)" stroke="var(--esl)"/>
+<path d="M125 90 h-39" stroke="var(--esl)"/><path d="M93 86 l-8 4 8 4" fill="var(--esl)" stroke="var(--esl)"/></g>
+<g font-family="Lexend,sans-serif" font-size="11" text-anchor="middle" fill="var(--ink)">
+<text x="51" y="70">LUNGS</text><text x="51" y="86" font-size="9.5" fill="var(--ink-soft)">phổi</text>
+<text x="160" y="70">HEART</text><text x="160" y="86" font-size="9.5" fill="var(--ink-soft)">tim</text>
+<text x="269" y="70">BODY</text><text x="269" y="86" font-size="9.5" fill="var(--ink-soft)">cơ thể</text>
+<text x="160" y="34" font-size="10" fill="var(--bad)">artery &mdash; máu đi khỏi tim</text>
+<text x="160" y="126" font-size="10" fill="var(--esl)">vein &mdash; máu trở về tim</text></g></svg>`,
+s2:`<svg viewBox="0 0 320 140" ${SVGO}><g font-family="Lexend,sans-serif" font-size="11" fill="var(--ink)">
+<rect x="10" y="14" width="140" height="112" rx="12" fill="var(--good-bg)" stroke="var(--good)" stroke-width="2"/>
+<rect x="170" y="14" width="140" height="112" rx="12" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="2"/>
+<text x="80" y="36" text-anchor="middle" font-size="12" fill="var(--good)">REVERSIBLE</text>
+<text x="240" y="36" text-anchor="middle" font-size="12" fill="var(--bad)">IRREVERSIBLE</text>
+<text x="80" y="58" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">quay lại được</text>
+<text x="240" y="58" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">tạo chất mới</text>
+<text x="80" y="80" text-anchor="middle">melting &middot; freezing</text><text x="80" y="98" text-anchor="middle">dissolving</text>
+<text x="80" y="116" text-anchor="middle">evaporating</text>
+<text x="240" y="80" text-anchor="middle">burning &middot; cooking</text><text x="240" y="98" text-anchor="middle">rusting</text>
+<text x="240" y="116" text-anchor="middle">vinegar + soda</text></g>
+<g stroke-width="2" fill="none"><path d="M46 128 q34 14 68 0" stroke="var(--good)"/><path d="M114 128 q-34 14 -68 0" stroke="var(--good)"/></g></svg>`,
+s3:`<svg viewBox="0 0 320 120" ${SVGO}><g font-family="Lexend,sans-serif" font-size="11" text-anchor="middle">
+<circle cx="42" cy="52" r="26" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2"/>
+<circle cx="160" cy="52" r="26" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+<circle cx="278" cy="52" r="26" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+<text x="42" y="50" fill="var(--ink)">grass</text><text x="42" y="64" font-size="9" fill="var(--ink-soft)">cỏ</text>
+<text x="160" y="50" fill="var(--ink)">rabbit</text><text x="160" y="64" font-size="9" fill="var(--ink-soft)">thỏ</text>
+<text x="278" y="50" fill="var(--ink)">fox</text><text x="278" y="64" font-size="9" fill="var(--ink-soft)">cáo</text>
+<text x="101" y="34" font-size="9" fill="var(--ink-soft)">is eaten by</text>
+<text x="219" y="34" font-size="9" fill="var(--ink-soft)">is eaten by</text>
+<text x="160" y="106" font-size="10" fill="var(--ac)">Mũi tên chỉ chiều năng lượng truyền đi</text></g>
+<g stroke="var(--ac)" stroke-width="2.5" fill="none" stroke-linecap="round">
+<path d="M70 52 h60"/><path d="M122 46 l9 6 -9 6"/><path d="M188 52 h60"/><path d="M240 46 l9 6 -9 6"/></g></svg>`,
+s4:`<svg viewBox="0 0 320 130" ${SVGO}><g font-family="Lexend,sans-serif" font-size="11" text-anchor="middle">
+<rect x="12" y="14" width="90" height="72" rx="10" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+<rect x="115" y="14" width="90" height="72" rx="10" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+<rect x="218" y="14" width="90" height="72" rx="10" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+<g fill="var(--ac)"><circle cx="30" cy="32" r="5"/><circle cx="45" cy="32" r="5"/><circle cx="60" cy="32" r="5"/><circle cx="75" cy="32" r="5"/>
+<circle cx="30" cy="48" r="5"/><circle cx="45" cy="48" r="5"/><circle cx="60" cy="48" r="5"/><circle cx="75" cy="48" r="5"/>
+<circle cx="30" cy="64" r="5"/><circle cx="45" cy="64" r="5"/><circle cx="60" cy="64" r="5"/><circle cx="75" cy="64" r="5"/>
+<circle cx="132" cy="60" r="5"/><circle cx="150" cy="66" r="5"/><circle cx="168" cy="58" r="5"/><circle cx="186" cy="65" r="5"/>
+<circle cx="141" cy="45" r="5"/><circle cx="162" cy="44" r="5"/><circle cx="180" cy="48" r="5"/>
+<circle cx="232" cy="30" r="5"/><circle cx="268" cy="24" r="5"/><circle cx="296" cy="40" r="5"/>
+<circle cx="240" cy="66" r="5"/><circle cx="278" cy="72" r="5"/><circle cx="262" cy="50" r="5"/></g>
+<text x="57" y="104" fill="var(--ink)">SOLID</text><text x="57" y="118" font-size="9" fill="var(--ink-soft)">rắn &middot; xếp sát</text>
+<text x="160" y="104" fill="var(--ink)">LIQUID</text><text x="160" y="118" font-size="9" fill="var(--ink-soft)">lỏng &middot; trượt lên nhau</text>
+<text x="263" y="104" fill="var(--ink)">GAS</text><text x="263" y="118" font-size="9" fill="var(--ink-soft)">khí &middot; xa và nhanh</text></g></svg>`,
+s5:`<svg viewBox="0 0 320 150" ${SVGO}>
+<rect x="120" y="58" width="80" height="46" rx="8" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2.5"/>
+<g stroke-width="2.5" fill="none" stroke-linecap="round">
+<path d="M160 104 v34" stroke="var(--bad)"/><path d="M154 130 l6 8 6 -8" stroke="var(--bad)"/>
+<path d="M160 58 v-34" stroke="var(--esl)"/><path d="M154 32 l6 -8 6 8" stroke="var(--esl)"/>
+<path d="M200 81 h48" stroke="var(--good)"/><path d="M240 75 l8 6 -8 6" stroke="var(--good)"/>
+<path d="M120 81 h-48" stroke="var(--warn)"/><path d="M80 75 l-8 6 8 6" stroke="var(--warn)"/></g>
+<g font-family="Lexend,sans-serif" font-size="10" text-anchor="middle">
+<text x="160" y="18" fill="var(--esl)">reaction &middot; phản lực</text>
+<text x="160" y="148" fill="var(--bad)">gravity &middot; trọng lực</text>
+<text x="272" y="85" fill="var(--good)">push</text><text x="46" y="85" fill="var(--warn)">friction</text>
+<text x="160" y="86" fill="var(--ink)" font-size="11">object</text></g></svg>`,
+s6:`<svg viewBox="0 0 320 140" ${SVGO}>
+<circle cx="34" cy="70" r="16" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="2.5"/>
+<rect x="140" y="38" width="18" height="64" rx="4" fill="var(--ink)"/>
+<rect x="248" y="10" width="62" height="120" rx="6" fill="var(--card-2)" stroke="var(--line)" stroke-width="2"/>
+<rect x="252" y="24" width="54" height="92" rx="4" fill="var(--ink-soft)" opacity=".55"/>
+<g stroke="var(--warn)" stroke-width="2" stroke-linecap="round">
+<path d="M50 62 L140 40"/><path d="M50 78 L140 100"/><path d="M50 70 h88"/>
+<path d="M158 40 L248 22"/><path d="M158 100 L248 118"/></g>
+<g font-family="Lexend,sans-serif" font-size="10" text-anchor="middle">
+<text x="34" y="104" fill="var(--ink-soft)">torch</text><text x="149" y="120" fill="var(--ink-soft)">object</text>
+<text x="279" y="72" fill="var(--card)" font-size="11">SHADOW</text><text x="279" y="86" fill="var(--card)" font-size="9">bóng</text></g></svg>`,
+s7:`<svg viewBox="0 0 320 130" ${SVGO}><g stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round">
+<path d="M40 30 h95 M185 30 h95 M280 30 v70 M280 100 h-95 M135 100 h-95 M40 100 v-70"/>
+<path d="M150 18 v24 M164 12 v36" stroke="var(--ac)"/>
+<circle cx="160" cy="100" r="15" fill="var(--warn-bg)" stroke="var(--warn)"/>
+<path d="M150 90 l20 20 M170 90 l-20 20" stroke="var(--warn)" stroke-width="2"/>
+<path d="M280 58 l-14 8 h28 z" fill="var(--ink)" stroke="none"/></g>
+<g font-family="Lexend,sans-serif" font-size="10" text-anchor="middle">
+<text x="157" y="8" fill="var(--ac)">cell &middot; pin</text>
+<text x="160" y="126" fill="var(--warn)">lamp &middot; bóng đèn</text>
+<text x="40" y="70" fill="var(--ink-soft)" transform="rotate(-90 40 70)">switch</text></g>
+<path d="M28 78 l24 -14" stroke="var(--ac)" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+s8:`<svg viewBox="0 0 320 140" ${SVGO}>
+<circle cx="44" cy="70" r="28" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="2.5"/>
+<circle cx="190" cy="50" r="26" fill="var(--esl-bg)" stroke="var(--esl)" stroke-width="2.5"/>
+<circle cx="270" cy="102" r="26" fill="var(--esl-bg)" stroke="var(--esl)" stroke-width="2.5"/>
+<g stroke="var(--ink-soft)" stroke-width="2" stroke-dasharray="5 5" fill="none"><path d="M190 24 l10 52" transform="rotate(23 190 50)"/><path d="M270 76 l10 52" transform="rotate(23 270 102)"/></g>
+<g font-family="Lexend,sans-serif" font-size="10" text-anchor="middle">
+<text x="44" y="74" fill="var(--warn)" font-size="11">SUN</text>
+<text x="190" y="14" fill="var(--ink)">summer here</text><text x="190" y="94" fill="var(--ink-soft)" font-size="9">nghiêng về Mặt Trời</text>
+<text x="270" y="140" fill="var(--ink)">winter here</text><text x="270" y="66" fill="var(--ink-soft)" font-size="9">nghiêng ra xa</text></g></svg>`,
+m1:`<svg viewBox="0 0 320 120" ${SVGO}><g font-family="JetBrains Mono,monospace" font-size="15" text-anchor="middle">
+<g fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5">
+<rect x="14" y="40" width="52" height="42"/><rect x="66" y="40" width="52" height="42"/><rect x="118" y="40" width="14" height="42" fill="var(--ac-bg)"/>
+<rect x="132" y="40" width="52" height="42"/><rect x="184" y="40" width="52" height="42"/><rect x="236" y="40" width="52" height="42"/></g>
+<g fill="var(--ink)"><text x="40" y="68">3</text><text x="92" y="68">6</text><text x="125" y="68" fill="var(--ac)">.</text>
+<text x="158" y="68">7</text><text x="210" y="68">4</text><text x="262" y="68">1</text></g>
+<g font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-soft)">
+<text x="40" y="32">tens</text><text x="92" y="32">units</text><text x="158" y="32">tenths</text>
+<text x="210" y="32">hundredths</text><text x="262" y="32">thousandths</text>
+<text x="40" y="98">chục</text><text x="92" y="98">đơn vị</text><text x="158" y="98">1/10</text>
+<text x="210" y="98">1/100</text><text x="262" y="98">1/1000</text></g></g></svg>`,
+m2:`<svg viewBox="0 0 320 130" ${SVGO}><g font-family="JetBrains Mono,monospace" font-size="12" text-anchor="middle">
+<rect x="12" y="20" width="296" height="26" rx="5" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2"/>
+<rect x="12" y="20" width="148" height="26" rx="5" fill="var(--ac)"/>
+<text x="86" y="38" fill="var(--card)">1/2 = 0.5 = 50%</text><text x="234" y="38" fill="var(--ac)">the other half</text>
+<rect x="12" y="56" width="296" height="26" rx="5" fill="var(--mat-bg)" stroke="var(--mat)" stroke-width="2"/>
+<rect x="12" y="56" width="74" height="26" rx="5" fill="var(--mat)"/>
+<text x="49" y="74" fill="var(--card)" font-size="11">1/4</text><text x="197" y="74" fill="var(--mat)">0.25 = 25%</text>
+<rect x="12" y="92" width="296" height="26" rx="5" fill="var(--esl-bg)" stroke="var(--esl)" stroke-width="2"/>
+<rect x="12" y="92" width="59" height="26" rx="5" fill="var(--esl)"/>
+<text x="41" y="110" fill="var(--card)" font-size="11">1/5</text><text x="190" y="110" fill="var(--esl)">0.2 = 20%</text></g></svg>`,
+m6:`<svg viewBox="0 0 320 120" ${SVGO}><g stroke-width="2.5" fill="none" stroke-linecap="round" stroke="var(--ink)">
+<path d="M20 90 h72 M20 90 l62 -40"/><path d="M124 90 h72 M124 90 v-46"/><path d="M228 90 h72 M228 90 l50 -34" transform="rotate(-0 228 90)"/>
+<path d="M228 90 l-4 -46" /></g>
+<g fill="none" stroke-width="2"><path d="M40 90 a20 20 0 0 0 15 -13" stroke="var(--good)"/>
+<path d="M124 74 h16 v16" stroke="var(--warn)"/>
+<path d="M248 90 a20 20 0 0 0 -22 -19" stroke="var(--bad)"/></g>
+<g font-family="Lexend,sans-serif" font-size="10.5" text-anchor="middle">
+<text x="56" y="112" fill="var(--good)">acute &lt; 90&deg;</text><text x="160" y="112" fill="var(--warn)">right = 90&deg;</text>
+<text x="264" y="112" fill="var(--bad)">obtuse &gt; 90&deg;</text></g></svg>`,
+m7:`<svg viewBox="0 0 320 150" ${SVGO}><g stroke="var(--line)" stroke-width="1">
+<path d="M60 20 v110 M100 20 v110 M140 20 v110 M180 20 v110 M220 20 v110 M260 20 v110"/>
+<path d="M20 40 h260 M20 65 h260 M20 90 h260 M20 115 h260"/></g>
+<g stroke="var(--ink)" stroke-width="2.5" fill="none"><path d="M20 130 h262"/><path d="M20 130 v-112"/>
+<path d="M276 126 l8 4 -8 4"/><path d="M16 26 l4 -8 4 8"/></g>
+<circle cx="140" cy="80" r="7" fill="var(--ac)"/>
+<g stroke="var(--ac)" stroke-width="2" stroke-dasharray="4 4"><path d="M20 80 h120"/><path d="M140 130 v-50"/></g>
+<g font-family="JetBrains Mono,monospace" font-size="11" fill="var(--ink)"><text x="150" y="72">(3, 2)</text>
+<text x="12" y="146" font-size="9">O</text></g>
+<g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink-soft)"><text x="80" y="146">along &rarr; 3</text><text x="150" y="112">up &uarr; 2</text></g></svg>`,
+m9:`<svg viewBox="0 0 320 130" ${SVGO}>
+<rect x="30" y="26" width="180" height="76" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2.5"/>
+<g stroke="var(--line)" stroke-width="1"><path d="M60 26 v76 M90 26 v76 M120 26 v76 M150 26 v76 M180 26 v76 M30 51 h180 M30 76 h180"/></g>
+<g font-family="Lexend,sans-serif" font-size="11" text-anchor="middle" fill="var(--ink)">
+<text x="120" y="18">length 6 cm</text><text x="248" y="68">width</text><text x="248" y="82">4 cm</text>
+<text x="120" y="68" font-size="13" fill="var(--ac)">6 &times; 4 = 24 cm&sup2;</text>
+<text x="120" y="122" font-size="10" fill="var(--ink-soft)">chu vi = 2 &times; (6 + 4) = 20 cm</text></g></svg>`,
+m10:`<svg viewBox="0 0 320 120" ${SVGO}>
+<g font-family="JetBrains Mono,monospace" font-size="14" text-anchor="middle" fill="var(--ink)">
+<text x="40" y="40">3</text><text x="100" y="40">5</text><text x="160" y="40">5</text><text x="220" y="40">8</text><text x="280" y="40">9</text></g>
+<g stroke="var(--line)" stroke-width="2"><path d="M20 52 h280"/></g>
+<circle cx="160" cy="40" r="18" fill="none" stroke="var(--ac)" stroke-width="2.5"/>
+<g font-family="Lexend,sans-serif" font-size="10" fill="var(--ink-soft)">
+<text x="160" y="76" text-anchor="middle" fill="var(--ac)">median = 5 (số ở giữa)</text>
+<text x="160" y="94" text-anchor="middle">mean = 30 &divide; 5 = 6 &middot; range = 9 &minus; 3 = 6</text>
+<text x="160" y="112" text-anchor="middle">mode = 5 (xuất hiện nhiều nhất)</text></g></svg>`,
+e1:`<svg viewBox="0 0 320 130" ${SVGO}>
+<path d="M20 70 h268" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+<path d="M282 65 l8 5 -8 5" stroke="var(--ink)" stroke-width="2.5" fill="none"/>
+<g stroke="var(--ink-soft)" stroke-width="2"><path d="M70 62 v16"/><path d="M240 62 v16"/></g>
+<circle cx="70" cy="70" r="7" fill="var(--mat)"/><circle cx="240" cy="70" r="7" fill="var(--esl)"/>
+<rect x="120" y="30" width="150" height="26" rx="8" fill="var(--esl-bg)"/>
+<rect x="16" y="86" width="130" height="26" rx="8" fill="var(--mat-bg)"/>
+<g font-family="Lexend,sans-serif" font-size="10.5" text-anchor="middle">
+<text x="70" y="92" fill="var(--mat)" font-size="9">last week</text>
+<text x="240" y="92" fill="var(--esl)" font-size="9">NOW</text>
+<text x="195" y="47" fill="var(--esl)">present perfect: still matters</text>
+<text x="81" y="103" fill="var(--mat)">past simple: finished</text>
+<text x="160" y="126" fill="var(--ink-soft)" font-size="9.5">QK đơn có mốc thời gian &middot; HTHT nối tới hiện tại</text></g></svg>`,
+e4:`<svg viewBox="0 0 320 130" ${SVGO}><g font-family="Lexend,sans-serif" font-size="10.5">
+<rect x="12" y="10" width="296" height="32" rx="9" fill="var(--good-bg)" stroke="var(--good)" stroke-width="1.5"/>
+<rect x="12" y="48" width="296" height="32" rx="9" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.5"/>
+<rect x="12" y="86" width="296" height="32" rx="9" fill="var(--esl-bg)" stroke="var(--esl)" stroke-width="1.5"/>
+<text x="24" y="24" fill="var(--good)" font-size="9.5">TYPE 0 &middot; luôn đúng</text>
+<text x="24" y="38" fill="var(--ink)">If you heat ice, it melts.</text>
+<text x="24" y="62" fill="var(--warn)" font-size="9.5">TYPE 1 &middot; có thể xảy ra</text>
+<text x="24" y="76" fill="var(--ink)">If it rains, we will stay in.</text>
+<text x="24" y="100" fill="var(--esl)" font-size="9.5">TYPE 2 &middot; tưởng tượng</text>
+<text x="24" y="114" fill="var(--ink)">If I had wings, I would fly.</text></g></svg>`
+};
+</script>
+
+<script>
+/* Đề thi thử: làm liên tục, không hiện đáp án cho tới khi nộp bài */
+const EXAMS = {
+science:{ name:"Science Paper", vi:"Đề thi thử Science", mins:25, qs:[
+ {u:"s1",q:"Blood leaves the heart through:", o:["Veins","Arteries","Capillaries","Valves"], a:1, e:"Động mạch đưa máu rời khỏi tim (A = Away)."},
+ {u:"s1",q:"Which part of the blood helps a cut to stop bleeding?", o:["Plasma","Platelets","Red cells","Water"], a:1, e:"Tiểu cầu (platelets) làm máu đông lại ở vết thương."},
+ {u:"s2",q:"Which of these is an irreversible change?", o:["Melting ice","Boiling water","Rusting a nail","Dissolving salt"], a:2, e:"Gỉ sét tạo ra chất mới (iron oxide) và không quay lại được."},
+ {u:"s3",q:"In a food chain, producers are always:", o:["Animals that hunt","Green plants","Decomposers","Birds"], a:1, e:"Cây xanh tự tạo thức ăn nhờ quang hợp nên luôn đứng đầu chuỗi."},
+ {u:"s3",q:"A camel stores fat in its hump. This is an example of:", o:["A food chain","An adaptation","A life cycle","Classification"], a:1, e:"Đặc điểm giúp lạc đà sống được ở sa mạc — đó là sự thích nghi."},
+ {u:"s4",q:"Which change happens at exactly 100&deg;C for water?", o:["Melting","Freezing","Boiling","Condensing"], a:2, e:"Nước sôi ở 100&deg;C; 0&deg;C là nhiệt độ nóng chảy hoặc đông đặc."},
+ {u:"s5",q:"A book lies still on a desk. The forces on it are:", o:["Unbalanced","Balanced","Zero","Only gravity"], a:1, e:"Trọng lực kéo xuống và mặt bàn đẩy lên bằng nhau nên các lực cân bằng."},
+ {u:"s6",q:"A shadow is formed because light:", o:["Bends round objects","Cannot pass through an opaque object","Is absorbed by air","Changes colour"], a:1, e:"Ánh sáng truyền thẳng và bị vật cản sáng chặn lại, tạo vùng tối phía sau."},
+ {u:"s7",q:"Which set of materials are ALL conductors?", o:["Copper, iron, aluminium","Plastic, wood, glass","Rubber, copper, paper","Glass, iron, cotton"], a:0, e:"Cả ba đều là kim loại nên đều dẫn điện tốt."},
+ {u:"s8",q:"Night happens on the side of the Earth that is:", o:["Tilted away from the Sun","Facing away from the Sun","Closest to the Moon","Covered by clouds"], a:1, e:"Nửa Trái Đất quay lưng lại Mặt Trời là ban đêm; nguyên nhân là Trái Đất tự quay."},
+ {u:"s9",q:"To make a test fair you must:", o:["Change several things at once","Change one thing and keep the rest the same","Do it only once","Guess the results"], a:1, e:"Chỉ đổi một biến, giữ nguyên tất cả các biến còn lại."},
+ {u:"s9",q:"Repeating readings and taking an average makes results more:", o:["Colourful","Reliable","Difficult","Expensive"], a:1, e:"Lặp lại và lấy trung bình giúp giảm sai số, kết quả đáng tin cậy hơn."}]},
+math:{ name:"Mathematics Paper", vi:"Đề thi thử Toán", mins:25, qs:[
+ {u:"m1",q:"Round 6.482 to one decimal place.", o:["6.4","6.5","6.48","7.0"], a:1, e:"Chữ số sau vị trí phần mười là 8 (&ge;5) nên tăng 4 lên 5 &rarr; 6.5."},
+ {u:"m2",q:"What is 30% of 90?", o:["18","27","30","33"], a:1, e:"10% của 90 = 9, nên 30% = 9 &times; 3 = 27."},
+ {u:"m3",q:"Share 56 sweets in the ratio 3 : 5. The larger share is:", o:["21","28","35","30"], a:2, e:"Tổng 8 phần, mỗi phần 56 &divide; 8 = 7. Phần lớn = 5 &times; 7 = 35."},
+ {u:"m4",q:"12 + 6 &divide; 3 =", o:["6","14","18","2"], a:1, e:"Chia trước: 6 &divide; 3 = 2, rồi 12 + 2 = 14."},
+ {u:"m5",q:"If n = 8, what is 5n &minus; 3?", o:["37","40","13","43"], a:0, e:"5 &times; 8 = 40, trừ 3 &rarr; 37."},
+ {u:"m6",q:"The angles of a quadrilateral add up to:", o:["180&deg;","270&deg;","360&deg;","540&deg;"], a:2, e:"Tứ giác chia được thành hai tam giác, mỗi tam giác 180&deg; &rarr; 360&deg;."},
+ {u:"m7",q:"Point (5, 2) is translated 3 left and 4 up. It lands at:", o:["(8, 6)","(2, 6)","(2, &minus;2)","(1, 6)"], a:1, e:"x: 5 &minus; 3 = 2; y: 2 + 4 = 6 &rarr; (2, 6)."},
+ {u:"m8",q:"3.2 kg in grams is:", o:["32 g","320 g","3200 g","0.32 g"], a:2, e:"1 kg = 1000 g nên 3.2 &times; 1000 = 3200 g."},
+ {u:"m9",q:"A cube has sides of 3 cm. Its volume is:", o:["9 cm&sup3;","18 cm&sup3;","27 cm&sup3;","12 cm&sup3;"], a:2, e:"3 &times; 3 &times; 3 = 27 cm&sup3;."},
+ {u:"m10",q:"The mean of 5, 9, 10 and 8 is:", o:["8","8.5","9","32"], a:0, e:"Tổng = 32, chia cho 4 &rarr; 8."},
+ {u:"m11",q:"A bag has 4 green and 6 yellow counters. P(green) is:", o:["4/6","4/10","6/10","1/4"], a:1, e:"Tổng 10 quân, 4 quân xanh &rarr; 4/10 (tức 2/5)."},
+ {u:"m12",q:"A book costs $6.50. How much change from $20 after buying two?", o:["$13.50","$7.00","$6.50","$13.00"], a:1, e:"Bước 1: 2 &times; 6.50 = $13.00. Bước 2: 20 &minus; 13 = $7.00."}]},
+esl:{ name:"English Paper", vi:"Đề thi thử Tiếng Anh", mins:25, qs:[
+ {u:"e1",q:"I ______ never been to Japan.", o:["has","have","had","am"], a:1, e:"Chủ ngữ I dùng have; &lsquo;never&rsquo; là từ tín hiệu của hiện tại hoàn thành."},
+ {u:"e1",q:"They ______ the museum last Friday.", o:["have visited","visited","has visited","visit"], a:1, e:"Có mốc quá khứ &lsquo;last Friday&rsquo; nên dùng quá khứ đơn."},
+ {u:"e2",q:"To find a date quickly in a text you should:", o:["Skim","Scan","Infer","Translate"], a:1, e:"Tìm chi tiết cụ thể như ngày tháng là kỹ năng scan."},
+ {u:"e3",q:"The cakes ______ baked this morning.", o:["was","were","is","has"], a:1, e:"&lsquo;The cakes&rsquo; số nhiều nên dùng were + V3."},
+ {u:"e4",q:"If I ______ rich, I would build a school.", o:["am","was","were","will be"], a:2, e:"Điều kiện loại 2 dùng were cho mọi chủ ngữ."},
+ {u:"e5",q:"&lsquo;I am busy,&rsquo; he said. &rarr; He said he ______ busy.", o:["is","was","were","has been"], a:1, e:"Lùi thì: am &rarr; was."},
+ {u:"e6",q:"The house ______ we visited is very old.", o:["who","which","whose","when"], a:1, e:"House là vật nên dùng which (hoặc that)."},
+ {u:"e7",q:"You ______ swim here. The water is dangerous.", o:["mustn't","don't have to","should","might"], a:0, e:"Nguy hiểm nên đây là điều cấm &rarr; mustn't."},
+ {u:"e8",q:"Which connective shows a result?", o:["although","however","so","but"], a:2, e:"&lsquo;so&rsquo; dẫn tới kết quả; although, however, but đều chỉ tương phản."},
+ {u:"e9",q:"The opposite of &lsquo;possible&rsquo; is:", o:["unpossible","impossible","dispossible","nonpossible"], a:1, e:"Tiền tố im- dùng trước các từ bắt đầu bằng p &rarr; impossible."},
+ {u:"e10",q:"Before a listening test you should:", o:["Close the paper","Read the questions","Write random answers","Talk to a friend"], a:1, e:"Đọc câu hỏi trước để biết cần nghe thông tin gì."},
+ {u:"e11",q:"Which answer would score highest in a speaking test?", o:["Yes.","Yes, I do.","Yes, because I enjoy playing with my cousins at weekends.","No."], a:2, e:"Câu đầy đủ kèm lý do luôn được điểm cao nhất."}]}
+};
+</script>
+
+<script>
+const KID = "Lâm";
+const SUBJ_IDS = ["science","math","esl"];
+const view = document.getElementById('view');
+const ttl  = document.getElementById('ttl');
+const backBtn = document.getElementById('back');
+const topright = document.getElementById('topright');
+const tabsEl = document.getElementById('tabs');
+
+/* mỗi unit: số câu quiz = số ý chính */
+SUBJ_IDS.forEach(k => DATA[k].units.forEach(u => {
+  if(EXTRA[u.id]) u.quiz = u.quiz.concat(EXTRA[u.id]);
+  u.subject = k;
+}));
+
+/* ---------- lưu trữ ---------- */
+const KEY = "checkpointlab.v2";
+let S = {units:{}, streak:0, lastDay:null, doneToday:[], hist:{}, srs:{}, exams:{}, showVI:false, tts:true};
+try{ const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const today = () => new Date().toISOString().slice(0,10);
+const dayAdd = (n) => new Date(Date.now()+n*864e5).toISOString().slice(0,10);
+(function rollDay(){
+  const t = today();
+  if(S.lastDay !== t){
+    S.streak = (S.lastDay === dayAdd(-1)) ? S.streak : 0;
+    S.doneToday = []; S.lastDay = t; save();
+  }
+})();
+function addMinutes(m){ S.hist[today()] = Math.round((S.hist[today()]||0) + m); save(); }
+function markDone(uid, pct){
+  const u = S.units[uid] || {best:0, tries:0};
+  u.best = Math.max(u.best, pct); u.last = pct; u.tries++; u.date = today();
+  S.units[uid] = u;
+  if(!S.doneToday.includes(uid)){ S.doneToday.push(uid); if(S.doneToday.length===1) S.streak = (S.streak||0)+1; }
+  save();
+}
+/* ôn lại câu sai theo khoảng cách tăng dần */
+const GAPS = [1,2,4,7,14];
+function srsWrong(uid,i){ S.srs[uid+":"+i] = {box:0, due:dayAdd(1)}; save(); }
+function srsRight(uid,i){
+  const k=uid+":"+i, it=S.srs[k]; if(!it) return;
+  it.box = Math.min(it.box+1, GAPS.length-1);
+  if(it.box >= GAPS.length-1){ delete S.srs[k]; } else { it.due = dayAdd(GAPS[it.box]); }
+  save();
+}
+function dueList(){
+  const t = today(), out=[];
+  Object.keys(S.srs).forEach(k=>{
+    if(S.srs[k].due > t) return;
+    const [uid,i] = k.split(":"); const u = findUnit(uid); if(!u) return;
+    const q = u.quiz[+i]; if(q) out.push({uid, i:+i, q, k:u.subject});
+  });
+  return out;
+}
+function findUnit(uid){ for(const k of SUBJ_IDS){ const u = DATA[k].units.find(x=>x.id===uid); if(u) return u; } return null; }
+
+/* ---------- tiện ích ---------- */
+const el = (h)=>{ const d=document.createElement('div'); d.innerHTML=h.trim(); return d.firstElementChild; };
+const plain = (h)=>{ const d=document.createElement('div'); d.innerHTML=h; return (d.textContent||"").trim(); };
+const subjStyle = (k)=>`--ac:var(${DATA[k].ac}); --ac-bg:var(${DATA[k].acbg})`;
+const readyUnits = (k)=>DATA[k].units;
+const allUnits = ()=>SUBJ_IDS.flatMap(k=>DATA[k].units.map(u=>({k,u})));
+function pct(k){ const r=readyUnits(k); return Math.round(r.reduce((a,u)=>a+((S.units[u.id]||{}).best||0),0)/r.length); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* ---------- phát âm ---------- */
+let voice=null;
+function pickVoice(){ const v=speechSynthesis.getVoices();
+  voice = v.find(x=>x.lang==="en-GB") || v.find(x=>x.lang && x.lang.startsWith("en")) || null; }
+if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function say(text){
+  if(!S.tts || !window.speechSynthesis) return;
+  try{ speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(plain(text));
+    u.lang="en-GB"; u.rate=.88; if(voice) u.voice=voice; speechSynthesis.speak(u);
+  }catch(e){}
+}
+const spk = (t)=>`<button class="spk" data-say="${t.replace(/"/g,'&quot;')}" aria-label="Nghe phát âm">&#128266;</button>`;
+
+/* ---------- mindmap ---------- */
+function wrap(s, max){
+  if(s.length<=max) return [s];
+  const w=s.split(" "); let a="",b="";
+  w.forEach(x=>{ if((a+" "+x).trim().length<=max && b==="") a=(a+" "+x).trim(); else b=(b+" "+x).trim(); });
+  return [a,b];
+}
+function mindmapSVG(uid, title){
+  const items = (MM[uid]||[]).map(s=>s.split("|"));
+  if(!items.length) return "";
+  const rowH=52, top=54, H = top + items.length*rowH + 12, cx=160;
+  let out = `<svg viewBox="0 0 320 ${H}" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">`;
+  out += `<path d="M${cx} 34 v${H-56}" stroke="var(--ac)" stroke-width="2" fill="none" stroke-dasharray="3 5" opacity=".55"/>`;
+  const t = wrap(title, 26);
+  out += `<rect x="42" y="6" width="236" height="${t.length>1?34:26}" rx="9" fill="var(--ac)"/>`;
+  out += `<text x="${cx}" y="${t.length>1?20:23}" text-anchor="middle" font-family="Literata,serif" font-size="12" font-weight="700" fill="var(--card)">${t[0]}</text>`;
+  if(t[1]) out += `<text x="${cx}" y="34" text-anchor="middle" font-family="Literata,serif" font-size="12" font-weight="700" fill="var(--card)">${t[1]}</text>`;
+  items.forEach((it,i)=>{
+    const y = top + i*rowH, left = i%2===0;
+    const bx = left ? 6 : 176, tx = left ? 12 : 182;
+    out += `<path d="M${cx} ${y+20} H${left?138:182}" stroke="var(--ac)" stroke-width="2" fill="none" opacity=".6"/>`;
+    out += `<circle cx="${cx}" cy="${y+20}" r="3.5" fill="var(--ac)"/>`;
+    out += `<rect x="${bx}" y="${y}" width="138" height="42" rx="10" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="1.2" opacity=".95"/>`;
+    const en = wrap(it[0], 21);
+    out += `<text x="${tx}" y="${y+16}" font-family="Lexend,sans-serif" font-size="9.5" font-weight="500" fill="var(--ink)">${en[0]}</text>`;
+    if(en[1]) out += `<text x="${tx}" y="${y+27}" font-family="Lexend,sans-serif" font-size="9.5" font-weight="500" fill="var(--ink)">${en[1]}</text>`;
+    out += `<text x="${tx}" y="${y+(en[1]?38:30)}" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-soft)">${wrap(it[1]||"",24)[0]}</text>`;
+  });
+  return out + `</svg>`;
+}
+const diagramFor = (uid)=> DIA[uid] ? `<div class="card" style="padding:14px 12px">${DIA[uid]}</div>` : "";
+
+/* ---------- router ---------- */
+let ST = {v:"home"};
+const ROOTS = ["home","subjects","review","progress"];
+function go(v, patch){ ST = Object.assign({v}, patch||{}); render(); window.scrollTo(0,0); }
+backBtn.onclick = ()=>{
+  if(ST.v==="unit") go("subject",{k:ST.k});
+  else if(ST.v==="quiz"||ST.v==="result") go(ST.src==="unit"?"unit":"home",{k:ST.k,uid:ST.uid});
+  else if(ST.v==="exam"||ST.v==="examresult") go("exams");
+  else if(ST.v==="session") go("home");
+  else go("home");
+};
+function render(){
+  backBtn.hidden = ROOTS.includes(ST.v);
+  topright.innerHTML = "";
+  tabsEl.style.display = (ST.v==="session"||ST.v==="exam") ? "none" : "flex";
+  view.className = "fade";
+  if(ST.v!=="exam" && ST.v!=="session") clearInterval(timerId);
+  const fn = {home:vHome, subjects:vSubjects, subject:vSubject, unit:vUnit, quiz:vQuiz, result:vResult,
+    session:vSession, review:vReview, progress:vProgress, exams:vExams, exam:vExam, examresult:vExamResult,
+    settings:vSettings, report:vReport}[ST.v];
+  fn();
+  bindCommon(); renderTabs();
+}
+function bindCommon(){
+  view.querySelectorAll('[data-say]').forEach(b=>b.onclick=(ev)=>{ ev.stopPropagation(); say(b.dataset.say); });
+  view.querySelectorAll('.veil').forEach(n=>n.onclick=()=>n.classList.remove('veil'));
+}
+function renderTabs(){
+  const d = dueList().length;
+  const items=[["home","&#127968;","Hôm nay",0],["subjects","&#128214;","Môn học",0],
+    ["review","&#128260;","Ôn lại",d],["progress","&#128200;","Tiến độ",0]];
+  const cur = ROOTS.includes(ST.v) ? ST.v : (["subject","unit"].includes(ST.v) ? "subjects" : (ST.v==="session"?"home":""));
+  tabsEl.innerHTML = items.map(([id,ic,lb,b])=>
+    `<button class="tab" data-go="${id}" aria-current="${cur===id}"><span>${ic}</span><span>${lb}</span>${b?`<span class="badge">${b>99?"99+":b}</span>`:""}</button>`).join("");
+  tabsEl.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+}
+const viClass = ()=> S.showVI ? "" : " veil";
+
+/* ---------- HÔM NAY ---------- */
+function vHome(){
+  ttl.textContent = "Checkpoint Lab";
+  topright.innerHTML = `<span class="streak">&#128293; ${S.streak||0} ngày</span>
+    <button class="spk" id="gear" aria-label="Cài đặt">&#9881;&#65039;</button>`;
+  topright.querySelector('#gear').onclick=()=>go("settings");
+  const hour=new Date().getHours();
+  const hi = hour<11?"Chào buổi sáng":hour<18?"Chào buổi chiều":"Chào buổi tối";
+  const due = dueList().length;
+  view.innerHTML = `<div class="stack">
+    <div class="hero">
+      <p class="eyebrow">${hi}, ${KID}</p>
+      <h2>Phiên ôn 15 phút hôm nay</h2>
+      <p style="font-size:14px;color:var(--ink-soft)">Ba chặng ngắn: nhớ lại &rarr; học kỹ &rarr; kiểm tra. Xong là nhớ hết ý chính của bài.</p>
+      <div class="plan">
+        <div class="leg"><b>1. Nhớ lại</b><small>4 phút &middot; thẻ lật</small></div>
+        <div class="leg"><b>2. Học kỹ</b><small>6 phút &middot; mindmap</small></div>
+        <div class="leg"><b>3. Kiểm tra</b><small>5 phút &middot; quiz</small></div>
+      </div>
+      <button class="btn" id="start">${S.doneToday.length? "Ôn thêm một phiên nữa" : "Bắt đầu phiên hôm nay"} &rarr;</button>
+      ${S.doneToday.length? `<p style="font-size:13px;color:var(--good);margin-top:10px;text-align:center">&#10003; Hôm nay đã hoàn thành ${S.doneToday.length} phiên &middot; ${S.hist[today()]||0} phút</p>`:""}
+    </div>
+    ${due? `<button class="unit" id="rv" style="--ac:var(--bad);--ac-bg:var(--bad-bg)"><div class="row">
+      <span class="num">${due}</span><div style="flex:1"><h4>Ôn lại câu đã làm sai</h4>
+      <p class="en">Đến hạn ôn hôm nay &middot; khoảng 3 phút</p></div><span style="color:var(--ink-faint)">&rsaquo;</span></div></button>`:""}
+    <div><p class="label" style="margin-bottom:9px">Ba môn</p><div class="stack-s" id="sl"></div></div>
+    <button class="unit" id="ex"><div class="row"><span style="font-size:20px">&#128221;</span>
+      <div style="flex:1"><h4>Đề thi thử Checkpoint</h4><p class="en">3 đề &middot; 12 câu &middot; 25 phút mỗi đề</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
+    <button class="unit" id="rp"><div class="row"><span style="font-size:20px">&#128203;</span>
+      <div style="flex:1"><h4>Báo cáo cho bố mẹ</h4><p class="en">Tuần này con học thế nào</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
+  </div>`;
+  const sl = view.querySelector('#sl');
+  SUBJ_IDS.forEach(k=>{
+    const s=DATA[k], p=pct(k), done=s.units.filter(u=>S.units[u.id]).length;
+    const b = el(`<button class="subj" style="${subjStyle(k)}"><div class="row">
+      <span style="font-size:20px">${s.icon}</span>
+      <div style="flex:1"><h3>${s.vi} <span style="font-family:Lexend;font-weight:400;font-size:13px;color:var(--ink-soft)">${s.name}</span></h3>
+      <p class="n">${done}/${s.units.length} unit đã học</p></div>
+      <span class="mono" style="font-size:13px;color:var(--ac);font-weight:700">${p}%</span></div>
+      <div class="bar" style="margin-top:11px"><i style="width:${p}%"></i></div></button>`);
+    b.onclick=()=>go("subject",{k}); sl.appendChild(b);
+  });
+  view.querySelector('#start').onclick=()=>startSession();
+  view.querySelector('#ex').onclick=()=>go("exams");
+  view.querySelector('#rp').onclick=()=>go("report");
+  const rv=view.querySelector('#rv'); if(rv) rv.onclick=()=>go("review");
+}
+
+/* ---------- MÔN HỌC ---------- */
+function vSubjects(){
+  ttl.textContent = "Môn học";
+  view.innerHTML = `<div class="stack" id="l"></div>`;
+  const l=view.querySelector('#l');
+  SUBJ_IDS.forEach(k=>{
+    const s=DATA[k];
+    const b=el(`<button class="subj" style="${subjStyle(k)}"><div class="row">
+      <span style="font-size:22px">${s.icon}</span>
+      <div style="flex:1"><h3>${s.name}</h3><p class="n">${s.vi} &middot; ${s.units.length} unit &middot; ${s.units.reduce((a,u)=>a+u.quiz.length,0)} câu hỏi</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>`);
+    b.onclick=()=>go("subject",{k}); l.appendChild(b);
+  });
+}
+function vSubject(){
+  const k=ST.k, s=DATA[k];
+  ttl.textContent = s.name;
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div><p class="eyebrow">${s.vi} &middot; Cambridge Stage 6</p>
+      <h2 style="font-size:20px;margin-top:2px">Chương trình Checkpoint</h2>
+      <div class="bar" style="margin-top:12px"><i style="width:${pct(k)}%"></i></div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">Điểm quiz trung bình: <b class="mono">${pct(k)}%</b></p></div>
+    <div class="stack-s" id="ul"></div></div>`;
+  const ul=view.querySelector('#ul');
+  s.units.forEach((u,i)=>{
+    const r=S.units[u.id];
+    const b=el(`<button class="unit"><div class="row"><span class="num">${i+1}</span>
+      <div style="flex:1"><h4>${u.vi}</h4><p class="en">${u.t}</p></div>
+      ${r?`<span class="pill on mono">${r.best}%</span>`:`<span class="pill">${u.quiz.length} câu</span>`}
+    </div></button>`);
+    b.onclick=()=>go("unit",{k,uid:u.id}); ul.appendChild(b);
+  });
+}
+
+/* ---------- BÀI HỌC ---------- */
+function vUnit(){
+  const k=ST.k, u=findUnit(ST.uid), tab=ST.tab||"kp";
+  ttl.textContent = DATA[k].name;
+  const r=S.units[u.id];
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div><p class="eyebrow">${DATA[k].vi} &middot; Unit</p>
+      <h2 style="font-size:21px;margin:2px 0 4px">${u.vi}</h2>
+      <div class="row"><p style="font-size:14px;color:var(--ink-soft);font-family:Literata,serif;flex:1">${u.t}</p>${spk(u.t)}</div>
+      ${r?`<p style="font-size:13px;margin-top:8px">Điểm cao nhất: <b class="mono" style="color:var(--ac)">${r.best}%</b> &middot; đã làm ${r.tries} lần</p>`:""}</div>
+    <div class="row" style="gap:7px;flex-wrap:wrap">
+      <button class="pill ${tab==='kp'?'on':''}" data-t="kp" style="padding:7px 13px;font-size:13px">Sơ đồ &amp; ý chính</button>
+      <button class="pill ${tab==='vo'?'on':''}" data-t="vo" style="padding:7px 13px;font-size:13px">Từ khoá</button>
+      ${u.passage?`<button class="pill ${tab==='pa'?'on':''}" data-t="pa" style="padding:7px 13px;font-size:13px">Bài đọc</button>`:""}
+    </div>
+    <div id="body"></div>
+    <button class="btn btn-accent" id="doQuiz">Làm quiz &middot; ${u.quiz.length} câu</button>
+  </div>`;
+  const body=view.querySelector('#body');
+  if(tab==="kp"){
+    body.className="stack";
+    body.innerHTML = `${diagramFor(u.id)}
+      <div class="card" style="padding:12px 10px">
+        <p class="label" style="margin:2px 0 8px 6px">Mindmap &middot; ${(MM[u.id]||[]).length} ý chính</p>
+        ${mindmapSVG(u.id, u.t)}</div>
+      <div class="stack-s">${u.kp.map((p,i)=>`<div class="kp"><div class="row" style="align-items:flex-start">
+        <p class="en" style="flex:1">${i+1}. ${p.en}</p>${spk(p.en)}</div>
+        <p class="vi${viClass()}">${p.vi}</p></div>`).join("")}</div>`;
+  } else if(tab==="vo"){
+    body.innerHTML = `<div class="card">${u.voc.map(([a,b])=>
+      `<div class="voc">${spk(a)}<b>${a}</b><i class="${S.showVI?"":"veil"}">${b}</i></div>`).join("")}</div>`;
+  } else {
+    body.innerHTML = `<div class="passage"><div class="row" style="margin-bottom:10px">
+      <h3 style="font-size:17px;flex:1">${u.passage.title}</h3>${spk(u.passage.title)}</div>
+      ${u.passage.text.map(t=>`<p>${t}</p>`).join("")}</div>`;
+  }
+  view.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>go("unit",{k,uid:u.id,tab:b.dataset.t}));
+  view.querySelector('#doQuiz').onclick=()=>go("quiz",{k,uid:u.id,qs:u.quiz.map((q,i)=>({q,i})),n:0,ans:[],src:"unit"});
+}
+
+/* ---------- QUIZ (có giải thích ngay) ---------- */
+function vQuiz(){
+  const k=ST.k, u=findUnit(ST.uid), n=ST.n, item=ST.qs[n], q=item.q;
+  ttl.textContent = ST.src==="review" ? "Ôn lại câu sai" : "Quiz";
+  topright.innerHTML = `<span class="pill mono">${n+1}/${ST.qs.length}</span>`;
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div class="bar"><i style="width:${n/ST.qs.length*100}%"></i></div>
+    <div><div class="row"><p class="label" style="flex:1">${u.vi}</p>${spk(q.q)}</div>
+      <p class="qtext">${q.q}</p><div class="stack-s" id="opts"></div></div>
+    <div id="after"></div></div>`;
+  const opts=view.querySelector('#opts'), after=view.querySelector('#after');
+  q.o.forEach((o,j)=>{
+    const b=el(`<button class="opt"><span class="k">${"ABCD"[j]}</span><span>${o}</span></button>`);
+    b.onclick=()=>answer(j); opts.appendChild(b);
+  });
+  function answer(j){
+    [...opts.children].forEach((b,x)=>{ b.disabled=true;
+      if(x===q.a) b.dataset.s="right"; else if(x===j) b.dataset.s="wrong"; });
+    ST.ans[n]=j;
+    const ok = j===q.a;
+    ok ? srsRight(item.uid||ST.uid, item.i) : srsWrong(item.uid||ST.uid, item.i);
+    after.innerHTML = `<div class="stack fade" style="margin-top:16px">
+      <div class="expl"><p class="v" style="color:var(--${ok?'good':'bad'})">${ok?"&#10003; Chính xác":"&#10007; Chưa đúng &mdash; đáp án đúng là "+"ABCD"[q.a]}</p><p>${q.e}</p></div>
+      <button class="btn" id="nx">${n+1<ST.qs.length?"Câu tiếp theo &rarr;":"Xem kết quả &rarr;"}</button></div>`;
+    after.querySelector('#nx').onclick=()=>{
+      if(n+1<ST.qs.length) go("quiz",Object.assign({},ST,{n:n+1}));
+      else go("result",Object.assign({},ST));
+    };
+  }
+}
+function vResult(){
+  const k=ST.k, u=findUnit(ST.uid);
+  const right = ST.qs.filter((it,i)=>ST.ans[i]===it.q.a).length;
+  const p = Math.round(right/ST.qs.length*100);
+  if(ST.src!=="review"){ markDone(u.id,p); }
+  if(ST.src==="session"){ addMinutes(15); }
+  ttl.textContent = "Kết quả";
+  const msg = p===100?"Tuyệt đối! Unit này đã vững."
+    : p>=80?"Rất tốt. Xem lại câu sai là chắc chắn."
+    : p>=50?"Khá ổn — ôn lại phần ý chính rồi thử lại nhé."
+    : "Cần đọc lại mindmap và ý chính trước khi làm lại.";
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div class="hero" style="text-align:center">
+      <p class="label">${ST.src==="review"?"Ôn lại câu sai":u.vi}</p>
+      <p class="score" style="color:var(--ac);margin:10px 0 4px">${p}%</p>
+      <p style="font-size:14px;color:var(--ink-soft)">Đúng ${right}/${ST.qs.length} câu &middot; chuỗi ${S.streak} ngày</p>
+      <p style="font-size:14px;margin-top:10px">${msg}</p></div>
+    <div><p class="label" style="margin-bottom:9px">Xem lại từng câu</p><div class="stack-s" id="rv"></div></div>
+    <div class="stack-s">
+      <button class="btn btn-accent" id="again">Làm lại</button>
+      <button class="btn btn-ghost" id="home">Về trang chính</button></div></div>`;
+  const rv=view.querySelector('#rv');
+  ST.qs.forEach((it,i)=>{
+    const q=it.q, ok=ST.ans[i]===q.a;
+    rv.appendChild(el(`<div class="rev"><p class="qq"><span class="${ok?'tick':'cross'}">${ok?"&#10003;":"&#10007;"}</span> ${q.q}</p>
+      <p class="aa">Đáp án đúng: <b>${q.o[q.a]}</b></p>
+      ${ok?"":`<p class="aa" style="color:var(--ink-soft)">${q.e}</p>`}</div>`));
+  });
+  view.querySelector('#again').onclick=()=>go("quiz",Object.assign({},ST,{n:0,ans:[]}));
+  view.querySelector('#home').onclick=()=>go("home");
+}
+
+/* ---------- PHIÊN 15 PHÚT ---------- */
+let timerId=null, endAt=0;
+function startSession(){
+  const pool = allUnits();
+  const fresh = pool.filter(x=>!S.doneToday.includes(x.u.id) && !S.units[x.u.id]);
+  const seen  = pool.filter(x=>!S.doneToday.includes(x.u.id));
+  const pick = (fresh.length?fresh:(seen.length?seen:pool));
+  const c = pick[Math.floor(Math.random()*pick.length)];
+  endAt = Date.now()+15*60*1000;
+  go("session",{k:c.k, uid:c.u.id, phase:0, ci:0, flipped:false});
+}
+function tick(){
+  const t=Math.max(0,endAt-Date.now());
+  const n=document.getElementById('clk'); if(!n) return;
+  n.textContent = `${String(Math.floor(t/60000)).padStart(2,'0')}:${String(Math.floor(t%60000/1000)).padStart(2,'0')}`;
+  n.classList.toggle('low', t<120000);
+}
+function vSession(){
+  const k=ST.k, u=findUnit(ST.uid);
+  ttl.textContent = "Phiên 15 phút";
+  topright.innerHTML = `<span class="timer" id="clk">15:00</span>`;
+  clearInterval(timerId); timerId=setInterval(tick,1000); tick();
+  const cards=u.kp.slice(0,4);
+  if(ST.phase===0){
+    view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+      <div class="hero"><p class="eyebrow">${DATA[k].vi} &middot; hôm nay ôn</p>
+        <h2 style="font-size:21px">${u.vi}</h2>
+        <p style="font-size:14px;color:var(--ink-soft);font-family:Literata,serif;margin-top:4px">${u.t}</p>
+        <div class="plan"><div class="leg"><b>4 thẻ</b><small>nhớ lại</small></div>
+          <div class="leg"><b>${u.kp.length} ý</b><small>mindmap</small></div>
+          <div class="leg"><b>${u.quiz.length} câu</b><small>kiểm tra</small></div></div>
+        <button class="btn btn-accent" id="g1">Bắt đầu &rarr;</button></div>
+      <button class="btn btn-ghost" id="sk">Đổi bài khác</button></div>`;
+    view.querySelector('#g1').onclick=()=>go("session",Object.assign({},ST,{phase:1,ci:0,flipped:false}));
+    view.querySelector('#sk').onclick=()=>startSession();
+  } else if(ST.phase===1){
+    const c=cards[ST.ci];
+    view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+      <div class="row"><span class="label">Chặng 1 &middot; Nhớ lại</span><span class="spacer"></span>
+        ${spk(c.en)}<span class="pill mono">${ST.ci+1}/${cards.length}</span></div>
+      <div class="fc" id="card"><p class="q">${c.en}</p>
+        ${ST.flipped?`<p class="a fade">${c.vi}</p>`:`<p class="a" style="color:var(--ink-faint)">Chạm vào thẻ để xem nghĩa tiếng Việt</p>`}</div>
+      <button class="btn ${ST.flipped?'btn-accent':'btn-ghost'}" id="nx">${ST.flipped?(ST.ci+1<cards.length?"Thẻ tiếp theo &rarr;":"Sang chặng học kỹ &rarr;"):"Lật thẻ"}</button></div>`;
+    const flip=()=>go("session",Object.assign({},ST,{flipped:true}));
+    view.querySelector('#card').onclick=()=>{ if(!ST.flipped) flip(); };
+    view.querySelector('#nx').onclick=()=>{
+      if(!ST.flipped) return flip();
+      if(ST.ci+1<cards.length) go("session",Object.assign({},ST,{ci:ST.ci+1,flipped:false}));
+      else go("session",Object.assign({},ST,{phase:2}));
+    };
+  } else {
+    view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+      <div class="row"><span class="label">Chặng 2 &middot; Học kỹ</span><span class="spacer"></span>
+        <span class="pill">${u.kp.length} ý chính</span></div>
+      ${diagramFor(u.id)}
+      <div class="card" style="padding:12px 10px">${mindmapSVG(u.id,u.t)}</div>
+      <div class="stack-s">${u.kp.map((p,i)=>`<div class="kp"><div class="row" style="align-items:flex-start">
+        <p class="en" style="flex:1">${i+1}. ${p.en}</p>${spk(p.en)}</div>
+        <p class="vi${viClass()}">${p.vi}</p></div>`).join("")}</div>
+      <div class="card" style="padding:4px 0">${u.voc.slice(0,6).map(([a,b])=>
+        `<div class="voc">${spk(a)}<b>${a}</b><i class="${S.showVI?"":"veil"}">${b}</i></div>`).join("")}</div>
+      <button class="btn btn-accent" id="toq">Chặng 3 &middot; Kiểm tra ${u.quiz.length} câu &rarr;</button></div>`;
+    view.querySelector('#toq').onclick=()=>{
+      clearInterval(timerId);
+      go("quiz",{k,uid:u.id,qs:u.quiz.map((q,i)=>({q,i})),n:0,ans:[],src:"session"});
+    };
+  }
+}
+
+/* ---------- ÔN LẠI CÂU SAI ---------- */
+function vReview(){
+  ttl.textContent = "Ôn lại";
+  const due = dueList();
+  const later = Object.keys(S.srs).length - due.length;
+  view.innerHTML = `<div class="stack">
+    <div class="hero"><p class="eyebrow">Chỉ ôn những câu con làm sai</p>
+      <h2 style="font-size:20px">${due.length? `${due.length} câu đến hạn hôm nay` : "Không có câu nào đến hạn"}</h2>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-top:6px">Mỗi câu sai sẽ quay lại sau 1 ngày, rồi 2, 4, 7 và 14 ngày. Trả lời đúng đủ số lần thì câu đó được xoá khỏi danh sách.</p>
+      ${due.length?`<button class="btn btn-accent" id="go" style="margin-top:14px">Ôn ngay &middot; ${due.length} câu</button>`:""}
+      ${later?`<p style="font-size:13px;color:var(--ink-faint);margin-top:10px">Còn ${later} câu đang chờ tới ngày ôn tiếp theo.</p>`:""}</div>
+    ${due.length?`<div><p class="label" style="margin-bottom:9px">Sẽ ôn những câu này</p><div class="stack-s" id="l"></div></div>`:
+      `<div class="note">Chưa có câu nào cần ôn lại. Cứ làm quiz như bình thường — câu nào sai sẽ tự động được thêm vào đây.</div>`}
+  </div>`;
+  if(due.length){
+    const l=view.querySelector('#l');
+    due.forEach(d=>{ const u=findUnit(d.uid);
+      l.appendChild(el(`<div class="rev" style="${subjStyle(d.k)}"><p class="qq">${d.q.q}</p>
+        <p class="aa" style="color:var(--ink-soft)">${DATA[d.k].name} &middot; ${u.vi}</p></div>`)); });
+    view.querySelector('#go').onclick=()=>{
+      const qs = shuffle(due).map(d=>({q:d.q, i:d.i, uid:d.uid}));
+      go("quiz",{k:due[0].k, uid:due[0].uid, qs, n:0, ans:[], src:"review"});
+    };
+  }
+}
+
+/* ---------- ĐỀ THI THỬ ---------- */
+function vExams(){
+  ttl.textContent = "Đề thi thử";
+  view.innerHTML = `<div class="stack">
+    <div><p class="eyebrow">Luyện đúng cảm giác phòng thi</p>
+      <h2 style="font-size:20px;margin-top:2px">Ba đề thi thử Checkpoint</h2>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-top:6px">Làm liên tục, có đồng hồ đếm ngược, KHÔNG hiện đáp án cho tới khi nộp bài — giống hệt khi thi thật.</p></div>
+    <div class="stack-s" id="l"></div></div>`;
+  const l=view.querySelector('#l');
+  SUBJ_IDS.forEach(k=>{
+    const ex=EXAMS[k], r=S.exams[k];
+    const b=el(`<button class="unit" style="${subjStyle(k)}"><div class="row">
+      <span style="font-size:20px">${DATA[k].icon}</span>
+      <div style="flex:1"><h4>${ex.vi}</h4><p class="en">${ex.qs.length} câu &middot; ${ex.mins} phút</p></div>
+      ${r?`<span class="pill on mono">${r.best}%</span>`:`<span class="pill">Chưa làm</span>`}</div></button>`);
+    b.onclick=()=>go("exam",{k, n:0, ans:new Array(ex.qs.length).fill(null), endAt:Date.now()+ex.mins*60000});
+    l.appendChild(b);
+  });
+}
+function vExam(){
+  const k=ST.k, ex=EXAMS[k], q=ex.qs[ST.n];
+  ttl.textContent = ex.name;
+  topright.innerHTML = `<span class="timer" id="clk">--:--</span>`;
+  endAt = ST.endAt; clearInterval(timerId);
+  timerId = setInterval(()=>{ tick(); if(Date.now()>=endAt){ clearInterval(timerId); go("examresult",Object.assign({},ST)); } },1000);
+  tick();
+  const done = ST.ans.filter(x=>x!==null).length;
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div class="row"><span class="label" style="flex:1">Câu ${ST.n+1} / ${ex.qs.length}</span>
+      <span class="pill">Đã trả lời ${done}</span></div>
+    <p class="qtext">${q.q}</p>
+    <div class="stack-s" id="opts"></div>
+    <div class="row" style="gap:9px">
+      <button class="btn btn-ghost" id="pv" ${ST.n===0?"disabled":""} style="flex:1">&larr; Trước</button>
+      <button class="btn btn-ghost" id="nx" ${ST.n===ex.qs.length-1?"disabled":""} style="flex:1">Sau &rarr;</button></div>
+    <div><p class="label" style="margin-bottom:9px">Chuyển nhanh</p><div class="navgrid" id="nav"></div></div>
+    <button class="btn btn-accent" id="submit">Nộp bài &middot; ${done}/${ex.qs.length} câu</button></div>`;
+  const opts=view.querySelector('#opts');
+  q.o.forEach((o,j)=>{
+    const b=el(`<button class="opt" ${ST.ans[ST.n]===j?'data-s="pick"':""}><span class="k">${"ABCD"[j]}</span><span>${o}</span></button>`);
+    b.onclick=()=>{ ST.ans[ST.n]=j; go("exam",Object.assign({},ST,{n:Math.min(ST.n+1, ex.qs.length-1)})); };
+    opts.appendChild(b);
+  });
+  const nav=view.querySelector('#nav');
+  ex.qs.forEach((_,i)=>{
+    const b=el(`<button data-s="${i===ST.n?'now':(ST.ans[i]!==null?'done':'')}">${i+1}</button>`);
+    b.onclick=()=>go("exam",Object.assign({},ST,{n:i})); nav.appendChild(b);
+  });
+  view.querySelector('#pv').onclick=()=>go("exam",Object.assign({},ST,{n:ST.n-1}));
+  view.querySelector('#nx').onclick=()=>go("exam",Object.assign({},ST,{n:ST.n+1}));
+  view.querySelector('#submit').onclick=()=>{
+    if(done<ex.qs.length && !confirm(`Còn ${ex.qs.length-done} câu chưa trả lời. Nộp bài luôn?`)) return;
+    clearInterval(timerId); go("examresult",Object.assign({},ST));
+  };
+}
+function vExamResult(){
+  const k=ST.k, ex=EXAMS[k];
+  clearInterval(timerId);
+  const right = ex.qs.filter((q,i)=>ST.ans[i]===q.a).length;
+  const p = Math.round(right/ex.qs.length*100);
+  const rec = S.exams[k] || {best:0, tries:0};
+  rec.best=Math.max(rec.best,p); rec.last=p; rec.tries++; rec.date=today();
+  S.exams[k]=rec; addMinutes(ex.mins); save();
+  const byUnit={};
+  ex.qs.forEach((q,i)=>{ if(!q.u) return; byUnit[q.u]=byUnit[q.u]||{r:0,n:0}; byUnit[q.u].n++; if(ST.ans[i]===q.a) byUnit[q.u].r++; });
+  const weak = Object.keys(byUnit).filter(id=>byUnit[id].r<byUnit[id].n);
+  ttl.textContent = "Kết quả thi thử";
+  view.innerHTML = `<div class="stack" style="${subjStyle(k)}">
+    <div class="hero" style="text-align:center"><p class="label">${ex.vi}</p>
+      <p class="score" style="color:var(--ac);margin:10px 0 4px">${p}%</p>
+      <p style="font-size:14px;color:var(--ink-soft)">Đúng ${right}/${ex.qs.length} câu</p>
+      <p style="font-size:14px;margin-top:10px">${p>=80?"Mức này đã sẵn sàng cho kỳ thi.":p>=60?"Gần đạt — tập trung vào các unit còn yếu bên dưới.":"Cần ôn lại các unit bên dưới rồi thi lại."}</p></div>
+    ${weak.length?`<div><p class="label" style="margin-bottom:9px">Unit cần ôn lại</p><div class="stack-s" id="w"></div></div>`:""}
+    <div><p class="label" style="margin-bottom:9px">Chi tiết từng câu</p><div class="stack-s" id="rv"></div></div>
+    <button class="btn btn-ghost" id="bk">Về danh sách đề</button></div>`;
+  if(weak.length){ const w=view.querySelector('#w');
+    weak.forEach(id=>{ const u=findUnit(id); if(!u) return;
+      const b=el(`<button class="unit"><div class="row"><span class="dot"></span>
+        <div style="flex:1"><h4>${u.vi}</h4><p class="en">${byUnit[id].r}/${byUnit[id].n} câu đúng</p></div>
+        <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>`);
+      b.onclick=()=>go("unit",{k:u.subject,uid:id}); w.appendChild(b); }); }
+  const rv=view.querySelector('#rv');
+  ex.qs.forEach((q,i)=>{
+    const ok=ST.ans[i]===q.a;
+    rv.appendChild(el(`<div class="rev"><p class="qq"><span class="${ok?'tick':'cross'}">${ok?"&#10003;":"&#10007;"}</span> ${i+1}. ${q.q}</p>
+      <p class="aa">Đáp án đúng: <b>${q.o[q.a]}</b>${ST.ans[i]==null?" &middot; <i>bỏ trống</i>":""}</p>
+      ${ok?"":`<p class="aa" style="color:var(--ink-soft)">${q.e}</p>`}</div>`));
+  });
+  view.querySelector('#bk').onclick=()=>go("exams");
+}
+
+/* ---------- TIẾN ĐỘ ---------- */
+function vProgress(){
+  ttl.textContent = "Tiến độ";
+  topright.innerHTML = `<button class="spk" id="gear" aria-label="Cài đặt">&#9881;&#65039;</button>`;
+  topright.querySelector('#gear').onclick=()=>go("settings");
+  const rows = allUnits().map(({k,u})=>({k,u,r:S.units[u.id]}));
+  const done = rows.filter(x=>x.r);
+  const avg = done.length? Math.round(done.reduce((a,x)=>a+x.r.best,0)/done.length):0;
+  const weak = done.filter(x=>x.r.best<70);
+  view.innerHTML = `<div class="stack">
+    <div class="hero"><p class="eyebrow">Tổng quan của ${KID}</p>
+      <div class="row" style="margin-top:12px;gap:16px;align-items:flex-start">
+        <div style="flex:1"><p class="score" style="font-size:32px">${S.streak||0}</p><p class="label">ngày liên tục</p></div>
+        <div style="flex:1"><p class="score" style="font-size:32px">${avg}%</p><p class="label">điểm trung bình</p></div>
+        <div style="flex:1"><p class="score" style="font-size:32px">${done.length}</p><p class="label">/${rows.length} unit</p></div></div></div>
+    ${weak.length?`<div><p class="label" style="margin-bottom:9px">Cần ôn lại &middot; dưới 70%</p><div class="stack-s" id="w"></div></div>`:""}
+    <div><p class="label" style="margin-bottom:9px">Tất cả unit</p><div class="stack-s" id="all"></div></div>
+    <button class="btn btn-ghost" id="rp">Xem báo cáo cho bố mẹ</button></div>`;
+  const mk=(x)=>{ const b=el(`<button class="unit" style="${subjStyle(x.k)}"><div class="row">
+      <span class="dot"></span><div style="flex:1"><h4>${x.u.vi}</h4><p class="en">${DATA[x.k].name}</p></div>
+      <span class="pill ${x.r?'on':''} mono">${x.r? x.r.best+"%":"chưa làm"}</span></div></button>`);
+    b.onclick=()=>go("unit",{k:x.k,uid:x.u.id}); return b; };
+  if(weak.length){ const w=view.querySelector('#w'); weak.forEach(x=>w.appendChild(mk(x))); }
+  const a=view.querySelector('#all'); rows.forEach(x=>a.appendChild(mk(x)));
+  view.querySelector('#rp').onclick=()=>go("report");
+}
+
+/* ---------- BÁO CÁO CHO BỐ MẸ ---------- */
+function vReport(){
+  ttl.textContent = "Báo cáo tuần";
+  const days=[]; for(let i=6;i>=0;i--){ const d=dayAdd(-i); days.push({d, m:S.hist[d]||0}); }
+  const maxM = Math.max(10, ...days.map(x=>x.m));
+  const mins = days.reduce((a,x)=>a+x.m,0);
+  const rows = allUnits().map(({k,u})=>({k,u,r:S.units[u.id]}));
+  const done = rows.filter(x=>x.r && x.r.date && x.r.date >= dayAdd(-6));
+  const avg = done.length? Math.round(done.reduce((a,x)=>a+x.r.last,0)/done.length):0;
+  const weak = rows.filter(x=>x.r && x.r.best<70);
+  const DN=["CN","T2","T3","T4","T5","T6","T7"];
+  view.innerHTML = `<div class="stack">
+    <div><p class="eyebrow">7 ngày gần nhất &middot; tính đến ${new Date().toLocaleDateString('vi-VN')}</p>
+      <h2 style="font-size:20px;margin-top:2px">Tuần này ${KID} học thế nào</h2></div>
+    <div class="card" style="padding:16px 14px;--ac:var(--esl);--ac-bg:var(--esl-bg)">
+      <p class="label" style="margin-bottom:12px">Số phút học mỗi ngày</p>
+      <div class="chart">${days.map(x=>`<div><i class="${x.m?'has':''}" style="height:${Math.round(x.m/maxM*72)}px"></i>
+        <small>${DN[new Date(x.d).getDay()]}</small></div>`).join("")}</div></div>
+    <div class="card">
+      <div class="kv"><span>Tổng thời gian học</span><b class="mono">${mins} phút</b></div>
+      <div class="kv"><span>Số ngày học liên tục</span><b class="mono">${S.streak||0} ngày</b></div>
+      <div class="kv"><span>Unit đã ôn trong tuần</span><b class="mono">${done.length}</b></div>
+      <div class="kv"><span>Điểm quiz trung bình tuần</span><b class="mono">${avg}%</b></div>
+      <div class="kv"><span>Câu sai đang chờ ôn lại</span><b class="mono">${Object.keys(S.srs).length}</b></div>
+    </div>
+    <div><p class="label" style="margin-bottom:9px">Điểm theo môn</p><div class="card" id="bys"></div></div>
+    <div><p class="label" style="margin-bottom:9px">Đề thi thử</p><div class="card" id="bye"></div></div>
+    ${weak.length?`<div><p class="label" style="margin-bottom:9px">Nên kèm thêm ${weak.length} unit này</p><div class="stack-s" id="w"></div></div>`:
+      `<div class="note">Chưa có unit nào dưới 70%. Cứ duy trì mỗi ngày một phiên 15 phút là ổn.</div>`}
+  </div>`;
+  const bys=view.querySelector('#bys');
+  SUBJ_IDS.forEach(k=>{ const d=DATA[k].units.filter(u=>S.units[u.id]).length;
+    bys.appendChild(el(`<div class="kv"><span>${DATA[k].vi} &middot; ${DATA[k].name}</span>
+      <b class="mono">${pct(k)}% &middot; ${d}/${DATA[k].units.length} unit</b></div>`)); });
+  const bye=view.querySelector('#bye');
+  SUBJ_IDS.forEach(k=>{ const r=S.exams[k];
+    bye.appendChild(el(`<div class="kv"><span>${EXAMS[k].vi}</span>
+      <b class="mono">${r? r.best+"% ("+r.tries+" lần)":"chưa làm"}</b></div>`)); });
+  if(weak.length){ const w=view.querySelector('#w');
+    weak.forEach(x=>{ const b=el(`<button class="unit" style="${subjStyle(x.k)}"><div class="row">
+      <span class="dot"></span><div style="flex:1"><h4>${x.u.vi}</h4><p class="en">${DATA[x.k].name} &middot; cao nhất ${x.r.best}%</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>`);
+      b.onclick=()=>go("unit",{k:x.k,uid:x.u.id}); w.appendChild(b); }); }
+}
+
+/* ---------- CÀI ĐẶT ---------- */
+function vSettings(){
+  ttl.textContent = "Cài đặt";
+  view.innerHTML = `<div class="stack">
+    <div class="card">
+      <div class="sw"><div class="t">Luôn hiện tiếng Việt<small>Tắt thì phải chạm mới hiện — luyện tư duy tiếng Anh trước</small></div>
+        <button class="toggle" id="tvi" aria-pressed="${!!S.showVI}" aria-label="Hiện tiếng Việt"></button></div>
+      <div class="sw" style="border-top:1px solid var(--line)"><div class="t">Phát âm tiếng Anh<small>Chạm nút loa để nghe từ và câu</small></div>
+        <button class="toggle" id="tts" aria-pressed="${!!S.tts}" aria-label="Bật phát âm"></button></div>
+    </div>
+    <div class="card">
+      <div class="kv"><span>Số unit</span><b class="mono">${allUnits().length}</b></div>
+      <div class="kv"><span>Tổng số câu hỏi</span><b class="mono">${allUnits().reduce((a,x)=>a+x.u.quiz.length,0) + SUBJ_IDS.reduce((a,k)=>a+EXAMS[k].qs.length,0)}</b></div>
+      <div class="kv"><span>Dữ liệu lưu ở</span><b>Ngay trên máy này</b></div>
+    </div>
+    <div class="note">Toàn bộ tiến độ được lưu trong trình duyệt của thiết bị này. Xoá dữ liệu trình duyệt sẽ mất tiến độ, nhưng bài học thì vẫn còn nguyên.</div>
+    <button class="btn btn-ghost" id="reset">Xoá dữ liệu luyện tập</button></div>`;
+  view.querySelector('#tvi').onclick=()=>{ S.showVI=!S.showVI; save(); go("settings"); };
+  view.querySelector('#tts').onclick=()=>{ S.tts=!S.tts; save(); if(S.tts) say("Hello"); go("settings"); };
+  view.querySelector('#reset').onclick=()=>{
+    if(confirm("Xoá toàn bộ điểm, chuỗi ngày và danh sách ôn lại?")){
+      S={units:{},streak:0,lastDay:today(),doneToday:[],hist:{},srs:{},exams:{},showVI:S.showVI,tts:S.tts};
+      save(); go("home");
+    }};
+}
+
+render();
+</script>
