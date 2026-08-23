@@ -1506,9 +1506,12 @@ const dayAdd = (n) => new Date(Date.now()+n*864e5).toISOString().slice(0,10);
 function addMinutes(m){ S.hist[today()] = Math.round((S.hist[today()]||0) + m); save(); }
 function markDone(uid, pct){
   const u = S.units[uid] || {best:0, tries:0};
+  const before = (S.pts && S.pts.claimed[uid]) || 0;
   u.best = Math.max(u.best, pct); u.last = pct; u.tries++; u.date = today();
   S.units[uid] = u;
   if(!S.doneToday.includes(uid)){ S.doneToday.push(uid); if(S.doneToday.length===1) S.streak = (S.streak||0)+1; }
+  syncPoints();
+  LAST_DELTA = ((S.pts && S.pts.claimed[uid]) || 0) - before;
   save();
 }
 /* ôn lại câu sai theo khoảng cách tăng dần */
@@ -1588,7 +1591,7 @@ const diagramFor = (uid)=> DIA[uid] ? `<div class="card" style="padding:14px 12p
 
 /* ---------- router ---------- */
 let ST = {v:"home"};
-const ROOTS = ["home","subjects","review","progress"];
+const ROOTS = ["home","subjects","review","progress","wallet","admin","login"];
 function go(v, patch){ ST = Object.assign({}, patch||{}, {v}); render(); window.scrollTo(0,0); }
 backBtn.onclick = ()=>{
   if(ST.v==="unit") go(ST.bu!=null?"bookunit":"subject",{k:ST.k,bu:ST.bu});
@@ -1596,15 +1599,15 @@ backBtn.onclick = ()=>{
   else if(ST.v==="quiz"||ST.v==="result") go(ST.src==="unit"?"unit":(ST.src==="mix"?"bookunit":"home"),{k:ST.k,uid:ST.uid,bu:ST.bu});
   else if(ST.v==="exam"||ST.v==="examresult") go("exams");
   else if(ST.v==="session") go("home");
-  else go("home");
+  else go(S.role==="admin" ? "admin" : "home");
 };
 function render(){
   backBtn.hidden = ROOTS.includes(ST.v);
   topright.innerHTML = "";
-  tabsEl.style.display = (ST.v==="session"||ST.v==="exam") ? "none" : "flex";
+  tabsEl.style.display = (ST.v==="session"||ST.v==="exam"||ST.v==="login") ? "none" : "flex";
   view.className = "fade";
   if(ST.v!=="exam" && ST.v!=="session") clearInterval(timerId);
-  const fn = {home:vHome, subjects:vSubjects, subject:vSubject, bookunit:vBookUnit, source:vSource,
+  const fn = {login:vLogin, wallet:vWallet, admin:vAdmin, home:vHome, subjects:vSubjects, subject:vSubject, bookunit:vBookUnit, source:vSource,
     unit:vUnit, quiz:vQuiz, result:vResult, session:vSession, review:vReview, progress:vProgress,
     exams:vExams, exam:vExam, examresult:vExamResult, settings:vSettings, report:vReport}[ST.v];
   fn();
@@ -1616,9 +1619,15 @@ function bindCommon(){
 }
 function renderTabs(){
   const d = dueList().length;
-  const items=[["home","&#127968;","Hôm nay",0],["subjects","&#128214;","Môn học",0],
-    ["review","&#128260;","Ôn lại",d],["progress","&#128200;","Tiến độ",0]];
-  const cur = ROOTS.includes(ST.v) ? ST.v : (["subject","bookunit","unit","source"].includes(ST.v) ? "subjects" : (ST.v==="session"?"home":""));
+  const cho = S.pts ? S.pts.reqs.filter(r=>r.st==="cho").length : 0;
+  const items = S.role==="admin"
+    ? [["admin","&#128100;","Bố mẹ",cho],["report","&#128203;","Báo cáo",0],
+       ["subjects","&#128214;","Môn học",0],["progress","&#128200;","Tiến độ",0]]
+    : [["home","&#127968;","Hôm nay",0],["subjects","&#128214;","Môn học",0],
+       ["review","&#128260;","Ôn lại",d],["wallet","&#11088;","Thưởng",0],
+       ["progress","&#128200;","Tiến độ",0]];
+  const cur = ROOTS.includes(ST.v) || ST.v==="report" ? ST.v
+    : (["subject","bookunit","unit","source"].includes(ST.v) ? "subjects" : (ST.v==="session"?"home":""));
   tabsEl.innerHTML = items.map(([id,ic,lb,b])=>
     `<button class="tab" data-go="${id}" aria-current="${cur===id}"><span>${ic}</span><span>${lb}</span>${b?`<span class="badge">${b>99?"99+":b}</span>`:""}</button>`).join("");
   tabsEl.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -1846,7 +1855,8 @@ function vResult(){
       <p class="label">${ST.src==="review"?"Ôn lại câu sai":(ST.src==="mix"?ST.mixName:u.vi)}</p>
       <p class="score" style="color:var(--ac);margin:10px 0 4px">${p}%</p>
       <p style="font-size:14px;color:var(--ink-soft)">Đúng ${right}/${ST.qs.length} câu &middot; chuỗi ${S.streak} ngày</p>
-      <p style="font-size:14px;margin-top:10px">${msg}</p></div>
+      <p style="font-size:14px;margin-top:10px">${msg}</p>
+      <p id="ptschip" style="margin-top:12px"></p></div>
     <div><p class="label" style="margin-bottom:9px">Xem lại từng câu</p><div class="stack-s" id="rv"></div></div>
     <div class="stack-s">
       <button class="btn btn-accent" id="again">Làm lại</button>
@@ -2019,7 +2029,7 @@ function vExamResult(){
   const p = Math.round(right/ex.qs.length*100);
   const rec = S.exams[k] || {best:0, tries:0};
   rec.best=Math.max(rec.best,p); rec.last=p; rec.tries++; rec.date=today();
-  S.exams[k]=rec; addMinutes(ex.mins); save();
+  S.exams[k]=rec; addMinutes(ex.mins); const _b=(S.pts&&S.pts.claimed["exam_"+k])||0; syncPoints(); LAST_DELTA=((S.pts&&S.pts.claimed["exam_"+k])||0)-_b; save();
   const byUnit={};
   ex.qs.forEach((q,i)=>{ if(!q.u) return; byUnit[q.u]=byUnit[q.u]||{r:0,n:0}; byUnit[q.u].n++; if(ST.ans[i]===q.a) byUnit[q.u].r++; });
   const weak = Object.keys(byUnit).filter(id=>byUnit[id].r<byUnit[id].n);
@@ -2028,7 +2038,8 @@ function vExamResult(){
     <div class="hero" style="text-align:center"><p class="label">${ex.vi}</p>
       <p class="score" style="color:var(--ac);margin:10px 0 4px">${p}%</p>
       <p style="font-size:14px;color:var(--ink-soft)">Đúng ${right}/${ex.qs.length} câu</p>
-      <p style="font-size:14px;margin-top:10px">${p>=80?"Mức này đã sẵn sàng cho kỳ thi.":p>=60?"Gần đạt — tập trung vào các unit còn yếu bên dưới.":"Cần ôn lại các unit bên dưới rồi thi lại."}</p></div>
+      <p style="font-size:14px;margin-top:10px">${p>=80?"Mức này đã sẵn sàng cho kỳ thi.":p>=60?"Gần đạt — tập trung vào các unit còn yếu bên dưới.":"Cần ôn lại các unit bên dưới rồi thi lại."}</p>
+      ${LAST_DELTA>0?`<p style="margin-top:12px"><span class="chip">&#11088; +${LAST_DELTA} điểm thưởng</span></p>`:""}</div>
     ${weak.length?`<div><p class="label" style="margin-bottom:9px">Unit cần ôn lại</p><div class="stack-s" id="w"></div></div>`:""}
     <div><p class="label" style="margin-bottom:9px">Chi tiết từng câu</p><div class="stack-s" id="rv"></div></div>
     <button class="btn btn-ghost" id="bk">Về danh sách đề</button></div>`;
@@ -2131,12 +2142,18 @@ function vSettings(){
         <button class="toggle" id="tts" aria-pressed="${!!S.tts}" aria-label="Bật phát âm"></button></div>
     </div>
     <div class="card">
-      <div class="kv"><span>Số unit</span><b class="mono">${allUnits().length}</b></div>
+      <div class="sw"><div class="t">Đang dùng: <b>${S.role==="admin"?"Bố mẹ":KID}</b>
+        <small>Chạm để chuyển sang tài khoản khác</small></div>
+        <button class="btn btn-ghost btn-sm" id="sw">Đổi</button></div>
+    </div>
+    <div class="card">
+      <div class="kv"><span>Số bài học</span><b class="mono">${allUnits().length}</b></div>
       <div class="kv"><span>Tổng số câu hỏi</span><b class="mono">${allUnits().reduce((a,x)=>a+x.u.quiz.length,0) + SUBJ_IDS.reduce((a,k)=>a+EXAMS[k].qs.length,0)}</b></div>
       <div class="kv"><span>Dữ liệu lưu ở</span><b>Ngay trên máy này</b></div>
     </div>
     <div class="note">Toàn bộ tiến độ được lưu trong trình duyệt của thiết bị này. Xoá dữ liệu trình duyệt sẽ mất tiến độ, nhưng bài học thì vẫn còn nguyên.</div>
     <button class="btn btn-ghost" id="reset">Xoá dữ liệu luyện tập</button></div>`;
+  view.querySelector('#sw').onclick=()=>{ S.role=null; save(); go("login"); };
   view.querySelector('#tvi').onclick=()=>{ S.showVI=!S.showVI; save(); go("settings"); };
   view.querySelector('#tts').onclick=()=>{ S.tts=!S.tts; save(); if(S.tts) say("Hello"); go("settings"); };
   view.querySelector('#reset').onclick=()=>{
@@ -2504,6 +2521,222 @@ vResult = function(){
   anchor.insertBefore(card, anchor.children[1]);
   bindApply(view, u.id);
   view.querySelectorAll('[data-say]').forEach(b=>b.onclick=(ev)=>{ ev.stopPropagation(); say(b.dataset.say); });
+  const chip = view.querySelector('#ptschip');
+  if(chip && LAST_DELTA>0) chip.innerHTML = `<span class="chip">&#11088; +${LAST_DELTA} điểm thưởng</span>`;
 };
+</script>
+
+<style>
+.who{display:block; width:100%; padding:20px 18px; border-radius:18px; background:var(--card);
+  border:1px solid var(--line); box-shadow:var(--shadow); border-left:5px solid var(--ac)}
+.who h3{font-size:19px; margin-bottom:3px}
+.who p{font-size:13px; color:var(--ink-soft)}
+.who .av{width:46px;height:46px;border-radius:14px;background:var(--ac-bg);color:var(--ac);
+  display:grid;place-items:center;font-size:23px;flex:none}
+.pin{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line);
+  background:var(--card); color:var(--ink); font-family:"JetBrains Mono",monospace; font-size:22px;
+  letter-spacing:.5em; text-align:center}
+.pin:focus{outline:none; border-color:var(--ac)}
+.coin{font-family:"JetBrains Mono",monospace; font-size:52px; font-weight:700; line-height:1; letter-spacing:-.03em}
+.money{font-family:Literata,serif; font-size:19px; font-weight:700; color:var(--good)}
+.req{padding:13px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card)}
+.req .st{font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:99px}
+.st-cho{background:var(--warn-bg); color:var(--warn)}
+.st-duyet{background:var(--good-bg); color:var(--good)}
+.st-tuchoi{background:var(--bad-bg); color:var(--bad)}
+.earn{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 13px;
+  border-bottom:1px solid var(--line); font-size:13.5px}
+.earn:last-child{border-bottom:0}
+.chip{display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:99px;
+  background:var(--warn-bg); color:var(--warn); font-weight:600; font-size:13px}
+</style>
+
+<script>
+/* ---------- TÀI KHOẢN VÀ ĐIỂM THƯỞNG ---------- */
+const DIEM_MOI_BAI = 10;      // mỗi bài học tối đa 10 điểm
+const DONG_MOI_DIEM = 1000;   // 100 điểm = 100.000đ
+const GOI_DOI = 100;          // đổi theo lô 100 điểm
+let LAST_DELTA = 0;
+
+if(!S.pts) S.pts = {claimed:{}, spent:0, reqs:[]};
+if(S.role===undefined) S.role = null;
+if(S.pin===undefined) S.pin = null;
+
+const tien = (p)=> (p*DONG_MOI_DIEM).toLocaleString('vi-VN')+"đ";
+const ptsFor = (percent)=> Math.max(0, Math.min(DIEM_MOI_BAI, Math.round(percent/10)));
+function syncPoints(){
+  allUnits().forEach(({u})=>{ const r=S.units[u.id]; if(r) S.pts.claimed[u.id]=ptsFor(r.best); });
+  SUBJ_IDS.forEach(k=>{ const r=S.exams[k]; if(r) S.pts.claimed["exam_"+k]=ptsFor(r.best); });
+}
+const totalEarned = ()=> Object.keys(S.pts.claimed).reduce((a,k)=>a+S.pts.claimed[k],0);
+const pendingPts  = ()=> S.pts.reqs.filter(r=>r.st==="cho").reduce((a,r)=>a+r.pts,0);
+const balance     = ()=> totalEarned() - S.pts.spent - pendingPts();
+const maxPts      = ()=> (allUnits().length + SUBJ_IDS.length) * DIEM_MOI_BAI;
+syncPoints();
+
+/* ---------- CHỌN TÀI KHOẢN ---------- */
+function vLogin(){
+  ttl.textContent = "Chọn tài khoản";
+  backBtn.hidden = true; tabsEl.style.display = "none";
+  view.innerHTML = `<div class="stack">
+    <div style="padding:6px 2px 0"><p class="eyebrow">Checkpoint Lab</p>
+      <h2 style="font-size:22px;margin-top:2px">Ai đang dùng máy?</h2></div>
+    <button class="who" id="u" style="--ac:var(--esl); --ac-bg:var(--esl-bg)"><div class="row">
+      <span class="av">&#128102;</span><div style="flex:1"><h3>${KID}</h3>
+      <p>Học bài, làm quiz và tích điểm thưởng</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
+    <button class="who" id="a" style="--ac:var(--mat); --ac-bg:var(--mat-bg)"><div class="row">
+      <span class="av">&#128100;</span><div style="flex:1"><h3>Bố mẹ</h3>
+      <p>${S.pin? "Duyệt đổi thưởng, xem báo cáo &middot; cần mã PIN" : "Duyệt đổi thưởng, xem báo cáo &middot; đặt mã PIN lần đầu"}</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
+    <div id="gate"></div>
+    <div class="note">Hai tài khoản này nằm ngay trên máy, không cần internet và không gửi dữ liệu đi đâu.
+      Mã PIN chỉ để cháu không tự duyệt điểm của mình, không phải là bảo mật ngân hàng.</div></div>`;
+  view.querySelector('#u').onclick=()=>{ S.role="user"; save(); go("home"); };
+  view.querySelector('#a').onclick=()=>gate();
+  function gate(){
+    const box = view.querySelector('#gate');
+    const first = !S.pin;
+    box.innerHTML = `<div class="card fade" style="padding:16px">
+      <p class="label" style="margin-bottom:4px">${first?"Đặt mã PIN 4 số":"Nhập mã PIN"}</p>
+      <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:12px">
+        ${first?"Chọn 4 số dễ nhớ với bố mẹ nhưng cháu không đoán ra.":"Mã PIN bố mẹ đã đặt lúc trước."}</p>
+      <input class="pin" id="p" type="tel" inputmode="numeric" maxlength="4" placeholder="----" autocomplete="off">
+      <p id="err" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
+      <button class="btn btn-accent" id="ok" style="--ac:var(--mat)">${first?"Đặt PIN và vào":"Vào"}</button></div>`;
+    const inp = box.querySelector('#p'), err = box.querySelector('#err');
+    inp.focus();
+    const submit = ()=>{
+      const v = inp.value.trim();
+      if(!/^\d{4}$/.test(v)){ err.textContent = "Mã PIN phải đúng 4 chữ số."; return; }
+      if(first){ S.pin = v; S.role = "admin"; save(); go("admin"); return; }
+      if(v !== S.pin){ err.textContent = "Sai mã PIN. Thử lại nhé."; inp.value=""; inp.focus(); return; }
+      S.role = "admin"; save(); go("admin");
+    };
+    box.querySelector('#ok').onclick = submit;
+    inp.onkeydown = (e)=>{ if(e.key==="Enter") submit(); };
+  }
+}
+
+/* ---------- VÍ ĐIỂM CỦA CON ---------- */
+function vWallet(){
+  ttl.textContent = "Điểm thưởng";
+  const bal = Math.max(0, balance()), earned = totalEarned(), cho = pendingPts();
+  const canDoi = Math.floor(bal/GOI_DOI);
+  const toNext = canDoi>0 ? 0 : GOI_DOI - bal;
+  view.innerHTML = `<div class="stack" style="--ac:var(--mat); --ac-bg:var(--mat-bg)">
+    <div class="hero" style="text-align:center">
+      <p class="eyebrow">Ví điểm của ${KID}</p>
+      <p class="coin" style="color:var(--mat);margin:12px 0 6px">${bal}</p>
+      <p class="money">= ${tien(bal)}</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:8px">
+        Đã kiếm ${earned} điểm${cho?` &middot; đang chờ duyệt ${cho} điểm`:""}</p>
+      ${toNext? `<div class="bar" style="margin-top:16px"><i style="width:${(bal%GOI_DOI)/GOI_DOI*100}%"></i></div>
+        <p style="font-size:13px;margin-top:8px">Còn <b class="mono">${toNext}</b> điểm nữa là đổi được ${tien(GOI_DOI)}</p>`
+       : `<p style="font-size:14px;margin-top:14px;color:var(--good)"><b>Đổi được ${canDoi} lần &times; ${tien(GOI_DOI)}</b></p>`}
+      ${canDoi>0? `<button class="btn btn-accent" id="doi" style="margin-top:14px">Xin đổi ${GOI_DOI} điểm &rarr; ${tien(GOI_DOI)}</button>`:""}
+    </div>
+    <div class="card">
+      <div class="kv"><span>Mỗi bài học tối đa</span><b class="mono">${DIEM_MOI_BAI} điểm</b></div>
+      <div class="kv"><span>Mỗi đề thi thử tối đa</span><b class="mono">${DIEM_MOI_BAI} điểm</b></div>
+      <div class="kv"><span>Quy đổi</span><b class="mono">${GOI_DOI} điểm = ${tien(GOI_DOI)}</b></div>
+      <div class="kv"><span>Tối đa cả chương trình</span><b class="mono">${maxPts()} điểm = ${tien(maxPts())}</b></div>
+    </div>
+    <div><p class="label" style="margin-bottom:9px">Còn kiếm được điểm ở đây</p>
+      <div class="card" id="todo"></div></div>
+    ${S.pts.reqs.length? `<div><p class="label" style="margin-bottom:9px">Lịch sử đổi thưởng</p>
+      <div class="stack-s" id="rq"></div></div>`:""}
+    <div class="note">Điểm mỗi bài tính theo điểm quiz cao nhất: đúng 100% được 10 điểm, đúng 70% được 7 điểm.
+      Làm lại tốt hơn thì điểm tự tăng, không bị mất điểm cũ.</div></div>`;
+  const todo = view.querySelector('#todo');
+  const gaps = allUnits().map(({k,u})=>({k,u,p:S.pts.claimed[u.id]||0}))
+    .filter(x=>x.p<DIEM_MOI_BAI).sort((a,b)=>b.p-a.p).slice(0,6);
+  if(!gaps.length) todo.innerHTML = `<div class="earn"><span>Đã lấy đủ điểm tất cả các bài. Giỏi quá!</span></div>`;
+  gaps.forEach(x=>{
+    const b = el(`<button class="earn" style="${subjStyle(x.k)};width:100%">
+      <span style="flex:1;text-align:left">${x.u.vi}<br><span style="font-size:12px;color:var(--ink-faint)">${DATA[x.k].name}</span></span>
+      <span class="chip">+${DIEM_MOI_BAI-x.p}</span></button>`);
+    b.onclick=()=>go("unit",{k:x.k,uid:x.u.id}); todo.appendChild(b);
+  });
+  const rq = view.querySelector('#rq');
+  if(rq) S.pts.reqs.slice().reverse().forEach(r=>{
+    rq.appendChild(el(`<div class="req"><div class="row">
+      <div style="flex:1"><b class="mono">${r.pts} điểm &rarr; ${tien(r.pts)}</b>
+        <p style="font-size:12.5px;color:var(--ink-faint)">${r.date}${r.done?` &middot; ${r.done}`:""}</p></div>
+      <span class="st st-${r.st}">${r.st==="cho"?"Chờ bố mẹ duyệt":r.st==="duyet"?"Đã nhận":"Từ chối"}</span>
+    </div></div>`));
+  });
+  const d = view.querySelector('#doi');
+  if(d) d.onclick=()=>{
+    if(balance() < GOI_DOI){ alert("Chưa đủ "+GOI_DOI+" điểm để đổi."); return go("wallet"); }
+    S.pts.reqs.push({id:Date.now(), pts:GOI_DOI, date:new Date().toLocaleDateString('vi-VN'), st:"cho"});
+    save(); go("wallet");
+  };
+}
+
+/* ---------- MÀN HÌNH BỐ MẸ ---------- */
+function vAdmin(){
+  ttl.textContent = "Bố mẹ";
+  const cho = S.pts.reqs.filter(r=>r.st==="cho");
+  const earned = totalEarned();
+  view.innerHTML = `<div class="stack" style="--ac:var(--mat); --ac-bg:var(--mat-bg)">
+    <div class="hero"><p class="eyebrow">Bảng điều khiển của bố mẹ</p>
+      <h2 style="font-size:20px">${KID} đang có ${balance()} điểm</h2>
+      <div class="row" style="margin-top:14px;gap:16px;align-items:flex-start">
+        <div style="flex:1"><p class="score" style="font-size:26px">${earned}</p><p class="label">điểm đã kiếm</p></div>
+        <div style="flex:1"><p class="score" style="font-size:26px">${S.pts.spent}</p><p class="label">điểm đã đổi</p></div>
+        <div style="flex:1"><p class="score" style="font-size:26px">${tien(S.pts.spent)}</p><p class="label">đã thưởng</p></div>
+      </div></div>
+    <div><p class="label" style="margin-bottom:9px">Yêu cầu đổi thưởng${cho.length?` &middot; ${cho.length} chờ duyệt`:""}</p>
+      <div class="stack-s" id="cho"></div></div>
+    <div class="card">
+      <div class="kv"><span>Chuỗi ngày học liên tục</span><b class="mono">${S.streak||0} ngày</b></div>
+      <div class="kv"><span>Bài đã học</span><b class="mono">${allUnits().filter(x=>S.units[x.u.id]).length}/${allUnits().length}</b></div>
+      <div class="kv"><span>Câu sai đang chờ ôn lại</span><b class="mono">${Object.keys(S.srs).length}</b></div>
+    </div>
+    <div class="stack-s">
+      <button class="btn btn-ghost" id="rp">Xem báo cáo tuần</button>
+      <button class="btn btn-ghost" id="pin">Đổi mã PIN</button>
+      <button class="btn btn-ghost" id="out">Thoát về tài khoản của ${KID}</button></div>
+    <div id="pinbox"></div></div>`;
+  const box = view.querySelector('#cho');
+  if(!cho.length) box.innerHTML = `<div class="note">Chưa có yêu cầu nào. Khi ${KID} đủ ${GOI_DOI} điểm, con bấm xin đổi thì yêu cầu sẽ hiện ở đây.</div>`;
+  cho.forEach(r=>{
+    const n = el(`<div class="req"><div class="row" style="margin-bottom:11px">
+        <div style="flex:1"><b class="mono" style="font-size:16px">${r.pts} điểm &rarr; ${tien(r.pts)}</b>
+        <p style="font-size:12.5px;color:var(--ink-faint)">Xin ngày ${r.date}</p></div></div>
+      <div class="row" style="gap:9px">
+        <button class="btn btn-accent" data-ok="1" style="flex:1;--ac:var(--good);padding:11px">Duyệt &middot; đã đưa tiền</button>
+        <button class="btn btn-ghost" data-no="1" style="flex:1;padding:11px">Từ chối</button></div></div>`);
+    n.querySelector('[data-ok]').onclick=()=>{
+      if(!confirm(`Xác nhận đã thưởng ${tien(r.pts)} cho ${KID}?`)) return;
+      r.st="duyet"; r.done="duyệt ngày "+new Date().toLocaleDateString('vi-VN');
+      S.pts.spent += r.pts; save(); go("admin");
+    };
+    n.querySelector('[data-no]').onclick=()=>{
+      r.st="tuchoi"; r.done="từ chối ngày "+new Date().toLocaleDateString('vi-VN'); save(); go("admin");
+    };
+    box.appendChild(n);
+  });
+  view.querySelector('#rp').onclick=()=>go("report");
+  view.querySelector('#out').onclick=()=>{ S.role="user"; save(); go("home"); };
+  view.querySelector('#pin').onclick=()=>{
+    const b = view.querySelector('#pinbox');
+    b.innerHTML = `<div class="card fade" style="padding:16px">
+      <p class="label" style="margin-bottom:11px">Đặt mã PIN mới</p>
+      <input class="pin" id="np" type="tel" inputmode="numeric" maxlength="4" placeholder="----" autocomplete="off">
+      <p id="e2" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
+      <button class="btn btn-accent" id="sv" style="--ac:var(--mat)">Lưu mã PIN</button></div>`;
+    b.querySelector('#sv').onclick=()=>{
+      const v=b.querySelector('#np').value.trim();
+      if(!/^\d{4}$/.test(v)){ b.querySelector('#e2').textContent="Mã PIN phải đúng 4 chữ số."; return; }
+      S.pin=v; save(); b.innerHTML=`<div class="note">Đã đổi mã PIN thành công.</div>`;
+    };
+  };
+}
+</script>
+
+<script>
+ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
 render();
 </script>

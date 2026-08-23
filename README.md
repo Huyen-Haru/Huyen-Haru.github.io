@@ -26,6 +26,33 @@ và phần nào còn cần xác nhận bằng mục lục sách in.
 - **35 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
   và 1 câu hỏi thử thách.
 
+## Hai tài khoản
+
+Mở app lên phải chọn tài khoản:
+
+- **Thế Lâm** — vào thẳng, học bài, làm quiz, tích điểm và xin đổi thưởng.
+- **Bố mẹ** — cần **mã PIN 4 số** (lần đầu vào thì tự đặt). Duyệt đổi thưởng, xem báo cáo, đổi PIN.
+
+Cả hai tài khoản nằm trên chính thiết bị, không cần internet và không gửi dữ liệu đi đâu.
+Mã PIN chỉ để cháu không tự duyệt điểm của mình — không phải cơ chế bảo mật thật.
+
+## Điểm thưởng
+
+| Quy tắc | Giá trị |
+|---|---|
+| Mỗi bài học tối đa | 10 điểm |
+| Mỗi đề thi thử tối đa | 10 điểm |
+| Quy đổi | 100 điểm = 100.000đ |
+| Tối đa cả chương trình | 380 điểm = 380.000đ |
+
+Điểm mỗi bài tính theo **điểm quiz cao nhất**: đúng 100% được 10 điểm, đúng 70% được 7 điểm.
+Làm lại tốt hơn thì điểm tự tăng, làm lại kém hơn không bị mất điểm, và **một bài không bao giờ
+cộng quá 10 điểm** dù làm bao nhiêu lần.
+
+Đủ 100 điểm thì cháu bấm *Xin đổi thưởng* → yêu cầu chuyển sang tài khoản Bố mẹ chờ duyệt
+(điểm bị giữ tạm trong lúc chờ). Bố mẹ bấm **Duyệt · đã đưa tiền** thì điểm mới bị trừ thật
+và ghi vào lịch sử.
+
 ## Tính năng
 
 - **Phiên ôn 15 phút/ngày**: thẻ lật → mindmap và ý chính → quiz, có đồng hồ đếm ngược.
@@ -38,6 +65,9 @@ và phần nào còn cần xác nhận bằng mục lục sách in.
 - **Đề thi thử** có đồng hồ, không lộ đáp án cho tới khi nộp bài.
 - **Báo cáo cho bố mẹ**: số phút học 7 ngày gần nhất, điểm theo môn, unit cần kèm thêm.
 - Giao diện tự đổi theo nền sáng/tối của điện thoại.
+
+> **Lưu ý:** toàn bộ tiến độ và điểm lưu bằng `localStorage` trên **chính thiết bị và trình duyệt đó**.
+> Bố mẹ duyệt thưởng trên cùng máy cháu học. Dùng máy khác thì dữ liệu bắt đầu lại từ đầu.
 
 ## Chạy
 
