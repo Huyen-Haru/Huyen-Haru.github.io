@@ -11,19 +11,20 @@ App xếp bài theo unit của sách:
 
 | Môn | Sách | Cấu trúc trong app |
 |---|---|---|
-| Science | Cambridge Primary Science 6 Learner's Book (CUP, 1st edition), bản song ngữ Vinschool | 5 unit sách + 1 phần ôn thêm cho Checkpoint |
+| Science | Cambridge Primary Science 6 — Learner's Book và Workbook (CUP, **2nd edition**), bản song ngữ Vinschool | **6 unit sách, 21 bài, kèm số trang** + 1 phần ôn thêm |
 | Mathematics | Toán học 6 — Sách bài tập Quyển 1 (HK1) và Quyển 2 (HK2) | 12 học phần chia theo hai học kì |
 | English (ESL) | Cambridge Global English 6 (CUP) | 6 phần theo kỹ năng của đề Checkpoint ESL |
 
-Màn hình **"Thứ tự unit này lấy từ đâu?"** trong app ghi rõ phần nào đã đối chiếu được với nguồn
-và phần nào còn cần xác nhận bằng mục lục sách in.
+Science đã được **đối chiếu trực tiếp với ảnh chụp mục lục sách của học sinh**, từng bài ghi kèm
+số trang trong sách để mở ra so được ngay. Toán và ESL vẫn đang xếp theo khung Cambridge Stage 6,
+chưa đối chiếu được với mục lục sách in — màn hình *"Thứ tự unit này lấy từ đâu?"* trong app nói rõ điều này.
 
 ## Nội dung
 
-- **24 unit sách**, **35 bài học**, **255 ý chính**, **255 câu quiz** — mỗi bài có số câu quiz
+- **37 unit sách**, **48 bài học**, **345 ý chính**, **345 câu quiz** — mỗi bài có số câu quiz
   đúng bằng số ý chính, mỗi câu đều có lời giải thích tiếng Việt.
 - **280 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
-- **35 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
+- **48 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
   và 1 câu hỏi thử thách.
 
 ## Hai tài khoản
@@ -56,7 +57,7 @@ và ghi vào lịch sử.
 ## Tính năng
 
 - **Phiên ôn 15 phút/ngày**: thẻ lật → mindmap và ý chính → quiz, có đồng hồ đếm ngược.
-- **Mindmap cho cả 35 bài** cùng **19 sơ đồ** và **30 hình minh hoạ chi tiết cho môn Science**,
+- **Mindmap cho cả 48 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
   tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
   quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,
   đường đi của thức ăn, nhung mao ruột non, thận và bàng quang, năm nhóm động vật có xương sống,

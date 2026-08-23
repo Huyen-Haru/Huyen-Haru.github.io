@@ -3330,6 +3330,769 @@ function figuresHTML(uid){
       <figcaption class="cap"><span class="no">Hình ${i+1}</span><b>${f.en}</b><span>${f.vi}</span></figcaption>
     </figure>`).join("")}</div></div>`;
 }
+</script>
+
+<script>
+/* Bổ sung các bài còn thiếu so với mục lục Cambridge Primary Science 6 (2nd edition) */
+DATA.science.units.push(
+{ id:"s13", subject:"science", t:"The reproductive system", vi:"Hệ sinh sản",
+  kp:[
+    {en:"Humans reproduce sexually: a sperm cell from the father joins an egg cell from the mother.", vi:"Người sinh sản hữu tính: tinh trùng của bố kết hợp với trứng của mẹ."},
+    {en:"Fertilisation is the moment the sperm and the egg join to make one new cell.", vi:"Thụ tinh là lúc tinh trùng và trứng kết hợp thành một tế bào mới."},
+    {en:"The fertilised egg grows into an embryo, then a fetus, inside the mother's uterus.", vi:"Trứng đã thụ tinh phát triển thành phôi rồi thành thai nhi trong tử cung của mẹ."},
+    {en:"Pregnancy in humans lasts about nine months. The baby gets food and oxygen through the umbilical cord.", vi:"Thai kỳ ở người kéo dài khoảng 9 tháng; em bé nhận thức ăn và oxygen qua dây rốn."},
+    {en:"Puberty is when the body changes from a child's body into an adult body, usually between 10 and 16.", vi:"Dậy thì là giai đoạn cơ thể trẻ em chuyển thành cơ thể người lớn, thường từ 10 đến 16 tuổi."},
+    {en:"The human life cycle is: baby &rarr; child &rarr; adolescent &rarr; adult &rarr; elderly.", vi:"Vòng đời của người: sơ sinh &rarr; trẻ em &rarr; thiếu niên &rarr; trưởng thành &rarr; người già."}],
+  voc:[["reproduction","sự sinh sản"],["sperm cell","tinh trùng"],["egg cell / ovum","tế bào trứng"],["fertilisation","sự thụ tinh"],["uterus / womb","tử cung"],["embryo","phôi"],["umbilical cord","dây rốn"],["puberty","tuổi dậy thì"],["adolescent","thiếu niên"],["life cycle","vòng đời"]],
+  quiz:[
+    {q:"What is fertilisation?", o:["A baby being born","A sperm cell joining an egg cell","The body growing taller","Food being digested"], a:1,
+     e:"Thụ tinh là thời điểm tinh trùng và trứng kết hợp tạo ra một tế bào mới, khởi đầu của một cơ thể mới."},
+    {q:"Where does a human baby develop before it is born?", o:["In the stomach","In the uterus","In the lungs","In an egg outside the body"], a:1,
+     e:"Em bé phát triển trong tử cung (uterus) của mẹ, không phải trong dạ dày — đây là chỗ rất hay bị nhầm."},
+    {q:"How long does human pregnancy usually last?", o:["About 3 months","About 6 months","About 9 months","About 12 months"], a:2,
+     e:"Khoảng 9 tháng, tức 40 tuần. Mỗi loài có thời gian mang thai khác nhau."},
+    {q:"What does the umbilical cord do?", o:["Helps the baby breathe air","Carries food and oxygen from the mother to the baby","Keeps the baby warm","Makes the baby's bones"], a:1,
+     e:"Dây rốn nối em bé với nhau thai, mang chất dinh dưỡng và oxygen vào, mang chất thải ra."},
+    {q:"Puberty is the time when:", o:["A baby is born","A child's body changes into an adult body","Someone becomes elderly","Teeth first appear"], a:1,
+     e:"Dậy thì là giai đoạn cơ thể thay đổi để trở thành người lớn, thường bắt đầu trong khoảng 10 đến 16 tuổi."},
+    {q:"Put the human life cycle in order.", o:["baby, adult, child, elderly","baby, child, adolescent, adult, elderly","child, baby, adult, elderly","adult, child, baby, elderly"], a:1,
+     e:"Sơ sinh &rarr; trẻ em &rarr; thiếu niên &rarr; trưởng thành &rarr; người già. Giai đoạn thiếu niên (adolescent) hay bị bỏ sót."}]},
+
+{ id:"s14", subject:"science", t:"Diseases", vi:"Bệnh tật",
+  kp:[
+    {en:"Infectious diseases are caused by microorganisms &mdash; bacteria, viruses and fungi &mdash; and can pass from person to person.", vi:"Bệnh truyền nhiễm do vi sinh vật gây ra (vi khuẩn, virus, nấm) và lây từ người sang người."},
+    {en:"Non-infectious diseases such as asthma or scurvy do NOT spread between people.", vi:"Bệnh không truyền nhiễm như hen suyễn hay thiếu vitamin C thì không lây."},
+    {en:"Diseases spread by touch, by droplets in the air when we cough or sneeze, by dirty water and by insects.", vi:"Bệnh lây qua tiếp xúc, qua giọt bắn khi ho hắt hơi, qua nước bẩn và qua côn trùng."},
+    {en:"Washing hands with soap, covering coughs and drinking clean water stop many diseases spreading.", vi:"Rửa tay bằng xà phòng, che miệng khi ho và uống nước sạch chặn được nhiều bệnh."},
+    {en:"A vaccine teaches the body to fight one disease before you ever catch it.", vi:"Vắc-xin dạy cơ thể cách chống lại một bệnh trước khi ta mắc bệnh đó."},
+    {en:"Antibiotics kill bacteria but they do NOT work against viruses such as the common cold.", vi:"Kháng sinh diệt vi khuẩn nhưng KHÔNG có tác dụng với virus như cảm lạnh."},
+    {en:"White blood cells are the body's own defence: they attack microorganisms that get inside.", vi:"Bạch cầu là hàng phòng thủ của cơ thể, tấn công vi sinh vật lọt vào bên trong."}],
+  voc:[["infectious","truyền nhiễm, lây được"],["microorganism","vi sinh vật"],["bacteria","vi khuẩn"],["virus","vi rút"],["droplet","giọt bắn"],["vaccine","vắc-xin"],["antibiotic","thuốc kháng sinh"],["immune","miễn dịch"],["hygiene","vệ sinh"],["symptom","triệu chứng"]],
+  quiz:[
+    {q:"Which of these is an INFECTIOUS disease?", o:["Asthma","Flu","Scurvy","Short sight"], o2:null, a:1,
+     e:"Cúm do virus gây ra và lây từ người sang người. Hen suyễn, thiếu vitamin C và cận thị đều không lây."},
+    {q:"How does a cold most often spread?", o:["Through droplets when someone coughs or sneezes","Through sunlight","Through cold weather alone","Through eating vegetables"], a:0,
+     e:"Virus cảm lạnh bay theo giọt bắn khi ho, hắt hơi. Trời lạnh không tự gây bệnh, nó chỉ khiến ta ở trong nhà đông người hơn."},
+    {q:"Why do antibiotics not cure a cold?", o:["Colds are caused by viruses, not bacteria","Colds are too strong","Antibiotics are too weak","Colds are not real diseases"], a:0,
+     e:"Kháng sinh chỉ diệt vi khuẩn. Cảm lạnh do virus nên uống kháng sinh vừa vô ích vừa gây kháng thuốc."},
+    {q:"What does a vaccine do?", o:["Kills all bacteria in the body","Prepares the body to fight one disease before you catch it","Cures every illness","Replaces washing hands"], a:1,
+     e:"Vắc-xin tập cho hệ miễn dịch nhận diện một mầm bệnh, nên khi gặp thật thì cơ thể chống lại được ngay."},
+    {q:"Which habit stops the most diseases spreading in school?", o:["Washing hands with soap","Sitting still","Drinking hot tea","Wearing a hat"], a:0,
+     e:"Rửa tay bằng xà phòng loại bỏ vi sinh vật trên tay — biện pháp rẻ và hiệu quả nhất."},
+    {q:"Which part of the blood fights microorganisms?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1,
+     e:"Bạch cầu (white blood cells) là lực lượng phòng thủ; hồng cầu chở oxygen, tiểu cầu làm đông máu."},
+    {q:"Malaria is spread by mosquitoes. This makes the mosquito a:", o:["Vaccine","Vector that carries the disease","Symptom","Antibiotic"], a:1,
+     e:"Con vật mang mầm bệnh từ người này sang người khác gọi là vật trung gian truyền bệnh (vector)."}]},
+
+{ id:"s15", subject:"science", t:"Properties of substances", vi:"Tính chất của các chất",
+  kp:[
+    {en:"A property is something we can observe or measure about a material: hardness, strength, flexibility, transparency.", vi:"Tính chất là điều ta quan sát hoặc đo được ở vật liệu: độ cứng, độ bền, độ dẻo, độ trong suốt."},
+    {en:"Materials are chosen for a job because of their properties &mdash; glass is transparent, rubber is flexible and waterproof.", vi:"Người ta chọn vật liệu theo tính chất: thuỷ tinh trong suốt, cao su dẻo và không thấm nước."},
+    {en:"Solubility is whether a substance dissolves in water. Sugar is soluble; sand is insoluble.", vi:"Độ tan là khả năng hoà tan trong nước: đường tan, cát không tan."},
+    {en:"Only iron, steel, nickel and cobalt are magnetic. Other metals such as copper and aluminium are NOT.", vi:"Chỉ sắt, thép, niken và coban có từ tính; đồng và nhôm thì không, dù cũng là kim loại."},
+    {en:"Density decides whether something floats: an object less dense than water floats.", vi:"Khối lượng riêng quyết định vật nổi hay chìm: nhẹ hơn nước thì nổi."},
+    {en:"Test properties fairly: use pieces of the same size and test each material the same way.", vi:"Thử tính chất phải công bằng: dùng mẫu cùng kích thước và thử theo cùng một cách."}],
+  voc:[["property","tính chất"],["hardness","độ cứng"],["flexible","dẻo, uốn được"],["transparent","trong suốt"],["waterproof","không thấm nước"],["soluble","tan được"],["magnetic","có từ tính"],["density","khối lượng riêng"],["absorbent","hút nước"],["durable","bền"]],
+  quiz:[
+    {q:"Why is glass used for windows?", o:["It is soft","It is transparent so light passes through","It is magnetic","It dissolves in water"], a:1,
+     e:"Cửa sổ cần cho ánh sáng đi qua và nhìn rõ, nên vật liệu phải trong suốt."},
+    {q:"Which metal is NOT attracted to a magnet?", o:["Iron","Steel","Copper","Nickel"], a:2,
+     e:"Đồng không có từ tính. Đây là bẫy quen thuộc: không phải kim loại nào cũng bị nam châm hút."},
+    {q:"Sand does not dissolve in water. Sand is:", o:["Soluble","Insoluble","Magnetic","Transparent"], a:1,
+     e:"Không tan gọi là insoluble, nên tách cát khỏi nước bằng cách lọc."},
+    {q:"A raincoat is made of a material that is:", o:["Absorbent","Waterproof","Soluble","Magnetic"], a:1,
+     e:"Áo mưa cần chặn nước nên phải không thấm. Vật liệu hút nước (absorbent) như bông thì làm khăn."},
+    {q:"An object floats in water. This tells you the object is:", o:["Less dense than water","More dense than water","Magnetic","Transparent"], a:0,
+     e:"Vật có khối lượng riêng nhỏ hơn nước thì nổi; lớn hơn thì chìm."},
+    {q:"To compare how strong three materials are, you must:", o:["Use different sized pieces","Use pieces of the same size and test them the same way","Test only one of them","Guess"], a:1,
+     e:"Chỉ được đổi loại vật liệu; kích thước mẫu và cách thử phải giữ nguyên thì so sánh mới công bằng."}]}
+);
+</script>
+
+<script>
+DATA.science.units.push(
+{ id:"s16", subject:"science", t:"Thermal and electrical conductors", vi:"Vật dẫn nhiệt và dẫn điện",
+  kp:[
+    {en:"A thermal conductor lets heat pass through it quickly. Most metals are good thermal conductors.", vi:"Vật dẫn nhiệt cho nhiệt truyền qua nhanh; hầu hết kim loại dẫn nhiệt tốt."},
+    {en:"A thermal insulator does not let heat pass easily: wood, plastic, wool, air.", vi:"Vật cách nhiệt không cho nhiệt truyền qua dễ: gỗ, nhựa, len, không khí."},
+    {en:"Trapped air is a very good insulator, which is why a woolly jumper keeps you warm.", vi:"Không khí bị giữ lại cách nhiệt rất tốt, vì thế áo len giữ ấm."},
+    {en:"An electrical conductor lets electricity flow: all metals and graphite (pencil lead).", vi:"Vật dẫn điện cho dòng điện đi qua: mọi kim loại và than chì trong ruột bút chì."},
+    {en:"An electrical insulator stops electricity flowing: plastic, rubber, glass, dry wood.", vi:"Vật cách điện chặn dòng điện: nhựa, cao su, thuỷ tinh, gỗ khô."},
+    {en:"Not the same thing: a material can conduct heat but not electricity. Water conducts electricity when salts are dissolved in it.", vi:"Hai loại khác nhau: có vật dẫn nhiệt nhưng không dẫn điện. Nước có muối hoà tan thì dẫn điện."},
+    {en:"Pans have metal bases to conduct heat and plastic handles to insulate your hand.", vi:"Nồi có đáy kim loại để dẫn nhiệt và tay cầm nhựa để cách nhiệt cho tay."}],
+  voc:[["thermal conductor","vật dẫn nhiệt"],["thermal insulator","vật cách nhiệt"],["electrical conductor","vật dẫn điện"],["electrical insulator","vật cách điện"],["trapped air","không khí bị giữ lại"],["graphite","than chì"],["handle","tay cầm"],["transfer","sự truyền"],["heat loss","sự mất nhiệt"],["safety","an toàn"]],
+  quiz:[
+    {q:"Why is the base of a saucepan made of metal?", o:["Metal is light","Metal conducts heat quickly to the food","Metal is transparent","Metal is an insulator"], a:1,
+     e:"Kim loại dẫn nhiệt nhanh nên thức ăn nóng đều và nhanh."},
+    {q:"Why is the handle of the same saucepan made of plastic?", o:["Plastic is cheap","Plastic is a thermal insulator so your hand does not get burnt","Plastic conducts heat","Plastic is magnetic"], a:1,
+     e:"Nhựa cách nhiệt nên nhiệt không truyền tới tay."},
+    {q:"Why does a woolly jumper keep you warm?", o:["Wool makes heat","It traps air, which is a good insulator","Wool is a conductor","It is heavy"], a:1,
+     e:"Sợi len giữ lại nhiều túi khí nhỏ; không khí cách nhiệt tốt nên nhiệt cơ thể ít thoát ra."},
+    {q:"Which of these conducts electricity but is NOT a metal?", o:["Rubber","Graphite","Glass","Dry wood"], a:1,
+     e:"Than chì trong ruột bút chì dẫn điện dù không phải kim loại — câu này rất hay ra đề."},
+    {q:"Why is it dangerous to touch a switch with wet hands?", o:["Water is a good insulator","Water with dissolved salts conducts electricity","Water makes plastic melt","Water is magnetic"], a:1,
+     e:"Nước ở tay không tinh khiết, có muối hoà tan nên dẫn điện, dòng điện có thể truyền qua người."},
+    {q:"Which set are ALL thermal insulators?", o:["Wood, wool, plastic","Copper, steel, aluminium","Iron, water, silver","Graphite, gold, air"], a:0,
+     e:"Gỗ, len và nhựa đều cản nhiệt. Các nhóm khác đều chứa kim loại dẫn nhiệt tốt."},
+    {q:"A metal spoon is left in hot soup. What happens?", o:["Nothing","The handle becomes hot because metal conducts heat","The spoon melts","The soup cools instantly"], a:1,
+     e:"Nhiệt truyền dọc theo thìa kim loại lên tận cán, nên cầm vào thấy nóng."}]},
+
+{ id:"s17", subject:"science", t:"Chemical reactions", vi:"Phản ứng hoá học",
+  kp:[
+    {en:"In a chemical reaction the starting substances turn into new substances. This cannot be undone.", vi:"Trong phản ứng hoá học, các chất ban đầu biến thành chất mới và không quay lại được."},
+    {en:"Signs of a chemical reaction: bubbles of gas, a colour change, heat or light given out, a new solid forming.", vi:"Dấu hiệu phản ứng hoá học: bọt khí, đổi màu, toả nhiệt hoặc phát sáng, xuất hiện chất rắn mới."},
+    {en:"Burning is a reaction between a fuel and oxygen. It gives out heat and light.", vi:"Sự cháy là phản ứng giữa nhiên liệu và oxygen, toả nhiệt và phát sáng."},
+    {en:"Vinegar plus bicarbonate of soda gives off carbon dioxide gas &mdash; that is why the mixture fizzes.", vi:"Giấm trộn baking soda sinh ra khí carbon dioxide, nên hỗn hợp sủi bọt."},
+    {en:"Rusting is a slow reaction between iron, oxygen and water.", vi:"Gỉ sét là phản ứng chậm giữa sắt, oxygen và nước."},
+    {en:"Mass is not lost in a reaction. If a candle seems lighter, the missing mass has escaped as gas.", vi:"Khối lượng không mất đi. Nến nhẹ đi vì chất đã bay ra dạng khí, không phải biến mất."},
+    {en:"Cooking is a chemical reaction: a raw egg cannot be turned back from a cooked one.", vi:"Nấu ăn là phản ứng hoá học: trứng chín không thể trở lại thành trứng sống."}],
+  voc:[["chemical reaction","phản ứng hoá học"],["reactant","chất tham gia"],["product","chất tạo thành"],["fizz","sủi bọt"],["combustion","sự cháy"],["fuel","nhiên liệu"],["carbon dioxide","khí carbonic"],["oxidation","sự oxy hoá"],["precipitate","chất rắn kết tủa"],["conserved","được bảo toàn"]],
+  quiz:[
+    {q:"Which is the clearest sign that a chemical reaction has happened?", o:["The mixture gets colder in the fridge","A new substance is made that cannot be changed back","The mixture is stirred","The container is full"], a:1,
+     e:"Điều quyết định là tạo ra chất mới và không đảo ngược được."},
+    {q:"Vinegar is poured onto bicarbonate of soda and it fizzes. The gas made is:", o:["Oxygen","Carbon dioxide","Hydrogen","Steam"], a:1,
+     e:"Phản ứng sinh khí carbon dioxide — chính khí này làm bánh nở khi nướng."},
+    {q:"Burning wood needs which gas from the air?", o:["Carbon dioxide","Nitrogen","Oxygen","Helium"], a:2,
+     e:"Cháy cần oxygen. Đậy kín ngọn nến là hết oxygen, lửa tắt."},
+    {q:"A candle burns away on a balance in the open air and the mass falls. Why?", o:["Mass has been destroyed","Gases made have escaped into the air","The balance is broken","Wax turns into light"], a:1,
+     e:"Khối lượng được bảo toàn; phần hụt đi đã bay ra dưới dạng khí carbon dioxide và hơi nước."},
+    {q:"Which pair of changes are BOTH chemical reactions?", o:["Melting ice and boiling water","Frying an egg and rusting a nail","Dissolving salt and freezing water","Cutting paper and folding cloth"], a:1,
+     e:"Rán trứng và gỉ sét đều tạo chất mới. Các cặp còn lại chỉ đổi trạng thái hoặc hình dạng."},
+    {q:"Rusting needs iron and which two other things?", o:["Oxygen and water","Heat and light","Salt and sugar","Carbon dioxide and oil"], a:0,
+     e:"Đủ ba yếu tố sắt + oxygen + nước mới gỉ; sơn phủ để chặn nước và không khí là cách chống gỉ."},
+    {q:"Why can you not turn a cooked egg back into a raw egg?", o:["It is too hot","Cooking is a chemical reaction that makes new substances","The shell is broken","Eggs are soluble"], a:1,
+     e:"Nhiệt làm protein trong trứng biến đổi hẳn thành chất mới, không có cách nào đảo ngược."}]},
+
+{ id:"s25", subject:"science", t:"Food chains, food webs and energy transfers", vi:"Chuỗi thức ăn, lưới thức ăn và truyền năng lượng",
+  kp:[
+    {en:"Nearly all energy in a food chain starts at the Sun and is captured by green plants.", vi:"Gần như toàn bộ năng lượng trong chuỗi thức ăn bắt đầu từ Mặt Trời và được cây xanh giữ lại."},
+    {en:"Producers make their own food. Consumers eat other living things.", vi:"Sinh vật sản xuất tự tạo thức ăn; sinh vật tiêu thụ ăn sinh vật khác."},
+    {en:"Arrows in a food chain show energy moving, and always point to the animal doing the eating.", vi:"Mũi tên chỉ chiều năng lượng truyền đi và luôn hướng về con vật ăn."},
+    {en:"A primary consumer eats the producer; a secondary consumer eats the primary consumer.", vi:"Sinh vật tiêu thụ bậc 1 ăn cây; bậc 2 ăn sinh vật bậc 1."},
+    {en:"At every step most energy is lost as heat, so only a small part passes on. Chains are rarely longer than five links.", vi:"Mỗi bậc mất phần lớn năng lượng dưới dạng nhiệt nên chuỗi hiếm khi dài quá 5 mắt xích."},
+    {en:"A food web joins many food chains in one habitat and shows that most animals eat more than one thing.", vi:"Lưới thức ăn nối nhiều chuỗi trong cùng môi trường và cho thấy hầu hết loài ăn nhiều thứ."},
+    {en:"Decomposers break down dead plants and animals and return nutrients to the soil.", vi:"Sinh vật phân huỷ phân giải xác chết, trả chất dinh dưỡng về đất."}],
+  voc:[["producer","sinh vật sản xuất"],["primary consumer","sinh vật tiêu thụ bậc 1"],["secondary consumer","sinh vật tiêu thụ bậc 2"],["energy transfer","sự truyền năng lượng"],["food web","lưới thức ăn"],["decomposer","sinh vật phân huỷ"],["nutrients","chất dinh dưỡng"],["habitat","môi trường sống"],["predator","kẻ săn mồi"],["prey","con mồi"]],
+  quiz:[
+    {q:"Where does the energy in almost every food chain come from originally?", o:["The soil","The Sun","The rain","Decomposers"], a:1,
+     e:"Cây xanh dùng ánh sáng Mặt Trời để tạo thức ăn, nên năng lượng của cả chuỗi bắt nguồn từ Mặt Trời."},
+    {q:"In grass &rarr; grasshopper &rarr; frog, the grasshopper is the:", o:["Producer","Primary consumer","Secondary consumer","Decomposer"], a:1,
+     e:"Châu chấu ăn trực tiếp sinh vật sản xuất nên là sinh vật tiêu thụ bậc 1."},
+    {q:"What do the arrows in a food chain actually show?", o:["Which animal is bigger","The direction energy is transferred","Where the animals live","How fast they run"], a:1,
+     e:"Mũi tên chỉ dòng năng lượng, đọc là &ldquo;bị ăn bởi&rdquo; chứ không phải &ldquo;ăn&rdquo;."},
+    {q:"Why are food chains rarely longer than five links?", o:["There are not enough animals","Most energy is lost as heat at each step","Arrows run out","Plants stop growing"], a:1,
+     e:"Chỉ khoảng một phần mười năng lượng lên được bậc trên, nên tới bậc thứ năm gần như không còn đủ."},
+    {q:"What is the main difference between a food chain and a food web?", o:["A web shows many chains linked together","A web has no arrows","A chain has no producers","There is no difference"], a:0,
+     e:"Lưới thức ăn là nhiều chuỗi nối nhau, phản ánh đúng thực tế là mỗi loài ăn nhiều loại thức ăn."},
+    {q:"What is the job of a decomposer?", o:["To hunt prey","To break down dead material and return nutrients to the soil","To make food from sunlight","To pollinate flowers"], a:1,
+     e:"Nấm và vi khuẩn phân giải xác sinh vật, trả chất dinh dưỡng lại cho đất để cây dùng tiếp."},
+    {q:"In a food web the number of frogs falls sharply. What is most likely?", o:["Only frogs are affected","Insects they ate increase and snakes that ate them decrease","Nothing changes","Plants die immediately"], a:1,
+     e:"Mất một mắt xích ảnh hưởng cả hai chiều: con mồi của nó tăng lên, kẻ ăn nó giảm đi."}]}
+);
+</script>
+
+<script>
+DATA.science.units.push(
+{ id:"s18", subject:"science", t:"Igneous rocks", vi:"Đá mắc-ma",
+  kp:[
+    {en:"Igneous rocks form when molten rock cools and hardens into crystals.", vi:"Đá mắc-ma hình thành khi đá nóng chảy nguội đi và kết tinh."},
+    {en:"Molten rock under the ground is called magma; when it reaches the surface it is called lava.", vi:"Đá nóng chảy dưới lòng đất gọi là magma; khi phun lên mặt đất gọi là dung nham (lava)."},
+    {en:"Slow cooling deep underground gives LARGE crystals, like granite.", vi:"Nguội chậm sâu dưới đất tạo tinh thể TO, ví dụ đá granit."},
+    {en:"Fast cooling on the surface gives SMALL crystals, like basalt.", vi:"Nguội nhanh trên mặt đất tạo tinh thể NHỎ, ví dụ đá bazan."},
+    {en:"So crystal size tells you how fast the rock cooled &mdash; big crystals mean slow cooling.", vi:"Nhìn cỡ tinh thể là biết đá nguội nhanh hay chậm: tinh thể to nghĩa là nguội chậm."},
+    {en:"Igneous rocks are usually hard and have no layers and no fossils.", vi:"Đá mắc-ma thường cứng, không có lớp và không chứa hoá thạch."}],
+  voc:[["igneous rock","đá mắc-ma"],["magma","đá nóng chảy dưới đất"],["lava","dung nham"],["molten","nóng chảy"],["crystal","tinh thể"],["granite","đá granit"],["basalt","đá bazan"],["volcano","núi lửa"],["cool down","nguội đi"],["harden","hoá cứng"]],
+  quiz:[
+    {q:"How do igneous rocks form?", o:["Layers of sand press together","Molten rock cools and hardens","Heat and pressure change other rocks","Plants rot in soil"], a:1,
+     e:"Đá mắc-ma sinh ra từ đá nóng chảy nguội lại — ba đáp án kia là cách hình thành của các loại đá khác."},
+    {q:"What is molten rock called once it reaches the surface?", o:["Magma","Lava","Granite","Soil"], a:1,
+     e:"Dưới đất là magma, phun lên mặt đất thì gọi là lava. Hai từ này rất hay bị nhầm."},
+    {q:"A rock has very large crystals. What does this tell you?", o:["It cooled quickly on the surface","It cooled slowly deep underground","It has fossils in it","It formed from sand"], a:1,
+     e:"Nguội càng chậm thì tinh thể càng có thời gian lớn lên, nên tinh thể to nghĩa là nguội sâu dưới đất."},
+    {q:"Basalt has tiny crystals. Where did it form?", o:["Deep underground","On the surface, cooling fast","In a river","Under the sea bed over millions of years"], a:1,
+     e:"Tinh thể nhỏ vì dung nham nguội rất nhanh khi ra tới không khí hoặc nước."},
+    {q:"Which is an igneous rock?", o:["Sandstone","Granite","Limestone","Chalk"], a:1,
+     e:"Granit là đá mắc-ma. Sa thạch, đá vôi và phấn đều là đá trầm tích."},
+    {q:"Why do igneous rocks contain no fossils?", o:["They are too hard","They formed from molten rock, which would destroy any remains","They are too young","Fossils dissolve in them"], a:1,
+     e:"Đá nóng chảy có nhiệt độ rất cao nên xác sinh vật không thể giữ lại được."}]},
+
+{ id:"s19", subject:"science", t:"Sedimentary rocks and fossils", vi:"Đá trầm tích và hoá thạch",
+  kp:[
+    {en:"Sedimentary rocks form from tiny pieces of rock, sand and shell that settle in layers, usually under water.", vi:"Đá trầm tích hình thành từ các mảnh đá, cát và vỏ sò lắng thành từng lớp, thường ở dưới nước."},
+    {en:"Over millions of years the weight of the layers above presses the sediment together into rock.", vi:"Qua hàng triệu năm, sức nặng của các lớp bên trên nén trầm tích lại thành đá."},
+    {en:"Sedimentary rocks show visible layers and are usually softer than igneous rocks.", vi:"Đá trầm tích có các lớp nhìn thấy được và thường mềm hơn đá mắc-ma."},
+    {en:"Sandstone, limestone and chalk are sedimentary rocks.", vi:"Sa thạch, đá vôi và đá phấn là đá trầm tích."},
+    {en:"Fossils are the preserved remains or traces of living things, and are found ONLY in sedimentary rock.", vi:"Hoá thạch là dấu tích của sinh vật xưa, và CHỈ tìm thấy trong đá trầm tích."},
+    {en:"The deepest layer of rock is the oldest, so fossils lower down come from earlier times.", vi:"Lớp đá sâu nhất là lớp cổ nhất, nên hoá thạch nằm càng sâu thì càng lâu đời."},
+    {en:"Fossils tell scientists what lived long ago and what the environment was like.", vi:"Hoá thạch cho nhà khoa học biết ngày xưa có loài gì sống và môi trường khi đó ra sao."}],
+  voc:[["sedimentary rock","đá trầm tích"],["sediment","trầm tích"],["layer","lớp"],["compress","nén ép"],["sandstone","sa thạch"],["limestone","đá vôi"],["fossil","hoá thạch"],["remains","dấu tích, di tích"],["preserved","được bảo tồn"],["evidence","bằng chứng"]],
+  quiz:[
+    {q:"How do sedimentary rocks form?", o:["Molten rock cools","Layers of sediment settle and are pressed together","Heat and pressure change existing rock","Plants decay in soil"], a:1,
+     e:"Trầm tích lắng thành lớp rồi bị nén lại qua hàng triệu năm."},
+    {q:"Which feature helps you recognise a sedimentary rock?", o:["Large shiny crystals","Visible layers","It is always black","It floats"], a:1,
+     e:"Các lớp nhìn thấy được là dấu hiệu đặc trưng của đá trầm tích."},
+    {q:"In which type of rock are fossils found?", o:["Igneous","Sedimentary","Metamorphic","All three equally"], a:1,
+     e:"Chỉ đá trầm tích giữ được hoá thạch, vì nó hình thành ở nhiệt độ thấp và bao lấy xác sinh vật."},
+    {q:"Which rock is sedimentary?", o:["Granite","Basalt","Limestone","Marble"], a:2,
+     e:"Đá vôi tạo từ vỏ sinh vật biển lắng đọng. Granit và bazan là mắc-ma, cẩm thạch là biến chất."},
+    {q:"Two fossils are found, one in a deep layer and one nearer the surface. Which is older?", o:["The deeper one","The one nearer the surface","They are the same age","Cannot tell"], a:0,
+     e:"Lớp dưới lắng trước nên cổ hơn — nguyên tắc cơ bản khi đọc các lớp đá."},
+    {q:"A fossil of a sea shell is found on a mountain. What does this suggest?", o:["Shells can climb","That area was once under the sea","The fossil is fake","Mountains are made of shells"], a:1,
+     e:"Vùng đó từng nằm dưới biển, sau đó lớp đá được nâng lên thành núi."},
+    {q:"Why are sedimentary rocks often softer than igneous rocks?", o:["They are newer","They are made of pieces stuck together rather than interlocking crystals","They contain water","They are always wet"], a:1,
+     e:"Đá trầm tích gồm các hạt gắn với nhau nên dễ vỡ hơn khối tinh thể đan xen của đá mắc-ma."}]},
+
+{ id:"s20", subject:"science", t:"Metamorphic rocks and the rock cycle", vi:"Đá biến chất và vòng tuần hoàn đá",
+  kp:[
+    {en:"Metamorphic rocks form when existing rock is changed by great HEAT and PRESSURE, without melting.", vi:"Đá biến chất hình thành khi đá có sẵn bị biến đổi bởi NHIỆT ĐỘ và ÁP SUẤT lớn mà chưa nóng chảy."},
+    {en:"Limestone becomes marble; shale becomes slate; sandstone becomes quartzite.", vi:"Đá vôi thành cẩm thạch; đá phiến sét thành đá đen lợp mái; sa thạch thành thạch anh."},
+    {en:"Metamorphic rocks are usually harder than the rock they came from, and may have bands or stripes.", vi:"Đá biến chất thường cứng hơn đá gốc và có thể có vân hoặc dải màu."},
+    {en:"The rock cycle: rock is worn away, becomes sediment, is pressed into sedimentary rock, changed into metamorphic rock, melted into magma, then cooled into igneous rock.", vi:"Vòng tuần hoàn đá: đá bị bào mòn thành trầm tích &rarr; đá trầm tích &rarr; đá biến chất &rarr; magma &rarr; đá mắc-ma."},
+    {en:"Weathering breaks rock down where it is; erosion moves the pieces away.", vi:"Phong hoá làm vỡ đá tại chỗ; xói mòn cuốn các mảnh vỡ đi nơi khác."},
+    {en:"The rock cycle has no start and no end &mdash; it keeps going and takes millions of years.", vi:"Vòng tuần hoàn đá không có điểm đầu điểm cuối, cứ lặp lại và mất hàng triệu năm."}],
+  voc:[["metamorphic rock","đá biến chất"],["pressure","áp suất"],["marble","đá cẩm thạch"],["slate","đá phiến lợp mái"],["rock cycle","vòng tuần hoàn đá"],["weathering","sự phong hoá"],["erosion","sự xói mòn"],["band","dải, vân đá"],["transported","bị cuốn đi"],["uplift","sự nâng lên"]],
+  quiz:[
+    {q:"What changes rock into metamorphic rock?", o:["Melting completely","Great heat and pressure","Settling in layers","Dissolving in water"], a:1,
+     e:"Nhiệt và áp suất lớn làm đá biến đổi nhưng chưa nóng chảy — nóng chảy hẳn thì thành magma."},
+    {q:"Limestone under great heat and pressure becomes:", o:["Granite","Marble","Sandstone","Basalt"], a:1,
+     e:"Đá vôi biến thành cẩm thạch, cứng hơn nhiều và được dùng làm tượng, bậc thang."},
+    {q:"What is the difference between weathering and erosion?", o:["They are the same","Weathering breaks rock where it is; erosion carries the pieces away","Weathering only happens in winter","Erosion only happens underground"], a:1,
+     e:"Phong hoá là vỡ tại chỗ, xói mòn là bị nước hay gió cuốn đi. Đề rất hay hỏi phân biệt hai từ này."},
+    {q:"In the rock cycle, what must happen for magma to form?", o:["Rock is worn away","Rock melts","Sediment settles","Fossils form"], a:1,
+     e:"Magma là đá nóng chảy, nên đá phải bị nung tới mức chảy ra."},
+    {q:"Which statement about the rock cycle is TRUE?", o:["It starts with igneous rock and ends with soil","It has no beginning and no end","It takes about one year","Only sedimentary rock takes part"], a:1,
+     e:"Vòng tuần hoàn lặp đi lặp lại liên tục, không có điểm bắt đầu hay kết thúc."},
+    {q:"A rock has coloured bands and is very hard. It is most likely:", o:["Sedimentary","Metamorphic","Freshly cooled lava","Soil"], a:1,
+     e:"Vân dải và độ cứng cao là dấu hiệu điển hình của đá biến chất."}]},
+
+{ id:"s21", subject:"science", t:"Soil", vi:"Đất",
+  kp:[
+    {en:"Soil is made of tiny pieces of weathered rock mixed with humus, water and air.", vi:"Đất gồm các mảnh đá bị phong hoá trộn với mùn, nước và không khí."},
+    {en:"Humus is rotted plant and animal material. It holds water and gives plants nutrients.", vi:"Mùn là xác động thực vật phân huỷ; nó giữ nước và cung cấp chất dinh dưỡng cho cây."},
+    {en:"Sandy soil has large particles: water drains through quickly and it dries out fast.", vi:"Đất cát có hạt to: nước thoát rất nhanh và đất mau khô."},
+    {en:"Clay soil has tiny particles: water drains very slowly and the soil can become waterlogged.", vi:"Đất sét có hạt rất nhỏ: nước thoát chậm và đất dễ bị úng."},
+    {en:"Loam is a mixture of sand, clay and humus. It drains well but keeps enough water, so it is best for growing.", vi:"Đất thịt là hỗn hợp cát, sét và mùn: thoát nước tốt mà vẫn giữ đủ ẩm nên trồng cây tốt nhất."},
+    {en:"Earthworms make tunnels that let air and water into the soil and mix humus through it.", vi:"Giun đất đào hang cho không khí và nước vào đất, đồng thời trộn đều mùn."},
+    {en:"To compare how fast water drains through soils, use the same amount of soil and the same amount of water each time.", vi:"So sánh tốc độ thoát nước phải dùng cùng lượng đất và cùng lượng nước cho mỗi loại."}],
+  voc:[["soil","đất"],["humus","mùn"],["particle","hạt"],["sandy soil","đất cát"],["clay soil","đất sét"],["loam","đất thịt"],["drainage","sự thoát nước"],["waterlogged","bị úng nước"],["earthworm","giun đất"],["fertile","màu mỡ"]],
+  quiz:[
+    {q:"What is humus?", o:["Small pieces of rock","Rotted plant and animal material","Water in the soil","Air in the soil"], a:1,
+     e:"Mùn là phần hữu cơ đã phân huỷ, giúp đất giữ nước và giàu dinh dưỡng."},
+    {q:"Water drains fastest through which soil?", o:["Clay soil","Sandy soil","Waterlogged soil","All the same"], a:1,
+     e:"Hạt cát to nên khe hở giữa các hạt rộng, nước chảy qua rất nhanh."},
+    {q:"Why can clay soil become waterlogged?", o:["Its particles are very small so water drains slowly","It has no water","It is full of sand","It contains no humus"], a:0,
+     e:"Hạt sét rất nhỏ, khe hở hẹp nên nước gần như không thoát được và đọng lại."},
+    {q:"Which soil is usually best for growing vegetables?", o:["Pure sand","Pure clay","Loam","Rock"], a:2,
+     e:"Đất thịt cân bằng được hai việc: thoát nước tốt mà vẫn giữ đủ ẩm và dinh dưỡng."},
+    {q:"How do earthworms help soil?", o:["They eat the roots","Their tunnels let in air and water and mix humus through the soil","They make the soil harder","They remove all the humus"], a:1,
+     e:"Hang giun tạo đường cho không khí và nước, đồng thời giun trộn mùn xuống sâu."},
+    {q:"In a drainage experiment you must keep the same:", o:["Type of soil","Amount of soil and amount of water","Colour of the funnel","Time of day only"], a:1,
+     e:"Chỉ được đổi loại đất; lượng đất và lượng nước phải giữ nguyên thì mới công bằng."},
+    {q:"Soil forms mainly from:", o:["Weathered rock mixed with humus","Melted lava","Sea water","Plastic waste"], a:0,
+     e:"Đá bị phong hoá vỡ vụn dần, trộn với xác sinh vật phân huỷ thành đất — quá trình mất rất nhiều năm."}]}
+);
+</script>
+
+<script>
+DATA.science.units.push(
+{ id:"s24", subject:"science", t:"The effects of forces", vi:"Tác dụng của lực",
+  kp:[
+    {en:"A force can make an object start moving, stop, speed up, slow down, change direction or change shape.", vi:"Lực có thể làm vật bắt đầu chuyển động, dừng, nhanh lên, chậm lại, đổi hướng hoặc đổi hình dạng."},
+    {en:"When forces on an object are balanced, it stays still or keeps moving at the same speed.", vi:"Khi các lực cân bằng, vật đứng yên hoặc chuyển động đều."},
+    {en:"When forces are unbalanced, the object speeds up, slows down or changes direction.", vi:"Khi các lực không cân bằng, vật sẽ nhanh lên, chậm lại hoặc đổi hướng."},
+    {en:"Friction is a force between two surfaces rubbing together. It slows movement and makes heat.", vi:"Ma sát là lực giữa hai bề mặt cọ xát, làm chậm chuyển động và sinh nhiệt."},
+    {en:"Rough surfaces give more friction; smooth or oiled surfaces give less.", vi:"Bề mặt nhám cho ma sát lớn; bề mặt nhẵn hoặc có dầu cho ma sát nhỏ."},
+    {en:"Air resistance and water resistance are types of friction. A streamlined shape reduces them.", vi:"Lực cản không khí và lực cản nước là dạng ma sát; hình thuôn giúp giảm chúng."},
+    {en:"Draw forces as arrows: the longer the arrow, the bigger the force.", vi:"Vẽ lực bằng mũi tên: mũi tên càng dài thì lực càng lớn."}],
+  voc:[["balanced forces","lực cân bằng"],["unbalanced forces","lực không cân bằng"],["friction","ma sát"],["air resistance","lực cản không khí"],["streamlined","hình thuôn"],["direction","hướng"],["speed up","tăng tốc"],["slow down","giảm tốc"],["force arrow","mũi tên chỉ lực"],["surface","bề mặt"]],
+  quiz:[
+    {q:"A ball rolls along the ground and slowly stops. Which force does this?", o:["Gravity","Friction","Upthrust","Magnetism"], a:1,
+     e:"Ma sát giữa bóng và mặt đất (cùng lực cản không khí) làm bóng chậm dần rồi dừng."},
+    {q:"A cyclist travels at a steady speed in a straight line. The forces on the bike are:", o:["Balanced","Unbalanced","Zero","Only friction"], a:0,
+     e:"Chuyển động đều nghĩa là lực đẩy tới bằng đúng lực cản, nên các lực cân bằng."},
+    {q:"Which is NOT something a force can do?", o:["Change an object's shape","Change an object's direction","Change an object's colour","Make an object speed up"], a:2,
+     e:"Lực làm đổi chuyển động hoặc hình dạng, nhưng không làm đổi màu vật."},
+    {q:"Why do cyclists lean forward when going fast?", o:["To look better","To be more streamlined and reduce air resistance","To increase friction","To weigh less"], a:1,
+     e:"Cúi người làm dáng thuôn hơn, giảm diện tích cản gió nên đi nhanh hơn với cùng sức đạp."},
+    {q:"Oil is put on a squeaky hinge. What does this do?", o:["Increases friction","Reduces friction","Adds weight","Adds gravity"], a:1,
+     e:"Dầu tạo lớp trơn giữa hai mặt kim loại nên ma sát giảm, bản lề hết kêu và đóng mở nhẹ."},
+    {q:"Two arrows are drawn on a box: one 3 cm to the right and one 5 cm to the left. The box will:", o:["Stay still","Move to the right","Move to the left","Spin"], a:2,
+     e:"Mũi tên dài hơn nghĩa là lực lớn hơn, nên hộp bị kéo về bên trái."},
+    {q:"Which surface gives the MOST friction?", o:["Ice","Polished wood","Rough carpet","Wet tiles"], a:2,
+     e:"Thảm nhám có bề mặt gồ ghề nhất nên ma sát lớn nhất."}]},
+
+{ id:"s22", subject:"science", t:"Floating and sinking", vi:"Nổi và chìm",
+  kp:[
+    {en:"Water pushes up on anything placed in it. This upward force is called upthrust.", vi:"Nước đẩy lên mọi vật đặt vào nó; lực đẩy lên đó gọi là lực đẩy Ác-si-mét (upthrust)."},
+    {en:"An object floats when the upthrust equals its weight, so the two forces are balanced.", vi:"Vật nổi khi lực đẩy lên bằng trọng lượng của nó, tức hai lực cân bằng."},
+    {en:"An object sinks when its weight is greater than the upthrust.", vi:"Vật chìm khi trọng lượng lớn hơn lực đẩy lên."},
+    {en:"Density decides floating: an object less dense than water floats, more dense sinks.", vi:"Khối lượng riêng quyết định: nhẹ hơn nước (cùng thể tích) thì nổi, nặng hơn thì chìm."},
+    {en:"Shape matters. A solid lump of steel sinks, but the same steel shaped as a hull holds air and floats.", vi:"Hình dạng rất quan trọng: cục thép đặc thì chìm, nhưng thép cán thành vỏ tàu chứa không khí thì nổi."},
+    {en:"Objects feel lighter in water because upthrust supports part of their weight.", vi:"Vật ở trong nước có cảm giác nhẹ hơn vì lực đẩy đỡ bớt một phần trọng lượng."}],
+  voc:[["float","nổi"],["sink","chìm"],["upthrust","lực đẩy lên của nước"],["weight","trọng lượng"],["density","khối lượng riêng"],["hull","vỏ tàu"],["displace","chiếm chỗ, đẩy nước ra"],["buoyant","có sức nổi"],["submerge","chìm hẳn xuống"],["volume","thể tích"]],
+  quiz:[
+    {q:"What is the upward force from water called?", o:["Gravity","Friction","Upthrust","Weight"], a:2,
+     e:"Nước đẩy vật lên bằng lực gọi là upthrust; trọng lực thì kéo vật xuống."},
+    {q:"An object floats. What can you say about the forces on it?", o:["Weight is bigger than upthrust","Upthrust equals weight","There are no forces","Upthrust is zero"], a:1,
+     e:"Nổi cân bằng nghĩa là lực đẩy lên đúng bằng trọng lượng, hai lực triệt tiêu nhau."},
+    {q:"A solid steel block sinks but a steel ship floats. Why?", o:["Ships are made of lighter steel","The ship's shape holds air, making it less dense overall","Sea water is thicker","Ships have engines"], a:1,
+     e:"Vỏ tàu rỗng chứa nhiều không khí nên khối lượng riêng trung bình của cả con tàu nhỏ hơn nước."},
+    {q:"An object is more dense than water. It will:", o:["Float on top","Sink","Dissolve","Float halfway"], a:1,
+     e:"Khối lượng riêng lớn hơn nước thì trọng lượng vượt lực đẩy nên vật chìm."},
+    {q:"Why does a heavy stone feel lighter when you lift it under water?", o:["It really loses mass","Upthrust supports part of its weight","Water makes it smaller","Gravity stops in water"], a:1,
+     e:"Khối lượng không đổi; chỉ là nước đỡ bớt nên tay ta phải dùng ít lực hơn."},
+    {q:"You want to make a plasticine ball float. What should you do?", o:["Add more plasticine","Shape it into a bowl so it holds air","Make it into a smaller ball","Warm it up"], a:1,
+     e:"Nặn thành hình bát làm tăng thể tích chiếm chỗ mà khối lượng không đổi, nên khối lượng riêng giảm và vật nổi."}]},
+
+{ id:"s23", subject:"science", t:"Refraction", vi:"Khúc xạ ánh sáng",
+  kp:[
+    {en:"Refraction is the bending of light as it passes from one transparent material into another.", vi:"Khúc xạ là hiện tượng ánh sáng bị bẻ cong khi truyền từ môi trường trong suốt này sang môi trường khác."},
+    {en:"Light bends because it travels at different speeds in air, water and glass.", vi:"Ánh sáng bị bẻ cong vì nó truyền với tốc độ khác nhau trong không khí, nước và thuỷ tinh."},
+    {en:"A straw in a glass of water looks bent or broken at the water surface because of refraction.", vi:"Ống hút trong cốc nước trông như gãy ở mặt nước chính là do khúc xạ."},
+    {en:"A swimming pool looks shallower than it really is, because light from the bottom bends as it leaves the water.", vi:"Bể bơi trông nông hơn thực tế vì ánh sáng từ đáy bị bẻ cong khi ra khỏi nước."},
+    {en:"Lenses in glasses, cameras and magnifying glasses work by refracting light.", vi:"Thấu kính trong kính mắt, máy ảnh và kính lúp hoạt động nhờ khúc xạ."},
+    {en:"A prism refracts white light and splits it into a spectrum of colours; raindrops do the same to make a rainbow.", vi:"Lăng kính bẻ cong ánh sáng trắng và tách thành dải màu; hạt mưa cũng làm vậy để tạo cầu vồng."},
+    {en:"Refraction is bending; reflection is bouncing back. Do not mix the two words up.", vi:"Khúc xạ là bẻ cong, phản xạ là dội ngược lại. Đừng lẫn hai từ này."}],
+  voc:[["refraction","sự khúc xạ"],["bend","bẻ cong"],["transparent","trong suốt"],["lens","thấu kính"],["magnify","phóng to"],["prism","lăng kính"],["spectrum","dải quang phổ"],["appear","trông có vẻ"],["shallow","nông"],["surface","mặt phân cách"]],
+  quiz:[
+    {q:"What is refraction?", o:["Light bouncing off a surface","Light bending as it passes into a different material","Light being blocked","Light being absorbed"], a:1,
+     e:"Khúc xạ là bẻ cong khi đi qua ranh giới hai môi trường. Dội lại là phản xạ (reflection)."},
+    {q:"Why does a straw look broken in a glass of water?", o:["The straw really bends","Light from the straw refracts as it leaves the water","The water is dirty","The glass is curved"], a:1,
+     e:"Ánh sáng từ phần ống hút dưới nước bị bẻ cong khi ra khỏi mặt nước, nên mắt ta thấy nó lệch đi."},
+    {q:"Why does light bend when it enters water?", o:["Water pushes it","It travels at a different speed in water","Water reflects it","It gets heavier"], a:1,
+     e:"Tốc độ ánh sáng trong nước nhỏ hơn trong không khí, sự đổi tốc độ đó làm tia sáng đổi hướng."},
+    {q:"A swimming pool looks shallower than it is. This is because of:", o:["Reflection","Refraction","Shadows","Absorption"], a:1,
+     e:"Tia sáng từ đáy bể bị bẻ cong khi ra khỏi nước nên đáy trông cao hơn thực tế."},
+    {q:"What does a prism do to white light?", o:["Blocks it","Splits it into a spectrum of colours","Turns it into heat","Reflects it back"], a:1,
+     e:"Mỗi màu bị bẻ cong một góc khác nhau nên ánh sáng trắng tách thành dải bảy màu."},
+    {q:"Which device works by refracting light?", o:["A mirror","A magnifying glass","A shadow puppet","A black curtain"], a:1,
+     e:"Kính lúp là thấu kính, phóng to nhờ bẻ cong tia sáng. Gương thì dùng phản xạ."},
+    {q:"Which word means light bouncing back off a surface?", o:["Refraction","Reflection","Absorption","Transmission"], a:1,
+     e:"Phản xạ là dội lại. Nhớ mẹo: <b>refl</b>ection = bounce back, <b>refr</b>action = bend."}]}
+);
+</script>
+
+<script>
+Object.assign(MM, {
+s13:["Sperm joins egg|Tinh trùng gặp trứng","Fertilisation makes one cell|Thụ tinh tạo tế bào mới","Grows in the uterus|Phát triển trong tử cung","Nine months of pregnancy|Thai kỳ chín tháng","Puberty: child to adult|Dậy thì: trẻ thành người lớn","Baby to elderly|Vòng đời từ sơ sinh tới già"],
+s14:["Infectious spreads|Truyền nhiễm thì lây","Non-infectious does not|Không truyền nhiễm thì không","Touch, droplets, water|Tiếp xúc, giọt bắn, nước","Wash hands, cover coughs|Rửa tay, che miệng","Vaccines train the body|Vắc-xin tập cho cơ thể","Antibiotics only kill bacteria|Kháng sinh chỉ diệt vi khuẩn","White blood cells defend|Bạch cầu phòng thủ"],
+s15:["Property = what we observe|Tính chất là điều quan sát được","Choose material for the job|Chọn vật liệu theo việc","Soluble or insoluble|Tan hay không tan","Only some metals magnetic|Chỉ vài kim loại có từ tính","Density decides floating|Khối lượng riêng quyết định nổi","Same size, same test|Cùng cỡ, cùng cách thử"],
+s16:["Metals conduct heat|Kim loại dẫn nhiệt","Wood and plastic insulate|Gỗ nhựa cách nhiệt","Trapped air insulates well|Không khí giữ lại cách nhiệt tốt","Metals and graphite conduct|Kim loại và than chì dẫn điện","Plastic and rubber insulate|Nhựa cao su cách điện","Heat and electricity differ|Nhiệt và điện là hai chuyện","Pan: metal base, plastic handle|Nồi: đáy kim loại, cán nhựa"],
+s17:["New substances made|Tạo ra chất mới","Gas, colour, heat, solid|Khí, màu, nhiệt, chất rắn","Burning needs oxygen|Cháy cần oxygen","Vinegar + soda gives CO2|Giấm và soda sinh CO2","Rust: iron, oxygen, water|Gỉ: sắt, oxygen, nước","Mass is conserved|Khối lượng được bảo toàn","Cooking cannot go back|Nấu chín không quay lại"],
+s25:["Energy starts at the Sun|Năng lượng từ Mặt Trời","Producers and consumers|Sản xuất và tiêu thụ","Arrows show energy flow|Mũi tên chỉ dòng năng lượng","Primary then secondary|Bậc một rồi bậc hai","Energy lost as heat|Năng lượng mất thành nhiệt","Webs link many chains|Lưới nối nhiều chuỗi","Decomposers return nutrients|Phân huỷ trả chất dinh dưỡng"],
+s18:["Molten rock cools|Đá nóng chảy nguội lại","Magma under, lava above|Magma dưới, dung nham trên","Slow cooling, big crystals|Nguội chậm, tinh thể to","Fast cooling, small crystals|Nguội nhanh, tinh thể nhỏ","Crystal size tells the story|Cỡ tinh thể kể lại quá trình","Hard, no layers, no fossils|Cứng, không lớp, không hoá thạch"],
+s19:["Sediment settles in layers|Trầm tích lắng thành lớp","Pressed over millions of years|Nén qua hàng triệu năm","Visible layers, softer|Có lớp, mềm hơn","Sandstone, limestone, chalk|Sa thạch, đá vôi, đá phấn","Fossils only here|Chỉ ở đây mới có hoá thạch","Deeper means older|Càng sâu càng cổ","Fossils show ancient life|Hoá thạch kể chuyện xưa"],
+s20:["Heat and pressure change rock|Nhiệt và áp suất biến đổi đá","Limestone becomes marble|Đá vôi thành cẩm thạch","Harder, often banded|Cứng hơn, có vân","The rock cycle turns|Vòng tuần hoàn đá quay mãi","Weathering then erosion|Phong hoá rồi xói mòn","No start, no end|Không đầu, không cuối"],
+s21:["Weathered rock plus humus|Đá vụn cộng mùn","Humus holds water|Mùn giữ nước","Sandy drains fast|Đất cát thoát nhanh","Clay drains slowly|Đất sét thoát chậm","Loam is best for growing|Đất thịt trồng tốt nhất","Worms let in air and water|Giun cho khí và nước vào","Fair test: same soil, same water|Cùng lượng đất, cùng lượng nước"],
+s24:["Start, stop, turn, reshape|Chạy, dừng, rẽ, đổi hình","Balanced: no change|Cân bằng thì không đổi","Unbalanced: speed changes|Không cân bằng thì đổi tốc","Friction slows and heats|Ma sát làm chậm và nóng","Rough more, smooth less|Nhám nhiều, nhẵn ít","Streamlined cuts resistance|Hình thuôn giảm lực cản","Longer arrow, bigger force|Mũi tên dài, lực lớn"],
+s22:["Water pushes up|Nước đẩy vật lên","Float: upthrust = weight|Nổi khi hai lực bằng nhau","Sink: weight is greater|Chìm khi trọng lượng lớn hơn","Density decides|Khối lượng riêng quyết định","Shape can make steel float|Hình dạng làm thép nổi","Feels lighter in water|Trong nước thấy nhẹ hơn"],
+s23:["Light bends between materials|Ánh sáng cong khi đổi môi trường","Different speeds cause it|Do tốc độ khác nhau","Straw looks broken|Ống hút trông như gãy","Pool looks shallower|Bể trông nông hơn","Lenses use refraction|Thấu kính dùng khúc xạ","Prism splits white light|Lăng kính tách ánh sáng trắng","Refract bends, reflect bounces|Khúc xạ cong, phản xạ dội"]
+});
+Object.assign(EXT, {
+s13:{d:[{en:"A human egg cell is the largest cell in the body, but is still only about the size of a full stop.",vi:"Trứng người là tế bào lớn nhất cơ thể, nhưng cũng chỉ to bằng dấu chấm câu."},
+ {en:"Identical twins come from ONE fertilised egg that splits in two, so they look the same.",vi:"Sinh đôi cùng trứng đến từ MỘT trứng thụ tinh tách làm hai, nên giống hệt nhau."},
+ {en:"Different animals have very different gestation times: a mouse 20 days, an elephant 22 months.",vi:"Thời gian mang thai mỗi loài rất khác nhau: chuột 20 ngày, voi tới 22 tháng."}],
+ a:["Vẽ vòng đời của người và của một con vật rồi so sánh xem giống, khác chỗ nào.","Hỏi bố mẹ xem lúc mới sinh con nặng bao nhiêu và giờ nặng bao nhiêu.","Kể tên 3 thay đổi của cơ thể ở tuổi dậy thì bằng tiếng Anh."],
+ c:{q:"Identical twins are formed when:",o:["Two eggs are fertilised by two sperm","One fertilised egg splits into two","Two babies grow in different mothers","An egg is not fertilised"],a:1,
+  e:"Một trứng đã thụ tinh tách đôi nên hai bé có cùng bộ gen, vì thế giống hệt nhau."}},
+s14:{d:[{en:"Bacteria are living cells and can be killed by antibiotics; viruses are not really alive and cannot.",vi:"Vi khuẩn là tế bào sống nên kháng sinh diệt được; virus không thực sự sống nên kháng sinh vô tác dụng."},
+ {en:"Using antibiotics when you do not need them helps bacteria become resistant &mdash; then the medicine stops working for everyone.",vi:"Uống kháng sinh bừa bãi làm vi khuẩn kháng thuốc, khiến thuốc mất tác dụng với cả cộng đồng."},
+ {en:"When enough people are vaccinated, a disease cannot spread easily. This protects those who cannot be vaccinated.",vi:"Khi đủ nhiều người tiêm vắc-xin, bệnh khó lây lan, nhờ đó bảo vệ cả những người không tiêm được."}],
+ a:["Đếm hôm nay con rửa tay mấy lần và ghi lại.","Tìm trong nhà 3 việc giúp chặn bệnh lây và nói bằng tiếng Anh.","Hỏi bố mẹ xem con đã tiêm những loại vắc-xin nào."],
+ c:{q:"Why is it a problem to take antibiotics for a cold?",o:["They taste bad","They do not work on viruses and help bacteria become resistant","They are expensive only","They cure colds too quickly"],a:1,
+  e:"Vừa không chữa được cảm lạnh do virus, vừa tạo điều kiện cho vi khuẩn kháng thuốc."}},
+s15:{d:[{en:"Density = mass &divide; volume. Two objects the same size can have very different masses.",vi:"Khối lượng riêng = khối lượng chia thể tích. Hai vật cùng cỡ có thể nặng nhẹ rất khác nhau."},
+ {en:"Stainless steel does not rust because a thin invisible layer protects the iron inside.",vi:"Thép không gỉ không bị gỉ nhờ một lớp màng mỏng vô hình bảo vệ sắt bên trong."},
+ {en:"Some plastics are now made to break down in sunlight, so their properties change on purpose.",vi:"Một số loại nhựa nay được chế tạo để tự phân rã dưới nắng — tính chất được thiết kế có chủ đích."}],
+ a:["Chọn 5 đồ trong nhà và ghi 2 tính chất của mỗi đồ bằng tiếng Anh.","Thử dùng nam châm kiểm tra 6 vật kim loại xem cái nào bị hút.","Cho thìa đường và thìa cát vào hai cốc nước, quan sát cái nào tan."],
+ c:{q:"Two blocks are the same size. Block A has mass 200 g, block B has mass 900 g. Which floats in water?",o:["Block A, it is less dense","Block B, it is heavier","Both float","Neither floats"],a:0,
+  e:"Cùng thể tích thì vật nhẹ hơn có khối lượng riêng nhỏ hơn, nên khối A dễ nổi hơn."}},
+s16:{d:[{en:"A vacuum flask keeps drinks hot by having a gap with almost no air, so heat cannot travel across it.",vi:"Bình giữ nhiệt có khoảng chân không gần như không có không khí, nên nhiệt không truyền qua được."},
+ {en:"Metals conduct heat well because their particles are packed closely and pass vibrations along quickly.",vi:"Kim loại dẫn nhiệt tốt vì các hạt xếp sát nhau, truyền dao động đi rất nhanh."},
+ {en:"Birds fluff up their feathers in winter to trap more air, exactly like wearing a thicker jumper.",vi:"Mùa đông chim xù lông để giữ nhiều không khí hơn — đúng nguyên lý mặc áo len dày."}],
+ a:["Sờ thử cán thìa kim loại và cán thìa gỗ trong bát canh nóng, so sánh.","Tìm 5 đồ trong nhà có phần cách nhiệt và chỉ ra phần đó.","Bọc hai cốc nước nóng bằng hai vật liệu khác nhau, 15 phút sau sờ xem cốc nào còn ấm hơn."],
+ c:{q:"Why does a metal chair feel colder than a wooden chair in the same room?",o:["The metal really is colder","Metal conducts heat away from your skin faster","Wood makes heat","Metal is heavier"],a:1,
+  e:"Hai ghế cùng nhiệt độ phòng, nhưng kim loại rút nhiệt từ da ta nhanh hơn nên cảm giác lạnh hơn."}},
+s17:{d:[{en:"Baking a cake uses a reaction: bicarbonate of soda gives off carbon dioxide, and the bubbles make the cake rise.",vi:"Nướng bánh là một phản ứng: baking soda sinh khí carbon dioxide, bọt khí làm bánh nở."},
+ {en:"A fire needs three things: fuel, oxygen and heat. Remove any one and the fire goes out.",vi:"Lửa cần đủ ba thứ: nhiên liệu, oxygen và nhiệt. Bỏ đi một thứ là lửa tắt."},
+ {en:"Photosynthesis in plants is also a chemical reaction: carbon dioxide and water become sugar and oxygen.",vi:"Quang hợp ở cây cũng là phản ứng hoá học: carbon dioxide và nước thành đường và oxygen."}],
+ a:["Cho một thìa baking soda vào cốc rồi rót giấm, quan sát và giải thích bọt khí.","Tìm 3 dấu hiệu phản ứng hoá học trong bếp nhà mình.","Để một chiếc đinh sắt vào cốc nước, sau vài ngày quan sát."],
+ c:{q:"A candle is covered with a glass jar and goes out. Which part of the fire triangle was removed?",o:["Fuel","Oxygen","Heat","Light"],a:1,
+  e:"Úp cốc lại thì oxygen trong cốc hết dần, thiếu một cạnh của tam giác lửa nên nến tắt."}},
+s25:{d:[{en:"Only about one tenth of the energy at one level passes to the next level.",vi:"Chỉ khoảng một phần mười năng lượng của bậc này lên được bậc trên."},
+ {en:"A pyramid of numbers shows there are many producers but very few top predators.",vi:"Tháp số lượng cho thấy rất nhiều cây, ít con mồi và cực ít thú săn đầu bảng."},
+ {en:"Removing a top predator can cause its prey to increase so much that the plants are eaten bare.",vi:"Mất thú săn đầu bảng khiến con mồi tăng vọt, ăn trụi cả thảm thực vật."}],
+ a:["Vẽ lưới thức ăn từ các con vật quanh nhà hoặc trong công viên.","Chọn một món ăn tối và truy ngược về cây nào, Mặt Trời nào tạo ra nó.","Đặt câu hỏi: nếu mất loài này thì loài nào tăng, loài nào giảm."],
+ c:{q:"A food chain has 1000 units of energy in the grass. Roughly how much reaches the second consumer?",o:["1000","100","10","0"],a:2,
+  e:"Mỗi bậc chỉ truyền khoảng 10%: 1000 &rarr; 100 &rarr; 10 đơn vị."}}
+});
+</script>
+
+<script>
+Object.assign(EXT, {
+s18:{d:[{en:"Obsidian cools so fast that no crystals form at all &mdash; it looks like black glass.",vi:"Đá vỏ chai nguội nhanh tới mức không kịp tạo tinh thể, nhìn như thuỷ tinh đen."},
+ {en:"Pumice floats on water because gas bubbles were trapped as the lava cooled.",vi:"Đá bọt nổi trên nước vì bọt khí bị giữ lại khi dung nham nguội."},
+ {en:"Granite is used for kitchen worktops and steps because its interlocking crystals make it very hard.",vi:"Granit dùng làm mặt bếp và bậc thang vì các tinh thể đan xen làm nó rất cứng."}],
+ a:["Tìm quanh nhà hoặc trên đường 3 loại đá và thử đoán loại nào.","Xem ảnh núi lửa và chỉ ra đâu là magma, đâu là lava.","Dùng kính lúp soi một viên đá xem có tinh thể to hay nhỏ."],
+ c:{q:"Obsidian has no crystals at all. What does that tell you about how it cooled?",o:["Very slowly, deep underground","Extremely fast, on the surface","It never cooled","It formed from sediment"],a:1,
+  e:"Không có tinh thể nghĩa là nguội cực nhanh, các hạt không kịp sắp xếp."}},
+s19:{d:[{en:"Most fossils form when an animal is buried quickly in sediment before it can rot away.",vi:"Phần lớn hoá thạch hình thành khi con vật bị vùi nhanh trong trầm tích trước khi kịp phân huỷ."},
+ {en:"A trace fossil is not the body itself but a mark left behind, such as a footprint or a burrow.",vi:"Hoá thạch vết tích không phải cơ thể mà là dấu để lại, ví dụ dấu chân hay hang."},
+ {en:"Chalk is made almost entirely from the shells of tiny sea creatures.",vi:"Đá phấn gần như hoàn toàn tạo từ vỏ của các sinh vật biển li ti."}],
+ a:["Ấn một chiếc lá hoặc vỏ sò vào đất nặn để tạo hoá thạch giả.","Đổ ba lớp cát, sỏi, đất vào cốc và quan sát lớp nào lắng trước.","Tìm hình một hoá thạch trên mạng và đoán con vật đó sống ở đâu."],
+ c:{q:"A dinosaur footprint preserved in rock is an example of:",o:["An igneous rock","A trace fossil","A crystal","A metamorphic rock"],a:1,
+  e:"Dấu chân là dấu để lại chứ không phải cơ thể, nên gọi là hoá thạch vết tích."}},
+s20:{d:[{en:"Slate splits into thin flat sheets, which is why it has been used for roof tiles for centuries.",vi:"Đá phiến tách thành tấm mỏng phẳng, vì thế được dùng lợp mái hàng trăm năm nay."},
+ {en:"Metamorphic rock never melts completely &mdash; if it did, it would become magma and then igneous rock.",vi:"Đá biến chất không nóng chảy hẳn; nếu chảy hết thì thành magma rồi thành đá mắc-ma."},
+ {en:"The whole rock cycle can take hundreds of millions of years for one full turn.",vi:"Một vòng tuần hoàn đá đầy đủ có thể mất hàng trăm triệu năm."}],
+ a:["Vẽ vòng tuần hoàn đá thành sơ đồ tròn có mũi tên và giải thích cho bố mẹ.","Quan sát một bức tường hoặc bậc thang đá, đoán xem là loại đá gì.","Tìm ví dụ phong hoá quanh nhà: vết nứt, rêu mọc, sơn bong."],
+ c:{q:"Rock is heated so much that it melts completely. What forms when it cools?",o:["Metamorphic rock","Igneous rock","Sedimentary rock","Soil"],a:1,
+  e:"Chảy hẳn thành magma, nguội lại cho đá mắc-ma chứ không phải đá biến chất."}},
+s21:{d:[{en:"It can take more than 500 years for nature to make just 2 cm of new topsoil.",vi:"Tự nhiên cần hơn 500 năm để tạo ra chỉ 2 cm lớp đất mặt."},
+ {en:"Soil is alive: one handful can contain more microorganisms than there are people on Earth.",vi:"Đất là vật sống: một nắm đất có thể chứa nhiều vi sinh vật hơn cả dân số Trái Đất."},
+ {en:"Farmers add compost to sandy soil to help it hold water, and dig sand into clay soil to improve drainage.",vi:"Nông dân trộn phân hữu cơ vào đất cát để giữ nước, và trộn cát vào đất sét để thoát nước tốt hơn."}],
+ a:["Lấy ba loại đất, cho vào ba phễu lót giấy, đổ cùng lượng nước và đếm giây xem loại nào thoát nhanh nhất.","Cho một nắm đất vào cốc nước, khuấy rồi để lắng và quan sát các lớp.","Tìm giun trong vườn hoặc chậu cây và quan sát đường hang."],
+ c:{q:"A gardener has heavy clay soil that stays wet. What should they add?",o:["More clay","Sand and compost","More water","Plastic"],a:1,
+  e:"Cát tạo khe hở cho nước thoát, phân hữu cơ tạo mùn — cả hai làm đất sét tơi và dễ trồng hơn."}},
+s24:{d:[{en:"Forces always come in pairs: when you push a wall, the wall pushes back on you with the same force.",vi:"Lực luôn xuất hiện theo cặp: ta đẩy tường thì tường đẩy lại ta với lực bằng đúng như vậy."},
+ {en:"Friction is not always bad. Without it your shoes would slip and a car could never brake.",vi:"Ma sát không phải lúc nào cũng xấu: không có nó thì giày trượt và ô tô không phanh được."},
+ {en:"An object with no force acting on it keeps moving forever &mdash; that is why things drift in space.",vi:"Vật không chịu lực nào sẽ chuyển động mãi, vì thế vật thể trôi hoài trong vũ trụ."}],
+ a:["Đẩy một quyển sách trên bàn, trên khăn và trên gạch, so sánh độ khó.","Vẽ mũi tên lực cho một quả bóng đang rơi và một quả bóng đang nằm yên.","Tìm 3 chỗ trong nhà người ta cố tình tăng ma sát và 3 chỗ cố tình giảm."],
+ c:{q:"A spacecraft switches off its engine far from any planet. What happens?",o:["It stops at once","It keeps moving at the same speed","It falls down","It speeds up"],a:1,
+  e:"Không có ma sát hay lực cản nào, các lực cân bằng ở mức bằng không, nên tàu giữ nguyên tốc độ."}},
+s22:{d:[{en:"An object pushes water out of the way. The weight of the water it pushes aside equals the upthrust.",vi:"Vật đẩy nước ra chỗ khác; trọng lượng phần nước bị đẩy ra chính bằng lực đẩy lên."},
+ {en:"Ships float lower in fresh water than in sea water, because salty water is denser.",vi:"Tàu chìm sâu hơn trong nước ngọt so với nước biển, vì nước mặn có khối lượng riêng lớn hơn."},
+ {en:"A submarine sinks by letting water into tanks and rises by pushing the water back out with air.",vi:"Tàu ngầm lặn bằng cách cho nước vào khoang và nổi lên bằng cách bơm khí đẩy nước ra."}],
+ a:["Nặn đất sét thành cục rồi thành hình bát, thả vào chậu nước và so sánh.","Thả 5 đồ vật vào chậu nước, đoán trước cái nào nổi rồi kiểm tra.","Thả một quả trứng vào nước thường rồi vào nước pha nhiều muối."],
+ c:{q:"An egg sinks in tap water but floats in very salty water. Why?",o:["Salt makes the egg lighter","Salty water is denser, so upthrust is greater","Salt dissolves the shell","The egg absorbs salt"],a:1,
+  e:"Nước muối đặc hơn nên lực đẩy lên lớn hơn, đủ cân bằng trọng lượng quả trứng."}},
+s23:{d:[{en:"Light travels slower in glass than in water, and slower in water than in air &mdash; that is why it bends by different amounts.",vi:"Ánh sáng đi trong thuỷ tinh chậm hơn trong nước, trong nước chậm hơn trong không khí, nên độ bẻ cong khác nhau."},
+ {en:"Each colour bends by a slightly different amount, which is why a prism separates them.",vi:"Mỗi màu bị bẻ cong một góc hơi khác nhau, nhờ vậy lăng kính tách được chúng ra."},
+ {en:"Glasses work by bending light so it focuses exactly on the back of the eye.",vi:"Kính mắt hoạt động bằng cách bẻ tia sáng để nó hội tụ đúng vào đáy mắt."}],
+ a:["Cắm ống hút vào cốc nước, nhìn ngang rồi nhìn từ trên xuống và tả sự khác nhau.","Đặt đồng xu dưới đáy bát, lùi lại tới khi khuất, rồi nhờ người rót nước vào và quan sát.","Cầm kính lúp soi chữ trong sách và giải thích vì sao chữ to lên."],
+ c:{q:"A coin at the bottom of an empty bowl is hidden from view. Water is poured in and the coin appears. Why?",o:["The coin moves","Light from the coin refracts at the water surface and reaches your eye","Water reflects the coin","The bowl changes shape"],a:1,
+  e:"Tia sáng từ đồng xu bị bẻ cong khi ra khỏi mặt nước nên đi tới được mắt ta, dù trước đó bị thành bát chắn."}}
+});
+</script>
+
+<script>
+/* Xếp lại đúng mục lục Cambridge Primary Science 6, 2nd edition (theo ảnh chụp sách của cháu) */
+(function(){
+  const rename = {
+    s2:  ["Reversible changes","Biến đổi thuận nghịch"],
+    s5:  ["Mass and weight","Khối lượng và trọng lượng"],
+    s6:  ["Reflection","Sự phản xạ ánh sáng"],
+    s7:  ["Different circuits and circuit diagrams","Các loại mạch điện và sơ đồ mạch"],
+    s8:  ["The solar system","Hệ Mặt Trời"],
+    s10: ["The respiratory system","Hệ hô hấp"],
+    s11: ["The digestive system and the kidneys","Hệ tiêu hoá và thận"],
+    s12: ["Harm to food chains and food webs","Tác hại tới chuỗi và lưới thức ăn"],
+    s1:  ["The circulatory system","Hệ tuần hoàn"]
+  };
+  Object.keys(rename).forEach(id=>{ const u=findUnit(id); if(u){ u.t=rename[id][0]; u.vi=rename[id][1]; } });
+
+  PROG.science = { short:"Unit",
+    book:"Cambridge Primary Science 6 &middot; Learner's Book và Workbook (CUP, 2nd edition) &mdash; bản song ngữ Vinschool, 6 unit",
+    units:[
+     {no:1, t:"The human body", vi:"Cơ thể người", lessons:["s1","s10","s13","s14"],
+      sub:"1.1 The circulatory system (tr.2) &middot; 1.2 The respiratory system (tr.12) &middot; 1.3 The reproductive system (tr.19) &middot; 1.4 Diseases (tr.24)"},
+     {no:2, t:"Materials: properties and changes", vi:"Vật chất: tính chất và biến đổi", lessons:["s15","s16","s2","s17"],
+      sub:"2.1 Properties of substances (tr.35) &middot; 2.2 Thermal and electrical conductors (tr.42) &middot; 2.3 Reversible changes (tr.49) &middot; 2.4 Chemical reactions (tr.56)"},
+     {no:3, t:"Rocks, the rock cycle and soil", vi:"Đá, vòng tuần hoàn đá và đất", lessons:["s18","s19","s20","s21"],
+      sub:"3.1 Igneous rocks (tr.63) &middot; 3.2 Sedimentary rocks and fossils (tr.70) &middot; 3.3 Metamorphic rocks and the rock cycle (tr.78) &middot; 3.4 Soil (tr.87)"},
+     {no:4, t:"Food chains and food webs", vi:"Chuỗi thức ăn và lưới thức ăn", lessons:["s25","s12"],
+      sub:"4.1 Food chains, food webs and energy transfers (tr.97) &middot; 4.2 Harm to food chains and food webs (tr.104)"},
+     {no:5, t:"Forces and electricity", vi:"Lực và điện", lessons:["s5","s24","s22","s7"],
+      sub:"5.1 Mass and weight (tr.112) &middot; 5.2 The effects of forces (tr.119) &middot; 5.3 Floating and sinking (tr.124) &middot; 5.4 Different circuits and circuit diagrams (tr.130)"},
+     {no:6, t:"Light and the solar system", vi:"Ánh sáng và Hệ Mặt Trời", lessons:["s6","s23","s8"],
+      sub:"6.1 Reflection (tr.142) &middot; 6.2 Refraction (tr.149) &middot; 6.3 The solar system (tr.154)"},
+     {no:7, t:"Working like a scientist &amp; extra revision", vi:"Kỹ năng khoa học và ôn thêm", lessons:["s9","s3","s4","s11"], extra:true,
+      sub:"Working like a scientist (tr.ix) &middot; New science skills (tr.167) &middot; thêm phần phân loại sinh vật, trạng thái vật chất và tiêu hoá học ở Stage 4-5 nhưng đề Checkpoint vẫn hỏi"}]};
+
+  SRC_NOTE.ok = [
+   "Science đã đối chiếu <b>trực tiếp với ảnh chụp mục lục sách của cháu</b>: <i>Cambridge Primary Science 6, 2nd edition</i>, gồm <b>6 unit</b> và 21 bài nhỏ.",
+   "Mỗi bài trong app ghi kèm <b>số trang trong sách</b> để mở ra đối chiếu được ngay.",
+   "Lớp 5 hệ chuẩn Vinschool học chương trình <b>Cambridge Primary Stage 6</b> &mdash; đúng với &ldquo;workbook 6&rdquo; của cháu.",
+   "Sách bài tập Toán chia <b>Quyển 1 (học kì 1)</b> và <b>Quyển 2 (học kì 2)</b>, nên phần Toán trong app cũng chia HK1 / HK2."];
+  SRC_NOTE.ask = [
+   "<b>Toán</b> và <b>ESL</b> thì app vẫn đang xếp theo khung Cambridge Stage 6, <b>chưa đối chiếu được với mục lục sách in</b>.",
+   "Bố mẹ chụp giúp trang <i>Contents</i> của hai cuốn còn lại (Toán và tiếng Anh) là tôi xếp lại đúng như đã làm với Science."];
+})();
+</script>
+
+<script>
+Object.assign(IMG, {
+s13:[
+ {en:"The human life cycle", vi:"Năm giai đoạn của một đời người. Dậy thì là bước chuyển từ trẻ em sang người lớn, thường bắt đầu khoảng 10 đến 16 tuổi",
+  svg:`<svg viewBox="0 0 320 150" ${SV}>
+   <g stroke="var(--ac)" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M52 96 h30"/><path d="M76 91 l7 5 -7 5"/><path d="M112 96 h30"/><path d="M136 91 l7 5 -7 5"/>
+    <path d="M176 96 h30"/><path d="M200 91 l7 5 -7 5"/><path d="M240 96 h30"/><path d="M264 91 l7 5 -7 5"/></g>
+   <g fill="#F2C9A8" stroke="#C79468" stroke-width="2">
+    <circle cx="30" cy="84" r="9"/><circle cx="96" cy="76" r="9"/><circle cx="160" cy="66" r="10"/><circle cx="224" cy="60" r="10"/><circle cx="290" cy="66" r="10"/></g>
+   <g stroke="#5C7FC9" stroke-width="7" stroke-linecap="round">
+    <path d="M30 94 v10"/><path d="M96 86 v18"/><path d="M160 77 v27"/><path d="M224 71 v33"/><path d="M290 77 v27"/></g>
+   <g stroke="#5C7FC9" stroke-width="4" stroke-linecap="round">
+    <path d="M96 104 l-5 8 M96 104 l5 8"/><path d="M160 104 l-6 10 M160 104 l6 10"/>
+    <path d="M224 104 l-7 12 M224 104 l7 12"/><path d="M290 104 l-6 10 M290 104 l6 10"/></g>
+   <path d="M283 60 q7 -12 14 0" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+   <g font-family="Lexend,sans-serif" font-size="9" text-anchor="middle" fill="var(--ink)">
+    <text x="30" y="130">baby</text><text x="96" y="130">child</text><text x="160" y="130">adolescent</text>
+    <text x="224" y="130">adult</text><text x="290" y="130">elderly</text></g>
+   <g font-family="Lexend,sans-serif" font-size="8" text-anchor="middle" fill="var(--ink-faint)">
+    <text x="30" y="142">sơ sinh</text><text x="96" y="142">trẻ em</text><text x="160" y="142">thiếu niên</text>
+    <text x="224" y="142">trưởng thành</text><text x="290" y="142">người già</text></g>
+   <text x="128" y="24" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ac)">PUBERTY &middot; dậy thì</text>
+   <path d="M128 30 v14" stroke="var(--ac)" stroke-width="2" stroke-dasharray="3 3"/></svg>`}],
+s14:[
+ {en:"How a cold spreads, and how to stop it", vi:"Ho hay hắt hơi bắn ra hàng nghìn giọt nhỏ chứa virus. Che miệng bằng khuỷu tay và rửa tay bằng xà phòng chặn được phần lớn",
+  svg:`<svg viewBox="0 0 320 160" ${SV}>
+   <g><circle cx="46" cy="52" r="16" fill="#F2C9A8" stroke="#C79468" stroke-width="2"/>
+    <path d="M46 68 v30" stroke="#5C7FC9" stroke-width="9" stroke-linecap="round"/>
+    <path d="M58 50 q10 -4 16 2" fill="none" stroke="#C79468" stroke-width="3"/>
+    <g fill="#8FBF6A" opacity=".85"><circle cx="84" cy="42" r="3"/><circle cx="100" cy="36" r="2.5"/><circle cx="96" cy="52" r="3.5"/>
+     <circle cx="116" cy="46" r="2.5"/><circle cx="112" cy="60" r="3"/><circle cx="132" cy="40" r="2"/><circle cx="128" cy="56" r="2.5"/></g>
+    <text x="46" y="122" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">hắt hơi</text>
+    <text x="108" y="80" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="#4F8C3E">droplets &middot; giọt bắn</text></g>
+   <line x1="160" y1="16" x2="160" y2="140" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="5 5"/>
+   <g><path d="M196 96 q22 -20 44 -2 q10 8 6 20 q-30 10 -52 2 q-6 -12 2 -20 z" fill="#F2C9A8" stroke="#C79468" stroke-width="2"/>
+    <path d="M198 78 q20 -14 42 0" fill="none" stroke="#9FD0EC" stroke-width="6" stroke-linecap="round"/>
+    <g fill="#fff" stroke="#9FB8CC" stroke-width="1.2"><circle cx="212" cy="70" r="5"/><circle cx="228" cy="66" r="4"/><circle cx="244" cy="72" r="4.5"/></g>
+    <rect x="266" y="84" width="26" height="34" rx="6" fill="#7FBF8A" stroke="#4F8C5E" stroke-width="2"/>
+    <text x="279" y="106" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="#fff">SOAP</text>
+    <text x="240" y="140" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">rửa tay bằng xà phòng</text></g>
+   <text x="160" y="156" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Virus gây cảm lạnh &mdash; kháng sinh không có tác dụng</text></svg>`}],
+s15:[
+ {en:"Choosing a material by its properties", vi:"Mỗi vật liệu được chọn vì một tính chất riêng: thuỷ tinh trong suốt, cao su dẻo và không thấm, sắt có từ tính, bông hút nước",
+  svg:`<svg viewBox="0 0 320 160" ${SV}>
+   <g><rect x="12" y="20" width="68" height="60" rx="8" fill="#DDEEF6" stroke="#8FB6CE" stroke-width="2"/>
+    <rect x="24" y="32" width="44" height="36" rx="3" fill="#F4FBFF" stroke="#8FB6CE" stroke-width="1.5"/>
+    <path d="M28 64 L64 36" stroke="#fff" stroke-width="5" opacity=".9"/>
+    <text x="46" y="98" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">glass</text>
+    <text x="46" y="110" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">trong suốt</text></g>
+   <g><rect x="92" y="20" width="68" height="60" rx="8" fill="#FBE8E0" stroke="#C97A5A" stroke-width="2"/>
+    <path d="M104 66 q22 -40 44 0" fill="none" stroke="#C0554A" stroke-width="8" stroke-linecap="round"/>
+    <text x="126" y="98" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">rubber</text>
+    <text x="126" y="110" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">dẻo, không thấm</text></g>
+   <g><rect x="172" y="20" width="68" height="60" rx="8" fill="#E8EDF3" stroke="#8C97A8" stroke-width="2"/>
+    <path d="M190 62 v-16 a16 16 0 0 1 32 0 v16 h-10 v-16 a6 6 0 0 0 -12 0 v16 z" fill="#C0444C" stroke="#8C2C34" stroke-width="1.5"/>
+    <rect x="190" y="62" width="10" height="8" fill="#8C97A8"/><rect x="212" y="62" width="10" height="8" fill="#8C97A8"/>
+    <text x="206" y="98" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">iron</text>
+    <text x="206" y="110" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">có từ tính</text></g>
+   <g><rect x="252" y="20" width="56" height="60" rx="8" fill="#FBF6E8" stroke="#C9B87A" stroke-width="2"/>
+    <path d="M264 40 h32 v28 a6 6 0 0 1 -6 6 h-20 a6 6 0 0 1 -6 -6 z" fill="#F4EBD2" stroke="#C9B87A" stroke-width="1.5"/>
+    <g fill="#7FB4D8"><circle cx="274" cy="52" r="3"/><circle cx="286" cy="58" r="3"/><circle cx="280" cy="66" r="3"/></g>
+    <text x="280" y="98" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">cotton</text>
+    <text x="280" y="110" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">hút nước</text></g>
+   <text x="160" y="136" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">Chọn vật liệu là chọn TÍNH CHẤT phù hợp với công việc</text>
+   <text x="160" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">hardness &middot; flexibility &middot; transparency &middot; solubility &middot; magnetism &middot; density</text></svg>`}],
+s16:[
+ {en:"One saucepan, two opposite jobs", vi:"Đáy nồi bằng kim loại để dẫn nhiệt nhanh vào thức ăn; tay cầm bằng nhựa để cách nhiệt, giữ cho tay không bị bỏng",
+  svg:`<svg viewBox="0 0 320 170" ${SV}>
+   <path d="M70 60 h132 v46 a20 20 0 0 1 -20 20 h-92 a20 20 0 0 1 -20 -20 z" fill="#C8CDD6" stroke="#7C8492" stroke-width="2.5"/>
+   <path d="M74 108 h124 v-4 h-124 z" fill="#9AA2AE"/>
+   <path d="M78 78 h116 v22 h-116 z" fill="#E8B04B" opacity=".75"/>
+   <path d="M202 74 h74 a10 10 0 0 1 0 20 h-74 z" fill="#3C4652" stroke="#232A33" stroke-width="2.5"/>
+   <g stroke="#D9484F" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <path d="M100 146 v-14"/><path d="M94 138 l6 -8 6 8"/><path d="M136 146 v-14"/><path d="M130 138 l6 -8 6 8"/>
+    <path d="M172 146 v-14"/><path d="M166 138 l6 -8 6 8"/></g>
+   <g stroke="#2E8B57" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <path d="M238 68 v-12"/><path d="M238 56 l-6 6 M238 56 l6 6"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9.5">
+    <text x="136" y="164" text-anchor="middle" fill="#D9484F">nhiệt truyền lên nhanh</text>
+    <text x="240" y="44" text-anchor="middle" fill="#2E8B57">nhiệt bị chặn lại</text>
+    <text x="136" y="94" text-anchor="middle" fill="var(--ink)">METAL BASE</text>
+    <text x="136" y="20" text-anchor="middle" fill="var(--ink-faint)" font-size="8.5">dẫn nhiệt &middot; thermal conductor</text>
+    <text x="240" y="112" text-anchor="middle" fill="var(--ink)">PLASTIC HANDLE</text>
+    <text x="240" y="124" text-anchor="middle" fill="var(--ink-faint)" font-size="8.5">cách nhiệt &middot; insulator</text></g></svg>`}],
+s17:[
+ {en:"The fire triangle", vi:"Cháy cần đủ ba thứ: nhiên liệu, oxygen và nhiệt. Bỏ đi bất kỳ cạnh nào là lửa tắt — úp cốc lên nến chính là cắt oxygen",
+  svg:`<svg viewBox="0 0 320 184" ${SV}>
+   <path d="M160 22 L268 148 L52 148 Z" fill="none" stroke="#E8683C" stroke-width="9" stroke-linejoin="round"/>
+   <path d="M160 96 c-16 -14 -5 -34 0 -42 c7 12 19 26 0 42 z" fill="#F2A03C" stroke="#D9761F" stroke-width="2"/>
+   <path d="M160 88 c-7 -7 -2 -16 0 -20 c3 6 9 12 0 20 z" fill="#FBE08A"/>
+   <g font-family="Lexend,sans-serif" font-size="10.5" fill="var(--ink)">
+    <text x="160" y="14" text-anchor="middle">HEAT</text>
+    <text x="42" y="164" text-anchor="start">FUEL</text>
+    <text x="278" y="164" text-anchor="end">OXYGEN</text></g>
+   <g font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">
+    <text x="196" y="14" text-anchor="start">nhiệt</text>
+    <text x="42" y="175" text-anchor="start">nhiên liệu</text>
+    <text x="278" y="175" text-anchor="end">khí oxy</text></g>
+   <text x="160" y="128" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-soft)">bỏ một cạnh &rarr; lửa tắt</text></svg>`}],
+s25:[
+ {en:"Energy gets smaller at every step", vi:"Mỗi bậc chỉ truyền lên khoảng một phần mười năng lượng, phần còn lại mất dưới dạng nhiệt. Vì thế chuỗi thức ăn hiếm khi dài quá năm mắt xích",
+  svg:`<svg viewBox="0 0 320 175" ${SV}>
+   <path d="M20 148 h280 l-40 -34 h-200 z" fill="#7FB45A" stroke="#4F8C3E" stroke-width="2"/>
+   <path d="M60 114 h200 l-40 -34 h-120 z" fill="#A8C46A" stroke="#6E9440" stroke-width="2"/>
+   <path d="M100 80 h120 l-32 -30 h-56 z" fill="#D9A86C" stroke="#A87C3C" stroke-width="2"/>
+   <path d="M132 50 h56 l-16 -26 h-24 z" fill="#C0554A" stroke="#8C2C34" stroke-width="2"/>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="#fff" text-anchor="middle">
+    <text x="160" y="140">grass &middot; cỏ</text><text x="160" y="106">grasshopper</text>
+    <text x="160" y="72">frog &middot; ếch</text><text x="160" y="43">snake</text></g>
+   <g font-family="JetBrains Mono,monospace" font-size="10" fill="var(--ink)" text-anchor="end">
+    <text x="312" y="142">1000</text><text x="312" y="108">100</text><text x="312" y="74">10</text><text x="312" y="44">1</text></g>
+   <g stroke="#D9484F" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M14 138 l-4 -14"/><path d="M8 126 l2 -8 6 4"/><path d="M14 104 l-4 -14"/><path d="M8 92 l2 -8 6 4"/></g>
+   <text x="10" y="168" font-family="Lexend,sans-serif" font-size="8.5" fill="#D9484F">năng lượng mất dưới dạng nhiệt</text>
+   <text x="312" y="168" text-anchor="end" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">đơn vị năng lượng</text></svg>`}],
+s18:[
+ {en:"Where igneous rock forms", vi:"Magma nguội chậm sâu dưới đất cho tinh thể to như đá granit; dung nham nguội nhanh trên mặt đất cho tinh thể nhỏ như đá bazan",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <path d="M0 92 L110 24 L220 92 Z" fill="#8C7A6A" stroke="#5E4E42" stroke-width="2"/>
+   <path d="M0 92 h320 v88 h-320 z" fill="#B09A84"/>
+   <path d="M110 24 l-16 26 h32 z" fill="#C0444C"/>
+   <path d="M110 50 q-8 40 -30 60 q-30 24 -60 26" fill="none" stroke="#E8683C" stroke-width="9" stroke-linecap="round"/>
+   <ellipse cx="196" cy="146" rx="52" ry="26" fill="#C0444C" stroke="#8C2C34" stroke-width="2"/>
+   <path d="M196 120 q-4 -30 -60 -46" fill="none" stroke="#C0444C" stroke-width="10" stroke-linecap="round"/>
+   <g fill="#F2A03C"><path d="M104 22 l-6 -12 8 4 4 -10 4 12 8 -4 -6 12 z"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">
+    <text x="14" y="140">LAVA</text><text x="14" y="152" font-size="8.5" fill="var(--ink-faint)">nguội nhanh</text>
+    <text x="14" y="164" font-size="8.5" fill="var(--ink-faint)">tinh thể nhỏ &rarr; bazan</text>
+    <text x="312" y="140" text-anchor="end">MAGMA</text><text x="312" y="152" font-size="8.5" fill="var(--ink-faint)" text-anchor="end">nguội chậm</text>
+    <text x="312" y="164" font-size="8.5" fill="var(--ink-faint)" text-anchor="end">tinh thể to &rarr; granit</text>
+    <text x="110" y="16" text-anchor="middle" font-size="9" fill="var(--ink-soft)">núi lửa</text></g></svg>`}]
+});
+</script>
+
+<script>
+Object.assign(IMG, {
+s19:[
+ {en:"Layers, and a fossil inside them", vi:"Trầm tích lắng thành từng lớp, lớp dưới cùng lắng trước nên cổ nhất. Xác sinh vật bị vùi trong đó thành hoá thạch",
+  svg:`<svg viewBox="0 0 320 175" ${SV}>
+   <g stroke="#9A8468" stroke-width="1.5">
+    <path d="M20 40 h280 v22 h-280 z" fill="#E8DCC4"/>
+    <path d="M20 62 h280 v24 h-280 z" fill="#D6C29A"/>
+    <path d="M20 86 h280 v26 h-280 z" fill="#C4A87C"/>
+    <path d="M20 112 h280 v30 h-280 z" fill="#A88C60"/></g>
+   <g fill="#7C6242"><circle cx="70" cy="74" r="2"/><circle cx="150" cy="72" r="2.5"/><circle cx="230" cy="76" r="2"/>
+    <circle cx="100" cy="100" r="2.5"/><circle cx="200" cy="98" r="2"/></g>
+   <g transform="translate(150,124)"><path d="M0 0 q14 -12 26 0 q-6 12 -26 0 z" fill="#F4EEE0" stroke="#7C6242" stroke-width="1.5"/>
+    <path d="M4 -2 q10 -7 18 0 M7 2 q8 -5 14 0" fill="none" stroke="#7C6242" stroke-width="1"/></g>
+   <g font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">
+    <text x="308" y="55" text-anchor="end">mới nhất</text>
+    <text x="308" y="134" text-anchor="end">cổ nhất</text></g>
+   <path d="M300 62 v66" stroke="var(--ac)" stroke-width="2"/><path d="M295 120 l5 9 5 -9" fill="none" stroke="var(--ac)" stroke-width="2"/>
+   <text x="196" y="132" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink)">fossil &middot; hoá thạch</text>
+   <text x="160" y="30" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">SEDIMENTARY ROCK &middot; đá trầm tích</text>
+   <text x="160" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Chỉ đá trầm tích mới chứa hoá thạch</text></svg>`}],
+s20:[
+ {en:"The rock cycle", vi:"Ba loại đá biến đổi qua lại không ngừng: bào mòn thành trầm tích, nén thành đá trầm tích, nhiệt và áp suất thành đá biến chất, nóng chảy thành magma rồi nguội thành đá mắc-ma",
+  svg:`<svg viewBox="0 0 320 210" ${SV}>
+   <g stroke="var(--ac)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".85">
+    <path d="M108 52 q52 -22 104 0"/><path d="M204 44 l10 8 -11 6"/>
+    <path d="M244 84 q22 40 -12 68"/><path d="M228 146 l4 12 -13 -4"/>
+    <path d="M112 158 q40 16 84 4"/><path d="M120 152 l-12 6 11 7"/>
+    <path d="M68 132 q-16 -40 16 -70"/><path d="M80 72 l6 -12 6 12"/></g>
+   <g><ellipse cx="78" cy="52" rx="52" ry="26" fill="#C0554A" stroke="#8C2C34" stroke-width="2"/>
+    <text x="78" y="50" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#fff">IGNEOUS</text>
+    <text x="78" y="62" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="#fff">đá mắc-ma</text></g>
+   <g><ellipse cx="244" cy="52" rx="52" ry="26" fill="#C4A87C" stroke="#8C7048" stroke-width="2"/>
+    <text x="244" y="50" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#fff">SEDIMENTARY</text>
+    <text x="244" y="62" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="#fff">đá trầm tích</text></g>
+   <g><ellipse cx="244" cy="164" rx="52" ry="26" fill="#6E8CA8" stroke="#44607C" stroke-width="2"/>
+    <text x="244" y="162" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#fff">METAMORPHIC</text>
+    <text x="244" y="174" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="#fff">đá biến chất</text></g>
+   <g><ellipse cx="78" cy="164" rx="52" ry="26" fill="#E8683C" stroke="#B14434" stroke-width="2"/>
+    <text x="78" y="162" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="#fff">MAGMA</text>
+    <text x="78" y="174" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="#fff">đá nóng chảy</text></g>
+   <g font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-soft)" text-anchor="middle">
+    <text x="160" y="24">phong hoá, xói mòn, lắng đọng</text>
+    <text x="292" y="112" text-anchor="end">nhiệt và</text><text x="292" y="122" text-anchor="end">áp suất</text>
+    <text x="160" y="196">nóng chảy</text>
+    <text x="28" y="112">nguội</text><text x="28" y="122">và kết tinh</text></g></svg>`}],
+s21:[
+ {en:"Which soil lets water through fastest?", vi:"Cùng lượng đất, cùng lượng nước: đất cát hạt to nên nước chảy qua rất nhanh, đất sét hạt nhỏ nên nước gần như đọng lại, đất thịt ở giữa và trồng cây tốt nhất",
+  svg:`<svg viewBox="0 0 320 185" ${SV}>
+   <g><path d="M18 26 h76 l-28 40 v22 h-20 v-22 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M22 30 h68 l-24 34 h-20 z" fill="#E0C08C"/>
+    <g fill="#B8975E"><circle cx="38" cy="42" r="4"/><circle cx="52" cy="48" r="4"/><circle cx="66" cy="40" r="4"/><circle cx="56" cy="58" r="4"/></g>
+    <path d="M56 88 v22" stroke="#7FB4D8" stroke-width="5" stroke-linecap="round"/>
+    <path d="M34 112 h44 v26 a6 6 0 0 1 -6 6 h-32 a6 6 0 0 1 -6 -6 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M36 122 h40 v16 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="#7FB4D8"/>
+    <text x="56" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">SANDY</text>
+    <text x="56" y="177" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">đất cát &middot; nhanh nhất</text></g>
+   <g><path d="M122 26 h76 l-28 40 v22 h-20 v-22 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M126 30 h68 l-24 34 h-20 z" fill="#C9A87C"/>
+    <g fill="#9C7C50"><circle cx="140" cy="44" r="2.5"/><circle cx="152" cy="50" r="2.5"/><circle cx="166" cy="42" r="2.5"/><circle cx="158" cy="58" r="2.5"/><circle cx="146" cy="56" r="2"/></g>
+    <path d="M160 88 v18" stroke="#7FB4D8" stroke-width="4" stroke-linecap="round"/>
+    <path d="M138 112 h44 v26 a6 6 0 0 1 -6 6 h-32 a6 6 0 0 1 -6 -6 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M140 130 h40 v8 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="#7FB4D8"/>
+    <text x="160" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">LOAM</text>
+    <text x="160" y="177" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">đất thịt &middot; vừa phải</text></g>
+   <g><path d="M226 26 h76 l-28 40 v22 h-20 v-22 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M230 30 h68 l-24 34 h-20 z" fill="#A88C6E"/>
+    <g fill="#7C6242"><circle cx="244" cy="44" r="1.5"/><circle cx="252" cy="50" r="1.5"/><circle cx="262" cy="42" r="1.5"/><circle cx="270" cy="52" r="1.5"/><circle cx="256" cy="58" r="1.5"/><circle cx="266" cy="62" r="1.5"/></g>
+    <path d="M264 88 v10" stroke="#7FB4D8" stroke-width="3" stroke-linecap="round"/>
+    <path d="M242 112 h44 v26 a6 6 0 0 1 -6 6 h-32 a6 6 0 0 1 -6 -6 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+    <path d="M244 138 h40 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="#7FB4D8"/>
+    <text x="264" y="164" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">CLAY</text>
+    <text x="264" y="177" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8" fill="var(--ink-faint)">đất sét &middot; chậm nhất</text></g>
+   <text x="160" y="16" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Fair test: cùng lượng đất, cùng lượng nước, cùng thời gian</text></svg>`}],
+s24:[
+ {en:"Balanced and unbalanced forces", vi:"Hai mũi tên bằng nhau thì vật giữ nguyên trạng thái; mũi tên bên nào dài hơn thì vật chuyển động về phía đó",
+  svg:`<svg viewBox="0 0 320 175" ${SV}>
+   <g><rect x="14" y="16" width="132" height="128" rx="12" fill="var(--good-bg)" stroke="var(--good)" stroke-width="2"/>
+    <rect x="52" y="66" width="56" height="34" rx="5" fill="#C79468" stroke="#96683F" stroke-width="2"/>
+    <g stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round">
+     <path d="M52 83 h-30"/><path d="M28 77 l-8 6 8 6"/><path d="M108 83 h30"/><path d="M132 77 l8 6 -8 6"/></g>
+    <text x="80" y="126" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--good)">BALANCED</text>
+    <text x="80" y="140" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-soft)">đứng yên hoặc đi đều</text>
+    <text x="80" y="42" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">hai lực bằng nhau</text></g>
+   <g><rect x="174" y="16" width="132" height="128" rx="12" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="2"/>
+    <rect x="212" y="66" width="56" height="34" rx="5" fill="#C79468" stroke="#96683F" stroke-width="2"/>
+    <g stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round">
+     <path d="M212 83 h-16"/><path d="M202 77 l-8 6 8 6"/><path d="M268 83 h32"/><path d="M294 77 l8 6 -8 6"/></g>
+    <path d="M240 112 h26" stroke="var(--warn)" stroke-width="2.5" fill="none"/><path d="M260 106 l8 6 -8 6" fill="none" stroke="var(--warn)" stroke-width="2.5"/>
+    <text x="240" y="126" text-anchor="middle" font-family="Lexend,sans-serif" font-size="10" fill="var(--warn)">UNBALANCED</text>
+    <text x="240" y="140" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-soft)">chuyển động về bên phải</text>
+    <text x="240" y="42" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink-faint)">mũi tên dài hơn = lực lớn hơn</text></g>
+   <text x="160" y="168" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Vẽ lực bằng mũi tên: chiều là hướng, độ dài là độ lớn</text></svg>`}],
+s22:[
+ {en:"Why a steel ship floats but a steel ball sinks", vi:"Cùng là thép: cục đặc thì trọng lượng lớn hơn lực đẩy nên chìm; vỏ tàu rỗng chứa không khí nên lực đẩy đủ nâng, tàu nổi",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <rect x="0" y="60" width="320" height="120" fill="#9FD0EC"/>
+   <path d="M0 60 q20 -7 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#5FA8CE" stroke-width="2.5"/>
+   <g><circle cx="72" cy="126" r="22" fill="#8C97A8" stroke="#5A6570" stroke-width="2.5"/>
+    <g stroke="#D9484F" stroke-width="3" fill="none" stroke-linecap="round"><path d="M72 148 v22"/><path d="M65 163 l7 8 7 -8"/></g>
+    <g stroke="#2E8B57" stroke-width="2" fill="none" stroke-linecap="round"><path d="M72 104 v-10"/><path d="M67 99 l5 -6 5 6"/></g>
+    <text x="72" y="42" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9.5" fill="var(--ink)">cục thép đặc</text>
+    <text x="72" y="30" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#D9484F">SINKS &middot; chìm</text></g>
+   <line x1="160" y1="14" x2="160" y2="172" stroke="#5FA8CE" stroke-width="1.5" stroke-dasharray="5 5"/>
+   <g><path d="M198 52 h96 l-14 34 h-68 z" fill="#8C97A8" stroke="#5A6570" stroke-width="2.5"/>
+    <rect x="228" y="30" width="34" height="22" rx="3" fill="#C8CDD6" stroke="#5A6570" stroke-width="2"/>
+    <text x="246" y="72" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#fff">không khí</text>
+    <g stroke="#2E8B57" stroke-width="3" fill="none" stroke-linecap="round">
+     <path d="M216 118 v-22"/><path d="M210 102 l6 -8 6 8"/><path d="M276 118 v-22"/><path d="M270 102 l6 -8 6 8"/></g>
+    <g stroke="#D9484F" stroke-width="3" fill="none" stroke-linecap="round"><path d="M246 96 v22"/><path d="M240 112 l6 8 6 -8"/></g>
+    <text x="246" y="22" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="#2E8B57">FLOATS &middot; nổi</text>
+    <text x="246" y="140" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink)">lực đẩy = trọng lượng</text></g>
+   <text x="160" y="172" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="var(--ink)">xanh: upthrust &middot; đỏ: weight</text></svg>`}],
+s23:[
+ {en:"The coin that appears when you add water", vi:"Đồng xu bị thành bát che khuất. Rót nước vào, tia sáng từ đồng xu bị bẻ cong ở mặt nước nên đi tới được mắt và đồng xu hiện ra",
+  svg:`<svg viewBox="0 0 320 180" ${SV}>
+   <g><path d="M20 60 h100 l-10 62 a8 8 0 0 1 -8 6 h-64 a8 8 0 0 1 -8 -6 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <ellipse cx="70" cy="122" rx="12" ry="4" fill="#E8B04B" stroke="#B57F22" stroke-width="1.5"/>
+    <path d="M120 60 L176 34" stroke="#C0C0C8" stroke-width="2" stroke-dasharray="4 4"/>
+    <circle cx="186" cy="30" r="7" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M179 30 h-6" stroke="var(--ink)" stroke-width="2"/>
+    <text x="70" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">bát rỗng</text>
+    <text x="70" y="166" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="#D9484F">không thấy đồng xu</text></g>
+   <line x1="196" y1="14" x2="196" y2="172" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="5 5"/>
+   <g><path d="M212 60 h100 l-10 62 a8 8 0 0 1 -8 6 h-64 a8 8 0 0 1 -8 -6 z" fill="none" stroke="var(--ink-soft)" stroke-width="2.5"/>
+    <path d="M215 82 h94 l-7 40 a8 8 0 0 1 -8 6 h-64 a8 8 0 0 1 -8 -6 z" fill="#9FD0EC" opacity=".85"/>
+    <path d="M215 82 h94" stroke="#5FA8CE" stroke-width="2"/>
+    <ellipse cx="262" cy="122" rx="12" ry="4" fill="#E8B04B" stroke="#B57F22" stroke-width="1.5"/>
+    <path d="M262 118 L286 82" stroke="#F2C94C" stroke-width="2.5"/>
+    <path d="M286 82 L316 46" stroke="#F2C94C" stroke-width="2.5"/>
+    <circle cx="286" cy="82" r="3" fill="#D9484F"/>
+    <text x="262" y="152" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink)">rót nước vào</text>
+    <text x="262" y="166" text-anchor="middle" font-family="Lexend,sans-serif" font-size="8.5" fill="#2E8B57">đồng xu hiện ra</text>
+    <text x="300" y="104" text-anchor="end" font-family="Lexend,sans-serif" font-size="8" fill="#D9484F">tia sáng bị bẻ cong</text></g></svg>`}]
+});
+</script>
+
+<script>
+syncPoints();
 ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
 render();
 </script>
