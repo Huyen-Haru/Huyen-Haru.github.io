@@ -1599,7 +1599,7 @@ backBtn.onclick = ()=>{
   if(ST.v==="unit") go(ST.bu!=null?"bookunit":"subject",{k:ST.k,bu:ST.bu});
   else if(ST.v==="bookunit"||ST.v==="source") go("subject",{k:ST.k});
   else if(ST.v==="quiz"||ST.v==="result") go(ST.src==="unit"?"unit":(ST.src==="mix"?"bookunit":"home"),{k:ST.k,uid:ST.uid,bu:ST.bu});
-  else if(ST.v==="exam"||ST.v==="examresult") go("exams");
+  else if(ST.v==="exam"||ST.v==="examresult") go(ST.paper?"bookunit":"exams",{k:ST.k,bu:ST.bu});
   else if(ST.v==="session") go("home");
   else go(S.role==="admin" ? "admin" : "home");
 };
@@ -1739,7 +1739,9 @@ function vBookUnit(){
     ${bu.extra?`<div class="note">Phần này không nằm trong sách lớp 5, nhưng kiến thức vẫn xuất hiện trong đề Checkpoint nên cần ôn lại.</div>`:""}
     <div><p class="label" style="margin-bottom:9px">${bu.lessons.length} bài học trong ${P.short.toLowerCase()} này</p>
       <div class="stack-s" id="ls"></div></div>
-    <button class="btn btn-accent" id="mix">Kiểm tra cả ${P.short.toLowerCase()} &middot; ${Math.min(nq,12)} câu</button></div>`;
+    <div class="stack-s">
+      <button class="btn btn-accent" id="mix">Ôn nhanh cả ${P.short.toLowerCase()} &middot; ${Math.min(nq,12)} câu</button>
+      <div id="utest"></div></div></div>`;
   const ls=view.querySelector('#ls');
   bu.lessons.forEach((id,i)=>{
     const u=findUnit(id), r=S.units[id];
@@ -1748,6 +1750,16 @@ function vBookUnit(){
       ${r?`<span class="pill on mono">${r.best}%</span>`:`<span class="pill">Mới</span>`}</div></button>`);
     b.onclick=()=>go("unit",{k,uid:id,bu:ST.bu}); ls.appendChild(b);
   });
+  const tkey = k+":"+bu.no, tp = (typeof TESTS!=="undefined" && TESTS[tkey]) || null;
+  if(tp){
+    const r = (S.tests||{})[tkey];
+    const b = el(`<button class="btn btn-ghost" style="border-color:var(--ac);color:var(--ac)">
+      &#128221; Bài kiểm tra cuối ${P.short.toLowerCase()} &middot; ${tp.qs.length} câu &middot; ${tp.mins} phút
+      ${r?` &middot; cao nhất ${r.best}%`:""}</button>`);
+    b.onclick=()=>go("exam",{k, bu:ST.bu, paper:Object.assign({key:tkey}, tp),
+      n:0, ans:new Array(tp.qs.length).fill(null), endAt:Date.now()+tp.mins*60000});
+    view.querySelector('#utest').appendChild(b);
+  }
   view.querySelector('#mix').onclick=()=>{
     const pool = bu.lessons.flatMap(id=>findUnit(id).quiz.map((q,i)=>({q,i,uid:id})));
     go("quiz",{k, uid:bu.lessons[0], bu:ST.bu, qs:shuffle(pool).slice(0,12), n:0, ans:[],
@@ -1989,7 +2001,7 @@ function vExams(){
   });
 }
 function vExam(){
-  const k=ST.k, ex=EXAMS[k], q=ex.qs[ST.n];
+  const k=ST.k, ex=ST.paper || EXAMS[k], q=ex.qs[ST.n];
   ttl.textContent = ex.name;
   topright.innerHTML = `<span class="timer" id="clk">--:--</span>`;
   endAt = ST.endAt; clearInterval(timerId);
@@ -2025,13 +2037,17 @@ function vExam(){
   };
 }
 function vExamResult(){
-  const k=ST.k, ex=EXAMS[k];
+  const k=ST.k, ex=ST.paper || EXAMS[k];
   clearInterval(timerId);
   const right = ex.qs.filter((q,i)=>ST.ans[i]===q.a).length;
   const p = Math.round(right/ex.qs.length*100);
-  const rec = S.exams[k] || {best:0, tries:0};
+  const key = ST.paper ? ST.paper.key : k;
+  const store = ST.paper ? (S.tests = S.tests || {}) : S.exams;
+  const rec = store[key] || {best:0, tries:0};
   rec.best=Math.max(rec.best,p); rec.last=p; rec.tries++; rec.date=today();
-  S.exams[k]=rec; addMinutes(ex.mins); const _b=(S.pts&&S.pts.claimed["exam_"+k])||0; syncPoints(); LAST_DELTA=((S.pts&&S.pts.claimed["exam_"+k])||0)-_b; save();
+  store[key]=rec; addMinutes(ex.mins);
+  const _b=(S.pts&&S.pts.claimed["exam_"+k])||0; syncPoints();
+  LAST_DELTA = ST.paper ? 0 : (((S.pts&&S.pts.claimed["exam_"+k])||0)-_b); save();
   const byUnit={};
   ex.qs.forEach((q,i)=>{ if(!q.u) return; byUnit[q.u]=byUnit[q.u]||{r:0,n:0}; byUnit[q.u].n++; if(ST.ans[i]===q.a) byUnit[q.u].r++; });
   const weak = Object.keys(byUnit).filter(id=>byUnit[id].r<byUnit[id].n);
@@ -2058,7 +2074,7 @@ function vExamResult(){
       <p class="aa">Đáp án đúng: <b>${q.o[q.a]}</b>${ST.ans[i]==null?" &middot; <i>bỏ trống</i>":""}</p>
       ${ok?"":`<p class="aa" style="color:var(--ink-soft)">${q.e}</p>`}</div>`));
   });
-  view.querySelector('#bk').onclick=()=>go("exams");
+  view.querySelector('#bk').onclick=()=> ST.paper ? go("bookunit",{k:k,bu:ST.bu}) : go("exams");
 }
 
 /* ---------- TIẾN ĐỘ ---------- */
@@ -4733,6 +4749,227 @@ e20:{d:[{en:"Indefinite pronouns take a singular verb even though they feel plur
    "Phần &ldquo;Ôn thêm&rdquo; ở cuối mỗi môn không có trong sách, nhưng kiến thức đó vẫn xuất hiện trong đề Checkpoint nên app giữ lại.",
    "Nếu cô giáo dạy lệch thứ tự so với sách, báo tôi biết là tôi xếp lại theo đúng lịch của lớp."];
 })();
+</script>
+
+<script>
+/* Bài kiểm tra cuối unit — câu hỏi tự soạn, bám đúng các mục nhỏ của từng unit */
+const TESTS = {};
+Object.assign(TESTS, {
+"math:1":{ name:"Unit 1 test", vi:"Kiểm tra Unit 1: Hệ thống số", mins:15, qs:[
+ {q:"What is the value of the 8 in 4.783?", o:["8 tenths","8 hundredths","8 thousandths","8 units"], a:1, e:"Sau dấu phẩy: 7 phần mười, 8 phần trăm, 3 phần nghìn."},
+ {q:"Write 2 106 045 in words.", o:["Two million, one hundred and six thousand and forty-five","Two million, sixteen thousand and forty-five","Twenty-one million, six thousand and forty-five","Two million, one hundred and sixty thousand and forty-five"], a:0, e:"Tách nhóm ba chữ số: 2 | 106 | 045 &rarr; hai triệu, một trăm linh sáu nghìn và bốn mươi lăm."},
+ {q:"Round 5.348 to one decimal place.", o:["5.3","5.4","5.35","6.0"], a:0, e:"Giữ một chữ số thập phân, nhìn chữ số kế tiếp là 4 (<5) nên giữ nguyên: 5.3."},
+ {q:"Round 5.348 to two decimal places.", o:["5.34","5.35","5.3","5.4"], a:1, e:"Chữ số thứ ba là 8 (&ge;5) nên tăng 4 lên 5 &rarr; 5.35."},
+ {q:"Which list is in order from smallest to largest?", o:["0.7, 0.68, 0.702","0.68, 0.7, 0.702","0.68, 0.702, 0.7","0.702, 0.7, 0.68"], a:2, e:"Viết đều: 0.680, 0.700, 0.702 &rarr; thứ tự đúng là 0.68, 0.7, 0.702. Đáp án B đảo hai số cuối."},
+ {q:"0.07 &times; 100 =", o:["0.7","7","70","0.0007"], a:1, e:"Nhân 100 thì dịch hai cột sang trái: 0.07 &rarr; 0.7 &rarr; 7."},
+ {q:"A number rounds to 6.5 when rounded to one decimal place. What is the largest it could be?", o:["6.54","6.549","6.5499","just under 6.55"], a:3, e:"Mọi số nhỏ hơn 6.55 đều làm tròn xuống 6.5; đúng 6.55 thì làm tròn lên 6.6."},
+ {q:"Round 149 500 to the nearest thousand.", o:["149 000","150 000","149 500","140 000"], a:1, e:"Chữ số hàng trăm là 5 nên tăng hàng nghìn từ 149 lên 150 &rarr; 150 000."},
+ {q:"Which digit is in the thousandths place in 12.4079?", o:["4","0","7","9"], a:2, e:"Đếm sau dấu phẩy: 4 phần mười, 0 phần trăm, 7 phần nghìn, 9 phần chục nghìn."},
+ {q:"3.6 &divide; 1000 =", o:["0.36","0.036","0.0036","3600"], a:2, e:"Chia 1000 thì dịch ba cột sang phải: 3.6 &rarr; 0.36 &rarr; 0.036 &rarr; 0.0036."}]},
+
+"math:2":{ name:"Unit 2 test", vi:"Kiểm tra Unit 2: Số và dãy số", mins:15, qs:[
+ {q:"What are the next two terms: 7, 12, 17, 22, ...?", o:["27, 32","26, 30","27, 31","28, 34"], a:0, e:"Hiệu giữa các số là 5 nên tiếp theo là 27 và 32."},
+ {q:"A sequence starts at 3 and the rule is &lsquo;multiply by 2 then subtract 1&rsquo;. What is the third term?", o:["5","9","11","17"], a:1, e:"Số hạng 1 là 3; 3&times;2&minus;1 = 5; 5&times;2&minus;1 = 9. Số hạng thứ ba là 9."},
+ {q:"Which number is prime?", o:["27","31","33","39"], a:1, e:"31 chỉ chia hết cho 1 và 31. 27 = 3&times;9, 33 = 3&times;11, 39 = 3&times;13."},
+ {q:"Which is a cube number?", o:["36","49","64","81"], a:2, e:"64 = 4 &times; 4 &times; 4. Ba số kia đều là số chính phương chứ không phải lập phương."},
+ {q:"What is the highest common factor of 24 and 36?", o:["6","9","12","18"], a:2, e:"Ước chung của 24 và 36 gồm 1, 2, 3, 4, 6, 12; lớn nhất là 12."},
+ {q:"What is the lowest common multiple of 6 and 9?", o:["3","18","36","54"], a:1, e:"Bội của 6: 6, 12, 18... Bội của 9: 9, 18... Chung nhỏ nhất là 18."},
+ {q:"How many factors does 16 have?", o:["3","4","5","6"], a:2, e:"1, 2, 4, 8, 16 &mdash; năm ước. Số chính phương luôn có số lượng ước lẻ."},
+ {q:"Which sequence has the rule &lsquo;subtract 6&rsquo;?", o:["30, 24, 18, 12","30, 25, 20, 15","6, 12, 18, 24","30, 24, 20, 14"], a:0, e:"Chỉ dãy A giảm đều 6 mỗi bước. Dãy D giảm 6 rồi 4 nên không đều."},
+ {q:"Counting back in steps of 4 from 5, what is the third number?", o:["1","&minus;3","&minus;7","&minus;4"], a:2, e:"5 &rarr; 1 &rarr; &minus;3 &rarr; &minus;7. Số thứ ba sau số đầu là &minus;7."},
+ {q:"Which pair of numbers are BOTH prime?", o:["2 and 9","11 and 15","13 and 17","21 and 23"], a:2, e:"13 và 17 đều chỉ có hai ước. 9 = 3&times;3, 15 = 3&times;5, 21 = 3&times;7."}]},
+
+"math:3":{ name:"Unit 3 test", vi:"Kiểm tra Unit 3: Số trung bình", mins:12, qs:[
+ {q:"Find the mode of: 4, 7, 4, 9, 4, 7.", o:["4","7","9","5.8"], a:0, e:"Số 4 xuất hiện ba lần, nhiều hơn số 7 (hai lần)."},
+ {q:"Find the median of: 12, 5, 9, 3, 7.", o:["5","7","9","9.2"], a:1, e:"Sắp xếp: 3, 5, 7, 9, 12. Số ở giữa là 7. Phải sắp xếp trước khi tìm."},
+ {q:"Find the mean of: 6, 8, 10, 12.", o:["8","9","10","36"], a:1, e:"Tổng 36 chia cho 4 số &rarr; 9."},
+ {q:"Find the range of: 15, 8, 22, 11.", o:["8","11","14","22"], a:2, e:"Lớn nhất 22 trừ nhỏ nhất 8 &rarr; 14."},
+ {q:"Find the median of: 4, 8, 10, 14.", o:["8","9","10","12"], a:1, e:"Có hai số giữa là 8 và 10; trung vị là (8 + 10) &divide; 2 = 9."},
+ {q:"The mean of five numbers is 12. What is their total?", o:["12","17","60","2.4"], a:2, e:"Tổng = trung bình &times; số lượng = 12 &times; 5 = 60."},
+ {q:"Four children score 5, 6, 6 and 19. Which average best describes the group?", o:["The mean, 9","The median, 6","The range, 14","The mode is useless here"], a:1, e:"Điểm 19 quá bất thường kéo trung bình lên 9. Trung vị 6 mô tả nhóm đúng hơn."},
+ {q:"A set of data has mode 5, median 6 and mean 7. Which value appears most often?", o:["5","6","7","Cannot tell"], a:0, e:"Mốt (mode) chính là giá trị xuất hiện nhiều lần nhất, ở đây là 5."},
+ {q:"Three numbers have a mean of 10. Two of them are 8 and 9. What is the third?", o:["10","12","13","11"], a:2, e:"Tổng phải là 30; 30 &minus; 8 &minus; 9 = 13."},
+ {q:"Which measure tells you how spread out the data is?", o:["Mode","Median","Mean","Range"], a:3, e:"Khoảng biến thiên (range) đo độ phân tán; ba số kia là các loại số trung bình."}]},
+
+"math:4":{ name:"Unit 4 test", vi:"Kiểm tra Unit 4: Cộng trừ (1)", mins:15, qs:[
+ {q:"Order from smallest to largest: 3, &minus;5, 0, &minus;12, 7.", o:["&minus;5, &minus;12, 0, 3, 7","&minus;12, &minus;5, 0, 3, 7","0, 3, 7, &minus;5, &minus;12","&minus;12, &minus;5, 3, 0, 7"], a:1, e:"Trên trục số càng sang trái càng nhỏ nên &minus;12 nhỏ nhất."},
+ {q:"The temperature is &minus;7&deg;C and rises 11&deg;C. What is it now?", o:["4&deg;C","&minus;18&deg;C","18&deg;C","&minus;4&deg;C"], a:0, e:"Từ &minus;7 lên 0 mất 7, còn 4 độ nữa &rarr; 4&deg;C."},
+ {q:"What is the difference between &minus;6&deg;C and 5&deg;C?", o:["1 degree","11 degrees","&minus;11 degrees","30 degrees"], a:1, e:"Đếm trên trục số: 6 độ lên tới 0, rồi 5 độ nữa, tổng 11 độ."},
+ {q:"A lift starts at floor &minus;3 and goes up 8 floors. Where is it?", o:["Floor 5","Floor 11","Floor &minus;11","Floor 4"], a:0, e:"&minus;3 + 8 = 5, tức tầng 5."},
+ {q:"If n = 6, what is 5n + 4?", o:["30","34","54","24"], a:1, e:"5 &times; 6 = 30, cộng 4 &rarr; 34."},
+ {q:"Solve 7n = 56.", o:["n = 7","n = 8","n = 49","n = 63"], a:1, e:"Chia hai vế cho 7: n = 56 &divide; 7 = 8."},
+ {q:"Solve n &minus; 13 = 25.", o:["n = 12","n = 38","n = 325","n = 13"], a:1, e:"Làm phép ngược: n = 25 + 13 = 38. Kiểm tra: 38 &minus; 13 = 25."},
+ {q:"Which expression means &lsquo;subtract 4 from three times a number&rsquo;?", o:["3n &minus; 4","4 &minus; 3n","3(n &minus; 4)","n &minus; 12"], a:0, e:"Ba lần số đó là 3n, rồi trừ đi 4 &rarr; 3n &minus; 4."},
+ {q:"Which is always an even number, whatever whole number n is?", o:["n + 1","2n","2n + 1","n &minus; 2"], a:1, e:"2n là hai nhân với một số nguyên nên luôn chẵn; 2n + 1 thì luôn lẻ."},
+ {q:"The temperature falls from 2&deg;C to &minus;9&deg;C. How far did it fall?", o:["7 degrees","9 degrees","11 degrees","&minus;7 degrees"], a:2, e:"Từ 2 xuống 0 là 2 độ, từ 0 xuống &minus;9 là 9 độ nữa, tổng 11 độ."}]},
+
+"math:5":{ name:"Unit 5 test", vi:"Kiểm tra Unit 5: Hình phẳng", mins:15, qs:[
+ {q:"A quadrilateral has angles 95&deg;, 85&deg; and 110&deg;. What is the fourth angle?", o:["60&deg;","70&deg;","80&deg;","90&deg;"], a:1, e:"Tổng bốn góc là 360&deg;: 360 &minus; 290 = 70&deg;."},
+ {q:"Which shape has two pairs of parallel sides and four right angles but NOT four equal sides?", o:["Square","Rectangle","Rhombus","Trapezium"], a:1, e:"Hình chữ nhật có bốn góc vuông nhưng chỉ hai cặp cạnh bằng nhau, không phải cả bốn."},
+ {q:"How many pairs of parallel sides does a trapezium have?", o:["None","Exactly one","Two","Three"], a:1, e:"Hình thang có đúng một cặp cạnh song song."},
+ {q:"A circle has a radius of 9 cm. What is its diameter?", o:["4.5 cm","9 cm","18 cm","81 cm"], a:2, e:"Đường kính gấp đôi bán kính: 9 &times; 2 = 18 cm."},
+ {q:"The diameter of a circle is 24 cm. What is its radius?", o:["12 cm","24 cm","48 cm","6 cm"], a:0, e:"Bán kính bằng nửa đường kính: 24 &divide; 2 = 12 cm."},
+ {q:"What is the order of rotational symmetry of an equilateral triangle?", o:["1","2","3","6"], a:2, e:"Quay một vòng thì ba lần trông giống ban đầu, mỗi lần 120&deg;."},
+ {q:"Which shape has rotational symmetry of order 2 but no right angles?", o:["Square","Rectangle","Rhombus","Kite"], a:2, e:"Hình thoi quay 180&deg; là trùng khít, nhưng các góc không vuông."},
+ {q:"A rhombus and a square are alike because both have:", o:["Four right angles","Four equal sides","One pair of parallel sides","No lines of symmetry"], a:1, e:"Cả hai đều có bốn cạnh bằng nhau; chỉ hình vuông mới có thêm bốn góc vuông."},
+ {q:"How many lines of symmetry does a rectangle have?", o:["1","2","4","0"], a:1, e:"Hai trục đi qua trung điểm các cạnh đối. Đường chéo KHÔNG phải trục đối xứng của hình chữ nhật."},
+ {q:"The distance all the way around a circle is called the:", o:["Radius","Diameter","Circumference","Area"], a:2, e:"Chu vi hình tròn gọi là circumference."}]}
+});
+</script>
+
+<script>
+Object.assign(TESTS, {
+"math:6":{ name:"Unit 6 test", vi:"Kiểm tra Unit 6: Phân số và phần trăm", mins:15, qs:[
+ {q:"Simplify 24/36 fully.", o:["12/18","6/9","2/3","4/6"], a:2, e:"Chia cả tử và mẫu cho ước chung lớn nhất là 12 &rarr; 2/3. Các đáp án khác đúng giá trị nhưng chưa rút gọn hết."},
+ {q:"Which fraction is equivalent to 3/5?", o:["6/15","9/15","12/25","5/3"], a:1, e:"Nhân cả tử và mẫu với 3: 3/5 = 9/15."},
+ {q:"Write 7/8 as a decimal.", o:["0.78","0.875","0.87","1.14"], a:1, e:"7 &divide; 8 = 0.875. Nhớ 1/8 = 0.125 nên 7/8 = 7 &times; 0.125."},
+ {q:"What is 35% of 80?", o:["24","28","30","32"], a:1, e:"10% của 80 là 8, nên 30% = 24; 5% = 4. Cộng lại 28."},
+ {q:"Which is the largest?", o:["0.6","3/5","62%","5/8"], a:3, e:"Đổi hết ra thập phân: 0.6, 0.6, 0.62, 0.625 &rarr; 5/8 lớn nhất."},
+ {q:"A shirt costs $60 and is reduced by 15%. What is the new price?", o:["$9","$45","$51","$55"], a:2, e:"15% của 60 = 9 (giảm). Giá phải trả 60 &minus; 9 = $51. Đừng dừng ở số tiền giảm."},
+ {q:"Which fraction is closest to 1/2?", o:["3/8","5/9","2/5","4/7"], a:1, e:"Đổi ra thập phân: 0.375, 0.556, 0.4, 0.571. Gần 0.5 nhất là 5/9."},
+ {q:"30% of a number is 21. What is the number?", o:["51","63","70","91"], a:2, e:"10% là 7, nên 100% = 70. Đi ngược từ phần về tổng."},
+ {q:"Write 0.45 as a fraction in its simplest form.", o:["45/100","9/20","4/5","1/45"], a:1, e:"0.45 = 45/100, chia cả hai cho 5 &rarr; 9/20."},
+ {q:"Which statement is TRUE?", o:["2/3 &gt; 3/4","2/3 = 0.66 exactly","2/3 &lt; 70%","2/3 = 6/8"], a:2, e:"2/3 &asymp; 0.667 tức 66.7%, nhỏ hơn 70%. 2/3 là số thập phân vô hạn tuần hoàn nên không bằng 0.66 chính xác."}]},
+
+"math:7":{ name:"Unit 7 test", vi:"Kiểm tra Unit 7: Khám phá đo lường", mins:15, qs:[
+ {q:"A rectangle is 9 cm by 6 cm. What is its area?", o:["15 cm&sup2;","30 cm&sup2;","54 cm&sup2;","54 cm"], a:2, e:"9 &times; 6 = 54, đơn vị cm&sup2;. Đáp án thiếu mũ 2 là mất điểm."},
+ {q:"What is the perimeter of that same rectangle?", o:["15 cm","30 cm","54 cm","36 cm"], a:1, e:"2 &times; (9 + 6) = 30 cm."},
+ {q:"A triangle has base 12 cm and height 5 cm. Its area is:", o:["17 cm&sup2;","30 cm&sup2;","60 cm&sup2;","34 cm&sup2;"], a:1, e:"(12 &times; 5) &divide; 2 = 30 cm&sup2;. Quên chia đôi là lỗi phổ biến nhất."},
+ {q:"A square has a perimeter of 48 cm. What is its area?", o:["12 cm&sup2;","96 cm&sup2;","144 cm&sup2;","2304 cm&sup2;"], a:2, e:"Cạnh = 48 &divide; 4 = 12 cm, diện tích = 12 &times; 12 = 144 cm&sup2;."},
+ {q:"An L-shape is made of a 6 cm by 4 cm rectangle and a 3 cm by 2 cm rectangle. Total area?", o:["24 cm&sup2;","30 cm&sup2;","6 cm&sup2;","18 cm&sup2;"], a:1, e:"Chia thành hai hình: 24 + 6 = 30 cm&sup2;."},
+ {q:"A film starts at 18:55 and lasts 1 hour 25 minutes. When does it end?", o:["20:20","19:80","20:10","19:20"], a:0, e:"18:55 + 1 giờ = 19:55; thêm 25 phút: 19:55 + 5 = 20:00, còn 20 phút &rarr; 20:20."},
+ {q:"15:40 on a 24-hour clock is:", o:["3:40 am","3:40 pm","5:40 pm","1:40 pm"], a:1, e:"15 &minus; 12 = 3, buổi chiều &rarr; 3:40 pm."},
+ {q:"A train leaves at 09:38 and arrives at 11:15. How long is the journey?", o:["1 h 37 min","1 h 23 min","2 h 23 min","1 h 77 min"], a:0, e:"Từ 09:38 tới 10:00 là 22 phút, tới 11:00 thêm 1 giờ, rồi 15 phút nữa &rarr; 1 giờ 37 phút."},
+ {q:"Two shapes both have an area of 36 cm&sup2;. What can you say about their perimeters?", o:["They must be equal","They can be different","They must be 36 cm","They must be 24 cm"], a:1, e:"Ví dụ 6&times;6 có chu vi 24 cm, còn 1&times;36 có chu vi 74 cm &mdash; cùng diện tích, khác chu vi."},
+ {q:"How many minutes are there in 3 and a quarter hours?", o:["180","195","315","325"], a:1, e:"3 giờ = 180 phút, thêm 15 phút &rarr; 195 phút."}]},
+
+"math:8":{ name:"Unit 8 test", vi:"Kiểm tra Unit 8: Cộng trừ (2)", mins:15, qs:[
+ {q:"6.8 + 15.47 =", o:["21.55","22.27","21.27","83.47"], a:1, e:"Xếp thẳng hàng: 06.80 + 15.47 = 22.27."},
+ {q:"30 &minus; 7.85 =", o:["22.15","23.15","22.25","23.25"], a:0, e:"Viết 30 thành 30.00 rồi trừ: 30.00 &minus; 7.85 = 22.15."},
+ {q:"2/5 + 1/4 =", o:["3/9","13/20","3/20","7/20"], a:1, e:"Mẫu chung 20: 8/20 + 5/20 = 13/20."},
+ {q:"7/8 &minus; 1/2 =", o:["6/6","3/8","1/4","6/8"], a:1, e:"1/2 = 4/8, nên 7/8 &minus; 4/8 = 3/8."},
+ {q:"5/6 + 1/6 =", o:["6/12","1","5/36","2/6"], a:1, e:"Cùng mẫu nên cộng tử: 6/6 = 1."},
+ {q:"Lan buys items costing $4.75 and $3.60. How much change from $10?", o:["$1.65","$2.65","$8.35","$1.75"], a:0, e:"Bước 1: 4.75 + 3.60 = 8.35. Bước 2: 10 &minus; 8.35 = $1.65."},
+ {q:"What must you do before adding 1/3 and 2/7?", o:["Add the denominators","Find a common denominator","Multiply the fractions","Simplify 2/7"], a:1, e:"Bắt buộc quy đồng mẫu trước; mẫu chung ở đây là 21."},
+ {q:"Estimate 19.7 + 8.15 first. About how much is it?", o:["About 12","About 28","About 100","About 2.8"], a:1, e:"Làm tròn: 20 + 8 = 28. Kết quả chính xác 27.85 rất sát."},
+ {q:"9.05 &minus; 2.7 =", o:["6.35","7.35","6.98","6.25"], a:0, e:"Viết 2.7 thành 2.70 rồi trừ: 9.05 &minus; 2.70 = 6.35."},
+ {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Both B and C"], a:3, e:"3/4 = 6/8, nên 6/8 + 5/8 = 11/8 = 1 và 3/8. Hai cách viết đều đúng."}]},
+
+"math:9":{ name:"Unit 9 test", vi:"Kiểm tra Unit 9: Xác suất", mins:12, qs:[
+ {q:"What is the probability of rolling a number greater than 4 on a fair dice?", o:["1/6","1/3","1/2","2/3"], a:1, e:"Chỉ 5 và 6 thoả mãn &rarr; 2/6 = 1/3."},
+ {q:"A bag has 5 red, 3 blue and 2 green balls. What is P(blue)?", o:["3/7","3/10","2/10","1/3"], a:1, e:"Tổng 10 quả, 3 quả xanh dương &rarr; 3/10. Mẫu số phải là TỔNG."},
+ {q:"The probability of snow is 0.15. What is the probability of no snow?", o:["0.15","0.75","0.85","1.15"], a:2, e:"1 &minus; 0.15 = 0.85."},
+ {q:"Which event is impossible?", o:["Rolling a 6","Rolling a 0 on a normal dice","Rain tomorrow","Picking a red ball"], a:1, e:"Xúc xắc thường không có mặt 0 nên xác suất bằng 0."},
+ {q:"A coin lands tails four times in a row. What is P(tails) next?", o:["Less than 1/2","1/2","More than 1/2","1"], a:1, e:"Mỗi lần tung độc lập nên vẫn là 1/2. Đồng xu không nhớ kết quả cũ."},
+ {q:"A spinner has 8 equal parts: 3 red, 4 blue, 1 yellow. Which colour is most likely?", o:["Red","Blue","Yellow","All equal"], a:1, e:"Xanh chiếm 4 trên 8 phần, nhiều nhất."},
+ {q:"On that spinner, what is P(not yellow)?", o:["1/8","7/8","1/2","3/8"], a:1, e:"P(vàng) = 1/8 nên P(không vàng) = 1 &minus; 1/8 = 7/8."},
+ {q:"Probability is always a number between:", o:["0 and 10","0 and 1","1 and 100","&minus;1 and 1"], a:1, e:"0 là không thể, 1 là chắc chắn; mọi xác suất nằm giữa hai mốc đó."},
+ {q:"A dice is rolled 60 times. About how many times would you expect a 3?", o:["3","6","10","30"], a:2, e:"P(3) = 1/6 nên kỳ vọng 60 &divide; 6 = 10 lần."},
+ {q:"Which describes an event with probability 0.5?", o:["Impossible","Unlikely","Even chance","Certain"], a:2, e:"0.5 nghĩa là khả năng xảy ra và không xảy ra ngang nhau."}]},
+
+"math:10":{ name:"Unit 10 test", vi:"Kiểm tra Unit 10: Nhân chia (1)", mins:15, qs:[
+ {q:"What is 46 &times; 32?", o:["1372","1472","1462","1572"], a:1, e:"46&times;30 = 1380 và 46&times;2 = 92; cộng lại 1472."},
+ {q:"What is 384 &divide; 8?", o:["46","48","47","44"], a:1, e:"8 &times; 48 = 384. Kiểm tra bằng phép nhân ngược lại."},
+ {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Số dư 5 nhỏ hơn 6 nên hợp lệ; đáp án D có dư lớn hơn số chia nên sai."},
+ {q:"Which number is divisible by 9?", o:["3627","3628","3629","3630"], a:0, e:"3+6+2+7 = 18 chia hết cho 9."},
+ {q:"Which number is divisible by both 3 and 4?", o:["114","124","132","142"], a:2, e:"132: tổng chữ số 6 chia hết 3, và hai chữ số cuối 32 chia hết 4."},
+ {q:"A quick way to multiply by 25 is:", o:["Multiply by 100 then divide by 4","Multiply by 5 twice then add","Divide by 4 then times 10","Add 25 each time"], a:0, e:"25 = 100 &divide; 4, nên nhân 100 rồi chia 4. Ví dụ 16&times;25 = 1600&divide;4 = 400."},
+ {q:"Estimate 297 &times; 6.", o:["About 1200","About 1800","About 2400","About 180"], a:1, e:"Làm tròn 300 &times; 6 = 1800. Kết quả chính xác là 1782."},
+ {q:"A box holds 24 pencils. How many boxes are needed for 300 pencils?", o:["12","12.5","13","14"], a:2, e:"300 &divide; 24 = 12 dư 12, nên vẫn cần thêm một hộp &rarr; 13 hộp. Phải làm tròn LÊN."},
+ {q:"Which test shows 5 130 is divisible by 5?", o:["It is even","It ends in 0","The digits add to 9","It is bigger than 5000"], a:1, e:"Chia hết cho 5 khi tận cùng là 0 hoặc 5."},
+ {q:"What is 1 in the remainder when 100 is divided by 7?", o:["2","1","3","0"], a:0, e:"7 &times; 14 = 98, còn dư 2."}]},
+
+"math:11":{ name:"Unit 11 test", vi:"Kiểm tra Unit 11: Hình khối", mins:12, qs:[
+ {q:"How many edges does a cube have?", o:["6","8","12","24"], a:2, e:"Lập phương có 12 cạnh, 6 mặt và 8 đỉnh."},
+ {q:"A square-based pyramid has how many faces?", o:["4","5","6","8"], a:1, e:"Một mặt đáy vuông và bốn mặt tam giác &rarr; 5 mặt."},
+ {q:"A net made of 6 squares folds into a:", o:["Cuboid","Cube","Pyramid","Cylinder"], a:1, e:"Sáu mặt vuông bằng nhau tạo thành hình lập phương."},
+ {q:"A cuboid is 8 cm &times; 5 cm &times; 2 cm. Its volume is:", o:["15 cm&sup3;","40 cm&sup3;","80 cm&sup3;","80 cm&sup2;"], a:2, e:"8 &times; 5 &times; 2 = 80 cm&sup3;, đơn vị mũ ba."},
+ {q:"A container of 3500 cm&sup3; holds how many litres?", o:["0.35","3.5","35","350"], a:1, e:"1000 cm&sup3; = 1 lít nên 3500 cm&sup3; = 3,5 lít."},
+ {q:"Which solid has two circular faces and one curved surface?", o:["Cone","Cylinder","Sphere","Prism"], a:1, e:"Hình trụ có hai đáy tròn song song và một mặt cong."},
+ {q:"Check with Euler's rule: a triangular prism has 5 faces and 6 vertices. How many edges?", o:["8","9","10","11"], a:1, e:"Mặt + đỉnh = cạnh + 2 &rarr; 5 + 6 = cạnh + 2 &rarr; 9 cạnh."},
+ {q:"A cube has sides of 3 cm. If every side doubles to 6 cm, the volume becomes:", o:["2 times bigger","4 times bigger","6 times bigger","8 times bigger"], a:3, e:"27 cm&sup3; thành 216 cm&sup3;, gấp 8 lần vì cả ba chiều đều nhân đôi."},
+ {q:"Which is measured in millilitres?", o:["Area","Capacity","Perimeter","Mass"], a:1, e:"Dung tích đo bằng ml và lít; khối lượng đo bằng g và kg."},
+ {q:"A box 10 cm &times; 10 cm &times; 10 cm holds exactly:", o:["100 ml","1 litre","10 litres","1 ml"], a:1, e:"Thể tích 1000 cm&sup3; = 1000 ml = 1 lít."}]}
+});
+</script>
+
+<script>
+Object.assign(TESTS, {
+"math:12":{ name:"Unit 12 test", vi:"Kiểm tra Unit 12: Tỉ số và tỉ lệ", mins:12, qs:[
+ {q:"Simplify the ratio 20 : 35.", o:["4 : 7","5 : 7","2 : 3","10 : 17"], a:0, e:"Chia hai vế cho ước chung lớn nhất là 5 &rarr; 4 : 7."},
+ {q:"Share $72 in the ratio 5 : 4. What is the larger share?", o:["$32","$40","$45","$36"], a:1, e:"Tổng 9 phần, mỗi phần 72 &divide; 9 = 8. Phần lớn = 5 &times; 8 = $40."},
+ {q:"In a class the ratio of girls to boys is 3 : 4. There are 28 pupils. How many girls?", o:["12","14","16","21"], a:0, e:"Tổng 7 phần, mỗi phần 28 &divide; 7 = 4. Số nữ = 3 &times; 4 = 12."},
+ {q:"A recipe for 6 people uses 450 g of flour. How much for 4 people?", o:["200 g","300 g","350 g","675 g"], a:1, e:"Một người cần 450 &divide; 6 = 75 g; bốn người cần 300 g."},
+ {q:"Squash is mixed with water in the ratio 1 : 5. How much squash makes 900 ml of drink?", o:["150 ml","180 ml","900 ml","112.5 ml"], a:0, e:"Tổng 6 phần, mỗi phần 900 &divide; 6 = 150 ml. Nước cốt là 1 phần. Bẫy là chia cho 5."},
+ {q:"For every 4 apples there are 7 oranges. If there are 28 oranges, how many apples?", o:["12","16","14","21"], a:1, e:"28 &divide; 7 = 4 nhóm, mỗi nhóm 4 quả táo &rarr; 16."},
+ {q:"7 pencils cost $2.80. What do 12 cost?", o:["$4.20","$4.80","$5.60","$3.36"], a:1, e:"Một bút giá 2.80 &divide; 7 = $0.40; 12 bút giá $4.80."},
+ {q:"A map scale is 1 : 200. A path is 6 cm on the map. How long is it really?", o:["120 cm","1200 cm","206 cm","33 cm"], a:1, e:"6 &times; 200 = 1200 cm, tức 12 m."},
+ {q:"Which ratio is equivalent to 3 : 8?", o:["6 : 24","9 : 24","12 : 30","6 : 11"], a:1, e:"Nhân cả hai vế với 3: 3 : 8 = 9 : 24."},
+ {q:"In the ratio 2 : 3, what fraction of the whole is the first part?", o:["2/3","2/5","3/5","1/2"], a:1, e:"Tổng 5 phần, phần đầu là 2 phần &rarr; 2/5 của tổng. Tỉ số so phần với phần, phân số so phần với tổng."}]},
+
+"math:13":{ name:"Unit 13 test", vi:"Kiểm tra Unit 13: Góc", mins:12, qs:[
+ {q:"Two angles on a straight line are 128&deg; and x. What is x?", o:["42&deg;","52&deg;","62&deg;","232&deg;"], a:1, e:"Tổng bằng 180&deg; nên x = 180 &minus; 128 = 52&deg;."},
+ {q:"A triangle has angles 43&deg; and 68&deg;. What is the third?", o:["69&deg;","79&deg;","89&deg;","111&deg;"], a:0, e:"180 &minus; (43 + 68) = 180 &minus; 111 = 69&deg;."},
+ {q:"An angle of 156&deg; is:", o:["Acute","Right","Obtuse","Reflex"], a:2, e:"Từ 90&deg; đến dưới 180&deg; là góc tù."},
+ {q:"Angles around a point add up to:", o:["90&deg;","180&deg;","270&deg;","360&deg;"], a:3, e:"Quanh một điểm là trọn một vòng: 360&deg;."},
+ {q:"An isosceles triangle has one angle of 40&deg; between its two equal sides. What are the other two?", o:["40&deg; and 100&deg;","70&deg; and 70&deg;","50&deg; and 90&deg;","60&deg; and 80&deg;"], a:1, e:"Hai góc đáy bằng nhau: (180 &minus; 40) &divide; 2 = 70&deg; mỗi góc."},
+ {q:"Three angles around a point are 90&deg;, 145&deg; and y. Find y.", o:["115&deg;","125&deg;","135&deg;","145&deg;"], a:1, e:"360 &minus; (90 + 145) = 125&deg;."},
+ {q:"Which angle is acute?", o:["95&deg;","90&deg;","89&deg;","181&deg;"], a:2, e:"Góc nhọn là góc nhỏ hơn 90&deg;."},
+ {q:"When measuring with a protractor you must line up:", o:["Any edge with any line","The centre with the vertex and zero with one arm","The 90&deg; mark with the vertex","The longest side only"], a:1, e:"Đặt tâm thước đo góc trùng đỉnh và vạch 0 trùng một cạnh, rồi đọc trên đúng thang."},
+ {q:"Can a triangle have two right angles?", o:["Yes, always","No, because the angles would already total 180&deg; with nothing left","Yes, if it is large","Only if it is isosceles"], a:1, e:"Hai góc vuông đã hết 180&deg;, không còn cho góc thứ ba nên không thể."},
+ {q:"An equilateral triangle has each angle equal to:", o:["45&deg;","60&deg;","90&deg;","120&deg;"], a:1, e:"Ba góc bằng nhau và tổng 180&deg; nên mỗi góc 60&deg;."}]},
+
+"math:14":{ name:"Unit 14 test", vi:"Kiểm tra Unit 14: Nhân chia (2)", mins:15, qs:[
+ {q:"3/4 &times; 2/5 =", o:["5/9","6/20","3/10","Both B and C"], a:3, e:"Nhân tử với tử, mẫu với mẫu: 6/20, rút gọn thành 3/10. Hai cách viết cùng giá trị."},
+ {q:"What is 2/3 of 45?", o:["15","30","67.5","22.5"], a:1, e:"45 &divide; 3 = 15 rồi &times; 2 = 30."},
+ {q:"1/3 &divide; 4 =", o:["4/3","1/12","3/4","1/7"], a:1, e:"Chia phân số cho số nguyên thì nhân mẫu lên: 1/3 &divide; 4 = 1/12."},
+ {q:"0.7 &times; 0.8 =", o:["5.6","0.56","0.056","56"], a:1, e:"7 &times; 8 = 56; tổng hai chữ số thập phân nên kết quả 0.56."},
+ {q:"1.2 &times; 0.4 =", o:["4.8","0.48","0.048","48"], a:1, e:"12 &times; 4 = 48; tổng hai chữ số thập phân &rarr; 0.48."},
+ {q:"8.4 &divide; 4 =", o:["2.1","21","0.21","2.4"], a:0, e:"8 &divide; 4 = 2 và 0.4 &divide; 4 = 0.1, cộng lại 2.1."},
+ {q:"Which calculation gives the BIGGEST answer?", o:["12 &times; 0.5","12 &divide; 0.5","12 &times; 0.1","12 &minus; 0.5"], a:1, e:"Chia cho 0.5 là hỏi có bao nhiêu nửa trong 12 &rarr; 24, lớn nhất."},
+ {q:"7.5 &divide; 5 =", o:["1.5","15","0.15","2.5"], a:0, e:"7.5 &divide; 5 = 1.5. Kiểm tra ngược: 1.5 &times; 5 = 7.5."},
+ {q:"Half of 3/4 is:", o:["3/2","3/8","1/4","6/4"], a:1, e:"Lấy một nửa nghĩa là nhân với 1/2: 3/4 &times; 1/2 = 3/8."},
+ {q:"A ribbon 4.5 m long is cut into 6 equal pieces. How long is each?", o:["0.75 m","0.65 m","7.5 m","0.9 m"], a:0, e:"4.5 &divide; 6 = 0.75 m, tức 75 cm."}]},
+
+"math:15":{ name:"Unit 15 test", vi:"Kiểm tra Unit 15: Số liệu", mins:12, qs:[
+ {q:"Which chart best shows how many pupils like each of four sports?", o:["Line graph","Bar chart","Scatter graph","Frequency diagram"], a:1, e:"Bốn môn là các nhóm riêng biệt nên dùng biểu đồ cột."},
+ {q:"In a waffle diagram, 35 shaded squares out of 100 means:", o:["35 people","35%","3.5%","35 squares only"], a:1, e:"Lưới 10 &times; 10 nên mỗi ô là 1%, 35 ô là 35%."},
+ {q:"A pie chart shows 40% of 250 pupils walk to school. How many pupils?", o:["40","90","100","150"], a:2, e:"40% của 250 = 100 học sinh. Biểu đồ tròn cho tỉ lệ, phải nhân với tổng."},
+ {q:"Which chart keeps every individual value visible?", o:["Pie chart","Dot plot","Waffle diagram","Bar chart"], a:1, e:"Biểu đồ chấm giữ từng số liệu nên vẫn tìm được mốt và khoảng biến thiên."},
+ {q:"Which chart shows a relationship between height and shoe size?", o:["Pie chart","Line graph","Scatter graph","Waffle diagram"], a:2, e:"Biểu đồ phân tán vẽ hai đại lượng theo nhau để tìm mối liên hệ."},
+ {q:"A line graph of temperature every hour is used because the data is:", o:["In groups","Continuous over time","Percentages","Random"], a:1, e:"Số liệu liên tục theo thời gian nên nối điểm được và thấy xu hướng."},
+ {q:"A bar chart's vertical axis starts at 80 instead of 0. What is the risk?", o:["Nothing","Small differences look much bigger","The bars disappear","It saves ink"], a:1, e:"Trục không bắt đầu từ 0 khiến chênh lệch nhỏ trông rất lớn — luôn kiểm tra thang chia."},
+ {q:"In a pie chart, a sector of 90&deg; represents what fraction of the total?", o:["1/2","1/3","1/4","1/8"], a:2, e:"90&deg; trên 360&deg; là một phần tư, tức 25%."},
+ {q:"A frequency diagram differs from a bar chart because its bars:", o:["Have gaps","Touch each other, showing continuous data","Are always red","Show percentages"], a:1, e:"Cột dính nhau vì số liệu liên tục; biểu đồ cột cho nhóm rời rạc thì cột có khoảng cách."},
+ {q:"On a dot plot, the value with the most dots is the:", o:["Mean","Median","Mode","Range"], a:2, e:"Giá trị có nhiều chấm nhất là giá trị xuất hiện nhiều nhất, tức mốt."}]},
+
+"math:16":{ name:"Unit 16 test", vi:"Kiểm tra Unit 16: Quy tắc phép tính", mins:12, qs:[
+ {q:"7 + 3 &times; 6 =", o:["60","25","36","46"], a:1, e:"Nhân trước: 18, rồi cộng 7 &rarr; 25."},
+ {q:"(9 &minus; 4) &times; 5 =", o:["25","11","41","20"], a:0, e:"Ngoặc trước: 5, rồi 5 &times; 5 = 25."},
+ {q:"24 &divide; (2 + 4) =", o:["16","4","12","8"], a:1, e:"Ngoặc trước: 6, rồi 24 &divide; 6 = 4."},
+ {q:"Which pair are equal?", o:["10 &minus; 6 and 6 &minus; 10","20 &divide; 5 and 5 &divide; 20","8 &times; 3 and 3 &times; 8","12 &minus; 3 and 3 + 12"], a:2, e:"Chỉ phép nhân và cộng mới giao hoán."},
+ {q:"Use the distributive law: 9 &times; 47 =", o:["9&times;40 + 9&times;7","9&times;40 &times; 9&times;7","9 + 40 + 7","47 &divide; 9"], a:0, e:"Tách 47 thành 40 + 7: 360 + 63 = 423."},
+ {q:"Where do brackets go to make 5 + 3 &times; 4 = 32?", o:["(5 + 3) &times; 4","5 + (3 &times; 4)","(5 + 3 &times; 4)","No brackets"], a:0, e:"(5 + 3) &times; 4 = 8 &times; 4 = 32."},
+ {q:"A quick way to work out 24 &times; 25 is:", o:["24 &times; 100 &divide; 4","24 + 25","24 &times; 20 + 5","25 &divide; 24"], a:0, e:"25 = 100 &divide; 4 nên 2400 &divide; 4 = 600."},
+ {q:"30 &minus; 12 &divide; 4 =", o:["4.5","27","18","6"], a:1, e:"Chia trước: 12 &divide; 4 = 3, rồi 30 &minus; 3 = 27."},
+ {q:"(6 + 2) &times; (10 &minus; 7) =", o:["11","24","18","30"], a:1, e:"Hai ngoặc trước: 8 và 3, rồi 8 &times; 3 = 24."},
+ {q:"Which law lets you write 2 &times; (5 &times; 7) as (2 &times; 5) &times; 7?", o:["Commutative","Associative","Distributive","Order of operations"], a:1, e:"Tính kết hợp cho phép đổi cách nhóm mà kết quả không đổi."}]},
+
+"math:17":{ name:"Unit 17 test", vi:"Kiểm tra Unit 17: Phép biến hình", mins:12, qs:[
+ {q:"Which point is 4 right and 3 up from the origin?", o:["(3, 4)","(4, 3)","(&minus;4, 3)","(3, &minus;4)"], a:1, e:"Toạ độ viết (x, y): ngang trước, lên sau &rarr; (4, 3)."},
+ {q:"Point (6, 2) is translated 4 left and 5 up. Where does it land?", o:["(2, 7)","(10, 7)","(2, &minus;3)","(1, 6)"], a:0, e:"x: 6 &minus; 4 = 2; y: 2 + 5 = 7 &rarr; (2, 7)."},
+ {q:"Point (3, 5) is reflected in the y-axis. Where does it land?", o:["(3, &minus;5)","(&minus;3, 5)","(&minus;3, &minus;5)","(5, 3)"], a:1, e:"Đối xứng qua trục tung thì x đổi dấu, y giữ nguyên."},
+ {q:"Point (2, &minus;4) is reflected in the x-axis. Where does it land?", o:["(&minus;2, &minus;4)","(2, 4)","(&minus;2, 4)","(4, &minus;2)"], a:1, e:"Đối xứng qua trục hoành thì y đổi dấu, x giữ nguyên."},
+ {q:"Point (5, 1) is rotated 180&deg; about the origin. Where does it land?", o:["(&minus;5, &minus;1)","(&minus;5, 1)","(1, 5)","(5, &minus;1)"], a:0, e:"Quay 180&deg; quanh gốc thì cả hai toạ độ đổi dấu."},
+ {q:"Which quadrant contains the point (&minus;4, &minus;6)?", o:["First","Second","Third","Fourth"], a:2, e:"Cả x và y đều âm nên nằm ở góc phần tư thứ ba, phía dưới bên trái."},
+ {q:"After a translation, the shape is:", o:["Bigger","Smaller","The same size and shape","Turned upside down"], a:2, e:"Tịnh tiến chỉ trượt hình, không đổi kích thước hay hình dạng."},
+ {q:"Two 90&deg; clockwise rotations are the same as:", o:["No turn","A 180&deg; turn","A 270&deg; turn","A reflection"], a:1, e:"90 + 90 = 180&deg;."},
+ {q:"What is the midpoint of (2, 3) and (8, 7)?", o:["(5, 5)","(10, 10)","(6, 4)","(4, 5)"], a:0, e:"Lấy trung bình từng toạ độ: (2+8)&divide;2 = 5 và (3+7)&divide;2 = 5."},
+ {q:"A shape is reflected and then translated. Compared with the original it is:", o:["A different size","Congruent, just in a new position","Rotated 45&deg;","Half as big"], a:1, e:"Cả hai phép đều giữ nguyên kích thước và hình dạng, chỉ đổi vị trí — hai hình bằng nhau."}]}
+});
+</script>
+
+<script>
 syncPoints();
 ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
 render();
