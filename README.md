@@ -23,9 +23,11 @@ số trang để mở sách ra so được ngay. Màn hình *"Thứ tự unit n�
 - **35 unit sách**, **66 bài học**, **451 ý chính**, **451 câu quiz** — mỗi bài có số câu quiz
   đúng bằng số ý chính, mỗi câu đều có lời giải thích tiếng Việt.
 - **602 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
-- **17 bài kiểm tra cuối unit môn Toán** (170 câu, mỗi unit một bài): làm liên tục có đồng hồ,
-  không lộ đáp án cho tới khi nộp bài, chấm xong mới hiện lời giải từng câu. Câu hỏi phủ kín
-  mọi mục nhỏ của unit đó trong sách.
+- **32 bài kiểm tra cuối unit** (320 câu): Toán 17 bài, Science 6 bài, ESL 9 bài — mỗi unit một bài.
+  Làm liên tục có đồng hồ, không lộ đáp án cho tới khi nộp bài, chấm xong mới hiện lời giải từng câu.
+  Câu hỏi phủ kín mọi mục nhỏ của unit đó trong sách.
+- Bài kiểm tra Science và ESL còn **gắn từng câu với bài học tương ứng**, nên chấm xong app chỉ ra
+  đúng bài cần ôn lại và bấm thẳng vào học được ngay — con không phải tự mò xem mình yếu chỗ nào.
 - **66 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
   và 1 câu hỏi thử thách.
 
@@ -97,5 +99,5 @@ Mọi thứ nằm trong các khối `<script>` của `index.html`:
 | `IMG` | 30 hình minh hoạ chi tiết môn Science |
 | `EXT` | phần Mở rộng: đào sâu, ứng dụng, thử thách |
 | `EXAMS` | ba đề thi thử |
-| `TESTS` | 17 bài kiểm tra cuối unit môn Toán |
+| `TESTS` | 32 bài kiểm tra cuối unit của cả ba môn |
 | `PROG` | **thứ tự unit theo sách** — sửa ở đây nếu lớp dạy khác thứ tự |

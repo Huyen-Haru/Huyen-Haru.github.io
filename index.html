@@ -4969,7 +4969,202 @@ Object.assign(TESTS, {
 });
 </script>
 
+
 <script>
+/* Bài kiểm tra cuối unit môn Science — mỗi câu ghi rõ thuộc bài nào để chấm xong biết ôn lại đâu */
+Object.assign(TESTS, {
+"science:1":{ name:"Unit 1 test", vi:"Kiểm tra Unit 1: Cơ thể người", mins:15, qs:[
+ {u:"s1", q:"Which blood vessel carries blood away from the heart?", o:["Vein","Artery","Capillary","Valve"], a:1, e:"Động mạch mang máu ĐI khỏi tim. Mẹo: <b>A</b>rtery = <b>A</b>way."},
+ {u:"s1", q:"Why does the left side of the heart have a thicker wall?", o:["It holds more blood","It pumps blood to the whole body, which is further","It is closer to the lungs","It contains more valves"], a:1, e:"Nửa trái bơm máu đi khắp cơ thể, quãng đường xa hơn nhiều so với nửa phải chỉ bơm lên phổi."},
+ {u:"s1", q:"Which part of blood fights disease?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1, e:"Bạch cầu tấn công vi sinh vật; hồng cầu chở oxygen, tiểu cầu làm đông máu."},
+ {u:"s10", q:"Where in the lungs does gas exchange happen?", o:["In the trachea","In the bronchi","In the alveoli","In the diaphragm"], a:2, e:"Phế nang có thành mỏng một lớp tế bào và rất nhiều mao mạch bao quanh."},
+ {u:"s10", q:"When you breathe IN, the diaphragm:", o:["Flattens and moves down","Rises up","Stays still","Closes the trachea"], a:0, e:"Cơ hoành hạ xuống làm lồng ngực rộng ra, không khí tràn vào."},
+ {u:"s10", q:"Compared with air breathed in, air breathed out contains:", o:["More oxygen","Less carbon dioxide","More carbon dioxide and water vapour","Exactly the same gases"], a:2, e:"Cơ thể lấy bớt oxygen, thải carbon dioxide và hơi nước — vì thế hà hơi vào gương thì mờ."},
+ {u:"s13", q:"Fertilisation is when:", o:["A baby is born","A sperm cell joins an egg cell","The body grows taller","Food is digested"], a:1, e:"Tinh trùng kết hợp với trứng tạo thành một tế bào mới."},
+ {u:"s13", q:"What does the umbilical cord carry to the baby?", o:["Air to breathe","Food and oxygen from the mother","Bones","Heat only"], a:1, e:"Dây rốn mang chất dinh dưỡng và oxygen vào, mang chất thải ra."},
+ {u:"s14", q:"Why do antibiotics not cure a cold?", o:["Colds are caused by viruses, not bacteria","Colds are too strong","Antibiotics are too weak","Colds are not real illnesses"], a:0, e:"Kháng sinh chỉ diệt vi khuẩn; cảm lạnh do virus nên uống vào vừa vô ích vừa gây kháng thuốc."},
+ {u:"s14", q:"Which habit stops most diseases spreading at school?", o:["Washing hands with soap","Sitting still","Drinking hot water","Wearing a hat"], a:0, e:"Rửa tay bằng xà phòng loại bỏ vi sinh vật trên tay — rẻ và hiệu quả nhất."}]},
+
+"science:2":{ name:"Unit 2 test", vi:"Kiểm tra Unit 2: Vật chất", mins:15, qs:[
+ {u:"s15", q:"Why is glass chosen for windows?", o:["It is soft","It is transparent so light passes through","It is magnetic","It dissolves in water"], a:1, e:"Cửa sổ cần cho ánh sáng qua và nhìn rõ nên vật liệu phải trong suốt."},
+ {u:"s15", q:"Which metal is NOT attracted to a magnet?", o:["Iron","Steel","Copper","Nickel"], a:2, e:"Đồng không có từ tính — không phải kim loại nào cũng bị nam châm hút."},
+ {u:"s15", q:"An object floats in water. This means it is:", o:["Less dense than water","More dense than water","Magnetic","Soluble"], a:0, e:"Khối lượng riêng nhỏ hơn nước thì nổi."},
+ {u:"s16", q:"Why does a saucepan have a metal base and a plastic handle?", o:["It looks nice","Metal conducts heat to the food, plastic insulates your hand","Plastic conducts better","Metal is lighter"], a:1, e:"Hai vật liệu cho hai việc trái ngược: dẫn nhiệt vào thức ăn và chặn nhiệt tới tay."},
+ {u:"s16", q:"Which conducts electricity but is NOT a metal?", o:["Rubber","Graphite","Glass","Dry wood"], a:1, e:"Than chì trong ruột bút chì dẫn điện dù không phải kim loại."},
+ {u:"s16", q:"Why does a woolly jumper keep you warm?", o:["Wool makes heat","It traps air, and air is a good insulator","Wool conducts heat well","It is heavy"], a:1, e:"Sợi len giữ nhiều túi khí nhỏ; không khí cách nhiệt rất tốt."},
+ {u:"s2", q:"Which change is REVERSIBLE?", o:["Burning paper","Melting butter","Frying an egg","Rusting a nail"], a:1, e:"Bơ tan rồi để nguội lại đông cứng, vẫn là bơ nên thuận nghịch."},
+ {u:"s2", q:"How do you get salt back from salty water?", o:["Filter it","Evaporate the water","Use a magnet","You cannot"], a:1, e:"Muối tan hết nên lọc không giữ được; cho nước bay hơi thì muối kết tinh lại."},
+ {u:"s17", q:"Vinegar is added to bicarbonate of soda and it fizzes. What gas is made?", o:["Oxygen","Carbon dioxide","Hydrogen","Steam"], a:1, e:"Phản ứng sinh khí carbon dioxide — chính khí này làm bánh nở khi nướng."},
+ {u:"s17", q:"A candle burns in the open air and its mass falls. Why?", o:["Mass is destroyed","Gases made have escaped into the air","The balance is broken","Wax turns into light"], a:1, e:"Khối lượng được bảo toàn; phần hụt đã bay ra dạng khí và hơi nước."}]},
+
+"science:3":{ name:"Unit 3 test", vi:"Kiểm tra Unit 3: Đá và đất", mins:15, qs:[
+ {u:"s18", q:"How do igneous rocks form?", o:["Layers of sand press together","Molten rock cools and hardens","Heat and pressure change other rock","Plants rot in soil"], a:1, e:"Đá mắc-ma sinh ra khi đá nóng chảy nguội lại và kết tinh."},
+ {u:"s18", q:"A rock has very large crystals. What does that tell you?", o:["It cooled fast on the surface","It cooled slowly deep underground","It contains fossils","It formed from sediment"], a:1, e:"Nguội càng chậm thì tinh thể càng có thời gian lớn lên."},
+ {u:"s18", q:"What is molten rock called once it reaches the surface?", o:["Magma","Lava","Granite","Soil"], a:1, e:"Dưới đất là magma, phun lên mặt đất gọi là lava."},
+ {u:"s19", q:"In which type of rock are fossils found?", o:["Igneous","Sedimentary","Metamorphic","All three"], a:1, e:"Chỉ đá trầm tích giữ được hoá thạch vì hình thành ở nhiệt độ thấp."},
+ {u:"s19", q:"Two fossils are found, one deep and one near the surface. Which is older?", o:["The deeper one","The one near the surface","Same age","Cannot tell"], a:0, e:"Lớp dưới lắng trước nên cổ hơn."},
+ {u:"s19", q:"A sea shell fossil is found on a mountain. This suggests:", o:["Shells can climb","That area was once under the sea","The fossil is fake","Mountains are made of shells"], a:1, e:"Vùng đó từng nằm dưới biển, sau đó lớp đá được nâng lên."},
+ {u:"s20", q:"What changes rock into metamorphic rock?", o:["Melting completely","Great heat and pressure","Settling in layers","Dissolving"], a:1, e:"Nhiệt và áp suất lớn làm đá biến đổi nhưng chưa nóng chảy hẳn."},
+ {u:"s20", q:"What is the difference between weathering and erosion?", o:["They are the same","Weathering breaks rock where it is; erosion carries pieces away","Weathering only in winter","Erosion only underground"], a:1, e:"Phong hoá là vỡ tại chỗ, xói mòn là bị cuốn đi nơi khác."},
+ {u:"s21", q:"Water drains fastest through which soil?", o:["Clay","Sandy","Waterlogged","All the same"], a:1, e:"Hạt cát to nên khe hở rộng, nước chảy qua rất nhanh."},
+ {u:"s21", q:"What is humus?", o:["Small pieces of rock","Rotted plant and animal material","Water in soil","Air in soil"], a:1, e:"Mùn là phần hữu cơ đã phân huỷ, giúp đất giữ nước và giàu dinh dưỡng."}]}
+});
+</script>
+
+<script>
+Object.assign(TESTS, {
+"science:4":{ name:"Unit 4 test", vi:"Kiểm tra Unit 4: Chuỗi và lưới thức ăn", mins:12, qs:[
+ {u:"s25", q:"Where does the energy in almost every food chain come from originally?", o:["The soil","The Sun","The rain","Decomposers"], a:1, e:"Cây xanh dùng ánh sáng Mặt Trời tạo thức ăn, nên năng lượng cả chuỗi bắt nguồn từ đó."},
+ {u:"s25", q:"In grass &rarr; grasshopper &rarr; frog, what does the arrow mean?", o:["&ldquo;is eaten by&rdquo;","&ldquo;eats&rdquo;","&ldquo;lives near&rdquo;","&ldquo;is bigger than&rdquo;"], a:0, e:"Mũi tên chỉ chiều năng lượng truyền đi: cỏ <i>bị ăn bởi</i> châu chấu."},
+ {u:"s25", q:"In that chain the grasshopper is the:", o:["Producer","Primary consumer","Secondary consumer","Decomposer"], a:1, e:"Ăn trực tiếp sinh vật sản xuất nên là sinh vật tiêu thụ bậc 1."},
+ {u:"s25", q:"Why are food chains rarely longer than five links?", o:["Not enough animals","Most energy is lost as heat at each step","Arrows run out","Plants stop growing"], a:1, e:"Chỉ khoảng một phần mười năng lượng lên được bậc trên."},
+ {u:"s25", q:"What is the job of a decomposer?", o:["To hunt prey","To break down dead material and return nutrients to the soil","To make food from sunlight","To pollinate flowers"], a:1, e:"Nấm và vi khuẩn phân giải xác sinh vật, trả chất dinh dưỡng về đất."},
+ {u:"s25", q:"A food web is different from a food chain because it:", o:["Shows many chains linked together","Has no arrows","Has no producers","Is always shorter"], a:0, e:"Lưới thức ăn phản ánh đúng thực tế: mỗi loài ăn nhiều loại thức ăn."},
+ {u:"s12", q:"A river is polluted and the small fish die. What happens to birds that eat them?", o:["Their number rises","Their number falls","Nothing changes","They become producers"], a:1, e:"Mất nguồn thức ăn thì số chim giảm — thay đổi lan theo cả lưới."},
+ {u:"s12", q:"All the foxes are removed from a food web. What most likely happens to the rabbits first?", o:["Their number falls","Their number rises","Nothing changes","They eat the foxes"], a:1, e:"Mất kẻ săn mồi thì số thỏ tăng, sau đó cỏ bị ăn nhiều nên có thể lại giảm."},
+ {u:"s12", q:"Which action by a pupil reduces harm most every day?", o:["Leaving lights on","Using a refillable water bottle","Buying more plastic bags","Dropping litter"], a:1, e:"Bình nước tái sử dụng cắt rác nhựa mỗi ngày — thay đổi nhỏ lặp lại rất nhiều lần."},
+ {u:"s12", q:"Which is a renewable resource?", o:["Coal","Oil","Wind","Natural gas"], a:2, e:"Gió không cạn; than, dầu, khí đốt là nhiên liệu hoá thạch và sẽ hết."}]},
+
+"science:5":{ name:"Unit 5 test", vi:"Kiểm tra Unit 5: Lực và điện", mins:15, qs:[
+ {u:"s5", q:"What unit is force measured in?", o:["Kilograms","Newtons","Metres","Litres"], a:1, e:"Lực đo bằng niutơn (N); kilôgam là đơn vị khối lượng."},
+ {u:"s5", q:"An astronaut travels to the Moon. What happens?", o:["Mass and weight both stay the same","Mass stays the same, weight decreases","Mass decreases, weight stays the same","Both increase"], a:1, e:"Khối lượng là lượng vật chất nên không đổi; trọng lực Mặt Trăng yếu hơn nên trọng lượng nhỏ hơn."},
+ {u:"s5", q:"A pupil has a mass of 40 kg. Roughly what is their weight on Earth?", o:["40 N","400 N","4 N","4000 N"], a:1, e:"Trên Trái Đất, trọng lượng xấp xỉ khối lượng nhân 10 &rarr; khoảng 400 N."},
+ {u:"s24", q:"A book lies still on a desk. The forces on it are:", o:["Unbalanced","Balanced","Zero","Only gravity"], a:1, e:"Trọng lực kéo xuống và mặt bàn đẩy lên bằng nhau nên cân bằng."},
+ {u:"s24", q:"Which is NOT something a force can do?", o:["Change an object's shape","Change its direction","Change its colour","Make it speed up"], a:2, e:"Lực đổi chuyển động hoặc hình dạng, không đổi màu."},
+ {u:"s24", q:"Oil is put on a squeaky hinge. This:", o:["Increases friction","Reduces friction","Adds weight","Adds gravity"], a:1, e:"Dầu tạo lớp trơn nên ma sát giảm."},
+ {u:"s22", q:"What is the upward force from water called?", o:["Gravity","Friction","Upthrust","Weight"], a:2, e:"Nước đẩy vật lên bằng lực gọi là upthrust."},
+ {u:"s22", q:"A solid steel block sinks but a steel ship floats. Why?", o:["Ships use lighter steel","The ship's shape holds air, making it less dense overall","Sea water is thicker","Ships have engines"], a:1, e:"Vỏ tàu rỗng chứa không khí nên khối lượng riêng trung bình nhỏ hơn nước."},
+ {u:"s7", q:"A lamp does not light. What is the most likely cause?", o:["The circuit has a gap in it","The wires are too short","The lamp is plastic","The room is too bright"], a:0, e:"Mạch phải kín thì dòng điện mới chạy; hở mạch là nguyên nhân phổ biến nhất."},
+ {u:"s7", q:"Two more lamps are added to a series circuit. Each lamp will be:", o:["Brighter","Dimmer","Unchanged","Off"], a:1, e:"Cùng một nguồn chia cho nhiều bóng hơn, điện trở tổng tăng nên mỗi bóng tối đi."}]},
+
+"science:6":{ name:"Unit 6 test", vi:"Kiểm tra Unit 6: Ánh sáng và Hệ Mặt Trời", mins:15, qs:[
+ {u:"s6", q:"How does light travel?", o:["In curves","In straight lines","In circles","Only downwards"], a:1, e:"Ánh sáng truyền thẳng — vì thế bóng có hình giống vật."},
+ {u:"s6", q:"A toy is moved closer to a torch. Its shadow on the wall:", o:["Gets bigger","Gets smaller","Disappears","Stays the same"], a:0, e:"Vật càng gần nguồn sáng thì chặn nhiều tia hơn nên bóng to ra."},
+ {u:"s6", q:"Light hits a mirror at 30&deg; to the normal. At what angle does it reflect?", o:["15&deg;","30&deg;","60&deg;","90&deg;"], a:1, e:"Góc tới bằng góc phản xạ."},
+ {u:"s6", q:"You raise your right hand in front of a mirror. The image appears to raise its:", o:["Right hand","Left hand","Both hands","No hand"], a:1, e:"Gương đảo trái phải, nhưng kích thước và khoảng cách không đổi."},
+ {u:"s23", q:"What is refraction?", o:["Light bouncing off a surface","Light bending as it enters a different material","Light being blocked","Light being absorbed"], a:1, e:"Khúc xạ là bẻ cong khi qua ranh giới hai môi trường; dội lại mới là phản xạ."},
+ {u:"s23", q:"Why does a straw look broken in a glass of water?", o:["It really bends","Light from it refracts as it leaves the water","The water is dirty","The glass is curved"], a:1, e:"Tia sáng từ phần dưới nước bị bẻ cong khi ra khỏi mặt nước."},
+ {u:"s23", q:"What does a prism do to white light?", o:["Blocks it","Splits it into a spectrum of colours","Turns it into heat","Reflects it back"], a:1, e:"Mỗi màu bị bẻ cong một góc khác nhau nên tách thành dải bảy màu."},
+ {u:"s8", q:"What causes day and night?", o:["The Sun moving round the Earth","The Earth spinning on its axis","The Moon blocking the Sun","The Earth orbiting the Sun"], a:1, e:"Trái Đất tự quay quanh trục trong 24 giờ."},
+ {u:"s8", q:"Which planet is fourth from the Sun?", o:["Venus","Mars","Jupiter","Mercury"], a:1, e:"Thứ tự: Thuỷ, Kim, Trái Đất, Hoả &rarr; Sao Hoả là thứ tư."},
+ {u:"s8", q:"Why does the Moon appear to change shape during a month?", o:["Clouds cover part of it","We see different amounts of its sunlit side as it orbits Earth","It really changes shape","Earth's shadow always covers it"], a:1, e:"Mặt Trăng luôn có nửa được chiếu sáng; khi nó quay quanh Trái Đất ta thấy phần sáng ở các góc khác nhau."}]}
+});
+</script>
+
+<script>
+Object.assign(TESTS, {
+"esl:1":{ name:"Unit 1 test", vi:"Kiểm tra Unit 1: My world", mins:15, qs:[
+ {u:"e12", q:"______ you ever climbed a mountain?", o:["Did","Have","Are","Do"], a:1, e:"Hỏi về trải nghiệm dùng hiện tại hoàn thành: Have you ever...?"},
+ {u:"e12", q:"She felt ______ when she found her lost keys.", o:["nervous","relieved","disappointed","curious"], a:1, e:"relieved là nhẹ nhõm sau khi đã lo lắng."},
+ {u:"e12", q:"We travelled around the island ______ bicycle.", o:["in","by","at","on"], a:1, e:"Phương tiện đi lại dùng <b>by</b>: by bicycle, by bus, by plane."},
+ {u:"e12", q:"My cousin is ______ hospital after her operation.", o:["at","in","on","by"], a:1, e:"<i>in hospital</i> nghĩa là đang nằm viện điều trị."},
+ {u:"e12", q:"I am very proud ______ my little brother.", o:["for","of","at","with"], a:1, e:"Cụm cố định <b>proud of</b> somebody."},
+ {u:"e1", q:"I ______ my project, so I can relax now.", o:["finish","finished","have finished","was finishing"], a:2, e:"Việc xong ảnh hưởng tới hiện tại nên dùng hiện tại hoàn thành."},
+ {u:"e1", q:"They ______ to Singapore last April.", o:["have gone","have been","went","go"], a:2, e:"Có mốc quá khứ <i>last April</i> nên bắt buộc dùng quá khứ đơn."},
+ {u:"e1", q:"We have lived in this house ______ 2020.", o:["for","since","from","during"], a:1, e:"2020 là MỐC thời gian nên dùng since; for đi với khoảng thời gian."},
+ {u:"e1", q:"Mum is not home. She ______ to the market.", o:["has been","has gone","went to","have gone"], a:1, e:"Mẹ chưa về nên dùng has gone to; đã về rồi mới nói has been to."},
+ {u:"e1", q:"Which sentence is INCORRECT?", o:["I have never tried durian.","They have just arrived.","I have seen her yesterday.","She has worked here for a year."], a:2, e:"Không dùng hiện tại hoàn thành với <i>yesterday</i>; phải viết <i>I saw her yesterday.</i>"}]},
+
+"esl:2":{ name:"Unit 2 test", vi:"Kiểm tra Unit 2: Sport", mins:15, qs:[
+ {u:"e13", q:"You wear these to protect your eyes when swimming:", o:["gloves","goggles","a racket","a whistle"], a:1, e:"goggles là kính bơi."},
+ {u:"e13", q:"Which joint connects your foot to your leg?", o:["wrist","elbow","ankle","shoulder"], a:2, e:"ankle là cổ chân; wrist là cổ tay, elbow là khuỷu tay."},
+ {u:"e13", q:"Athletes ______ a lot of water during a race.", o:["need","needs to","needing","need to be"], a:0, e:"Chủ ngữ số nhiều dùng <i>need</i>, theo sau là danh từ."},
+ {u:"e4", q:"If you practise every day, you ______ better.", o:["get","got","will get","would get"], a:2, e:"Điều kiện loại 1: if + hiện tại đơn, mệnh đề chính dùng will."},
+ {u:"e4", q:"______ you warm up, you may get injured.", o:["If","Unless","When","Because"], a:1, e:"Unless = if not: nếu bạn KHÔNG khởi động."},
+ {u:"e4", q:"If I ______ a professional athlete, I would train every morning.", o:["am","was","were","will be"], a:2, e:"Điều kiện loại 2 dùng <i>were</i> cho mọi chủ ngữ."},
+ {u:"e4", q:"Where does the comma go? &lsquo;If it rains we will play indoors.&rsquo;", o:["After &lsquo;rains&rsquo;","After &lsquo;If&rsquo;","After &lsquo;play&rsquo;","No comma needed"], a:0, e:"Mệnh đề if đứng đầu câu nên có dấu phẩy sau nó."},
+ {u:"e7", q:"You ______ swim here. The water is dangerous.", o:["mustn't","don't have to","should","might"], a:0, e:"Nguy hiểm nên đây là điều CẤM &rarr; mustn't."},
+ {u:"e7", q:"It is Sunday, so we ______ get up early.", o:["mustn't","don't have to","can't","shouldn't"], a:1, e:"Chủ nhật KHÔNG CẦN dậy sớm (nhưng vẫn được phép)."},
+ {u:"e7", q:"Which sentence is correct?", o:["He can to swim.","He cans swim.","He can swim.","He can swimming."], a:2, e:"Sau modal là động từ nguyên thể không <i>to</i>, và modal không thêm -s."}]},
+
+"esl:3":{ name:"Unit 3 test", vi:"Kiểm tra Unit 3: Living things", mins:15, qs:[
+ {u:"e14", q:"Fish breathe using their:", o:["lungs","gills","beaks","claws"], a:1, e:"Cá dùng mang để lấy oxygen hoà tan trong nước."},
+ {u:"e14", q:"A penguin ______ its eggs warm on its feet.", o:["keep","keeps","keeping","are keeping"], a:1, e:"Chủ ngữ số ít ngôi thứ ba nên động từ thêm -s."},
+ {u:"e14", q:"______ do sea turtles lay their eggs?", o:["What","Where","Who","Which"], a:1, e:"Hỏi về nơi chốn dùng Where."},
+ {u:"e14", q:"A group of the same kind of living thing is called a:", o:["habitat","species","predator","reef"], a:1, e:"species là loài; habitat là nơi sống."},
+ {u:"e14", q:"Which sentence is correct?", o:["Birds has feathers.","A bird have feathers.","Birds have feathers.","Bird have feather."], a:2, e:"Chủ ngữ số nhiều <i>birds</i> đi với <i>have</i> và danh từ số nhiều."},
+ {u:"e6", q:"The whale, ______ is the largest animal on Earth, eats tiny plankton.", o:["who","which","where","whose"], a:1, e:"Cá voi là con vật nên dùng which; giữa hai dấu phẩy thì không dùng that."},
+ {u:"e6", q:"That is the forest ______ the tigers live.", o:["which","who","where","when"], a:2, e:"Nói về nơi chốn nên dùng where."},
+ {u:"e6", q:"I met a girl ______ father is a marine biologist.", o:["who","whose","which","that"], a:1, e:"Chỉ sự sở hữu (bố CỦA cô bé) nên dùng whose."},
+ {u:"e6", q:"Which sentence is INCORRECT?", o:["The bird that sings is a robin.","The tree which grows here is old.","The fish who swims is fast.","The plant that needs water is dry."], a:2, e:"Cá là con vật nên dùng which hoặc that, không dùng who."},
+ {u:"e6", q:"Combine: &lsquo;I have a friend. She studies plants.&rsquo;", o:["I have a friend who studies plants.","I have a friend which studies plants.","I have a friend where studies plants.","I have a friend she studies plants."], a:0, e:"Thay <i>She</i> bằng who để nối hai câu thành một câu mượt hơn."}]},
+
+"esl:4":{ name:"Unit 4 test", vi:"Kiểm tra Unit 4: Inventions", mins:12, qs:[
+ {u:"e15", q:"Alexander Graham Bell ______ the telephone in 1876.", o:["invents","has invented","invented","will invent"], a:2, e:"Có mốc quá khứ rõ ràng nên dùng quá khứ đơn."},
+ {u:"e15", q:"What is the past simple of &lsquo;think&rsquo;?", o:["thinked","thought","thinks","thinking"], a:1, e:"think là bất quy tắc: think &rarr; thought."},
+ {u:"e15", q:"In fifty years, people ______ live on Mars.", o:["will probably","probably will not be","are probably","were probably"], a:0, e:"Dự đoán tương lai dùng will; probably đứng sau will."},
+ {u:"e15", q:"Please ______ the light when you leave.", o:["switch off","switch of","switching off","switched"], a:0, e:"Cụm động từ <i>switch off</i> nghĩa là tắt; sau please dùng nguyên thể."},
+ {u:"e15", q:"Which sentence is INCORRECT?", o:["Turn off the radio.","Turn the radio off.","Turn it off.","Turn off it."], a:3, e:"Với đại từ <i>it</i> thì bắt buộc tách cụm động từ: turn it off."},
+ {u:"e15", q:"She ______ a brilliant idea for a new app.", o:["came up with","came up of","come up with","coming with"], a:0, e:"<i>come up with</i> là nghĩ ra; ở quá khứ là came up with."},
+ {u:"e15", q:"A small useful piece of equipment is called a:", o:["gadget","engine","wheel","screen"], a:0, e:"gadget là đồ dùng nhỏ tiện lợi."},
+ {u:"e15", q:"The past simple of &lsquo;build&rsquo; is:", o:["builded","built","building","builds"], a:1, e:"build &rarr; built &rarr; built, động từ bất quy tắc."},
+ {u:"e15", q:"Which shows a prediction, not a fact?", o:["The wheel was invented long ago.","Robots will do more work in future.","My phone has a screen.","She invented a robot."], a:1, e:"will + động từ diễn tả dự đoán về tương lai."},
+ {u:"e15", q:"He ______ the machine ______ to see how it worked.", o:["took / apart","take / apart","taken / off","took / on"], a:0, e:"<i>take apart</i> nghĩa là tháo rời; ở quá khứ là took apart."}]},
+
+"esl:5":{ name:"Unit 5 test", vi:"Kiểm tra Unit 5: Money", mins:12, qs:[
+ {u:"e16", q:"Can I ______ your calculator, please?", o:["lend","borrow","earn","afford"], a:1, e:"Mình lấy của người khác thì dùng borrow; người đưa cho mình thì lends."},
+ {u:"e16", q:"How ______ money did you save this month?", o:["many","much","few","a lot"], a:1, e:"money là danh từ không đếm được nên dùng much."},
+ {u:"e16", q:"There were only ______ coins left in my purse.", o:["much","a little","a few","less"], a:2, e:"coins đếm được nên dùng a few."},
+ {u:"e16", q:"There is ______ traffic today than yesterday.", o:["fewer","less","few","many"], a:1, e:"traffic không đếm được nên dùng less; fewer chỉ dùng cho danh từ đếm được."},
+ {u:"e16", q:"I made this poster ______.", o:["myself","me","mine","my"], a:0, e:"Chủ ngữ I nên đại từ phản thân là myself."},
+ {u:"e16", q:"They built the treehouse ______.", o:["themself","themselves","theirselves","them"], a:1, e:"Chủ ngữ they nên dùng themselves; không có dạng <i>theirselves</i>."},
+ {u:"e16", q:"She saves money ______ than her brother.", o:["carefuller","more carefully","most carefully","carefully"], a:1, e:"Trạng từ đuôi -ly thì so sánh hơn dùng more + trạng từ."},
+ {u:"e16", q:"We cannot ______ a holiday abroad this year.", o:["spend","afford","earn","cost"], a:1, e:"afford là có đủ tiền để mua được; cost là giá bao nhiêu."},
+ {u:"e16", q:"A jacket costs $40 with 25% off. What do you pay?", o:["$10","$25","$30","$35"], a:2, e:"25% của 40 là 10 (số tiền giảm), nên phải trả 40 &minus; 10 = $30."},
+ {u:"e16", q:"He works ______ than anyone else in the team.", o:["harder","more hard","hardest","hardly"], a:0, e:"hard là trạng từ ngắn nên so sánh hơn là harder; <i>hardly</i> nghĩa hoàn toàn khác là &lsquo;hầu như không&rsquo;."}]}
+});
+</script>
+
+<script>
+Object.assign(TESTS, {
+"esl:6":{ name:"Unit 6 test", vi:"Kiểm tra Unit 6: People and work", mins:12, qs:[
+ {u:"e17", q:"Someone who studies science is a:", o:["scienter","sciencer","scientist","scientor"], a:2, e:"Hậu tố -ist: scientist, artist, dentist, journalist."},
+ {u:"e17", q:"My mother is very good ______ solving problems.", o:["in","at","for","on"], a:1, e:"Cụm cố định <b>good at</b> + V-ing hoặc danh từ."},
+ {u:"e17", q:"A nurse must be ______ because patients need time and care.", o:["patient","patience","patiently","impatient"], a:0, e:"Cần TÍNH TỪ để tả người: patient. patience là danh từ."},
+ {u:"e17", q:"Which is a compound noun?", o:["quickly","firefighter","beautiful","carefully"], a:1, e:"firefighter = fire + fighter, hai danh từ ghép lại."},
+ {u:"e17", q:"He ______ in Hue this month, but he usually lives in Ha Noi.", o:["works","is working","worked","has worked"], a:1, e:"Tình huống tạm thời nên dùng hiện tại tiếp diễn."},
+ {u:"e17", q:"She is responsible ______ the whole team.", o:["of","for","to","with"], a:1, e:"Cụm cố định <b>responsible for</b>."},
+ {u:"e5", q:"&lsquo;I work at night,&rsquo; he said. &rarr; He said he ______ at night.", o:["works","worked","is working","will work"], a:1, e:"Tường thuật lùi thì: work &rarr; worked."},
+ {u:"e5", q:"Which sentence is correct?", o:["She told that she was busy.","She said me she was busy.","She told me she was busy.","She said to she was busy."], a:2, e:"<b>tell</b> phải có tân ngữ người; <b>say</b> thì không."},
+ {u:"e5", q:"&lsquo;Where do you live?&rsquo; he asked. &rarr; He asked where I ______.", o:["live","lived","did live","do live"], a:1, e:"Câu hỏi tường thuật dùng trật tự câu kể và lùi thì, bỏ trợ động từ."},
+ {u:"e5", q:"&lsquo;Are you ready?&rsquo; she asked. &rarr; She asked ______ I was ready.", o:["that","if","what","which"], a:1, e:"Câu hỏi yes/no khi tường thuật dùng if hoặc whether."}]},
+
+"esl:7":{ name:"Unit 7 test", vi:"Kiểm tra Unit 7: Nature's power", mins:12, qs:[
+ {u:"e18", q:"The storm was ______ and everyone was ______.", o:["terrified / terrifying","terrifying / terrified","terrify / terrified","terrifying / terrifying"], a:1, e:"Sự vật gây ra cảm giác dùng -ing; con người cảm nhận dùng -ed."},
+ {u:"e18", q:"The journey was ______ so we were all ______.", o:["tired / tiring","tiring / tired","tire / tired","tiring / tiring"], a:1, e:"Chuyến đi gây mệt (-ing), người thấy mệt (-ed)."},
+ {u:"e18", q:"I am afraid ______ thunder.", o:["from","of","for","with"], a:1, e:"Cụm cố định <b>afraid of</b>."},
+ {u:"e18", q:"We stayed inside ______ the wind was very strong.", o:["although","because","however","so"], a:1, e:"Nêu lý do nên dùng because."},
+ {u:"e18", q:"______ it was raining, they still went out.", o:["Because","So","Although","And"], a:2, e:"Although mở đầu mệnh đề chỉ sự tương phản."},
+ {u:"e18", q:"Which comes first in a storm, and why?", o:["Thunder, it is louder","Lightning, because light travels faster than sound","They arrive together","Thunder, it is hotter"], a:1, e:"Ta thấy chớp trước vì ánh sáng đi nhanh hơn âm thanh rất nhiều."},
+ {u:"e18", q:"A long period with no rain is called a:", o:["flood","drought","hurricane","eruption"], a:1, e:"drought là hạn hán; flood là lũ, ngược lại hẳn."},
+ {u:"e18", q:"Molten rock that flows out of a volcano is called:", o:["magma","lava","ash","steam"], a:1, e:"Dưới đất là magma, chảy ra mặt đất gọi là lava."},
+ {u:"e18", q:"She was ______ about the news of the earthquake.", o:["worry","worried","worrying","worries"], a:1, e:"Người cảm thấy lo nên dùng -ed: worried about."},
+ {u:"e18", q:"The film about volcanoes was really ______.", o:["interested","interest","interesting","interests"], a:2, e:"Bộ phim gây ra sự thích thú nên dùng -ing: interesting."}]},
+
+"esl:8":{ name:"Unit 8 test", vi:"Kiểm tra Unit 8: Entertainment", mins:12, qs:[
+ {u:"e19", q:"The film ______ in New Zealand.", o:["was filmed","were filmed","is filming","filmed"], a:0, e:"Chủ ngữ số ít và ở quá khứ nên dùng was + V3."},
+ {u:"e19", q:"The first cinemas ______ in the 1890s.", o:["was built","were built","built","are built"], a:1, e:"Chủ ngữ số nhiều <i>cinemas</i> nên dùng were built."},
+ {u:"e19", q:"The story of a film is called the:", o:["scene","plot","screen","review"], a:1, e:"plot là cốt truyện; scene là một cảnh."},
+ {u:"e19", q:"Complete: &lsquo;He ______ late for the cinema.&rsquo;", o:["always is","is always","always be","be always"], a:1, e:"Với động từ <b>be</b> thì trạng từ tần suất đứng SAU."},
+ {u:"e19", q:"Where does &lsquo;often&rsquo; go? &lsquo;She ______ watches cartoons.&rsquo;", o:["often (before watches)","after watches","at the end only","it cannot be used"], a:0, e:"Trạng từ tần suất đứng trước động từ chính: She often watches."},
+ {u:"e19", q:"Rewrite in the passive: &lsquo;Someone stole the camera.&rsquo;", o:["The camera stole.","The camera was stolen.","The camera is stealing.","The camera were stolen."], a:1, e:"Tân ngữ thành chủ ngữ, dùng was + V3; không cần <i>by someone</i>."},
+ {u:"e3", q:"Rice ______ in many parts of Vietnam.", o:["grows","is grown","is growing","grew"], a:1, e:"Lúa được người ta trồng nên dùng bị động hiện tại đơn."},
+ {u:"e3", q:"These toys ______ made in China.", o:["is","are","was","be"], a:1, e:"Chủ ngữ <i>these toys</i> số nhiều nên dùng are."},
+ {u:"e3", q:"Which sentence CANNOT be made passive?", o:["They built the school.","She wrote the letter.","He arrived early.","We cleaned the room."], a:2, e:"arrive là nội động từ, không có tân ngữ nên không chuyển sang bị động."},
+ {u:"e3", q:"Why is the passive often used in reports?", o:["It is shorter","What happened matters more than who did it","It sounds friendlier","It is easier to spell"], a:1, e:"Trong báo cáo, điều quan trọng là sự việc chứ không phải ai làm."}]},
+
+"esl:9":{ name:"Unit 9 test", vi:"Kiểm tra Unit 9: Amazing arts", mins:12, qs:[
+ {u:"e20", q:"Everyone ______ enjoying the exhibition.", o:["are","is","were","have"], a:1, e:"Đại từ bất định như everyone luôn đi với động từ số ít."},
+ {u:"e20", q:"There is ______ in the gallery. It is completely empty.", o:["someone","anyone","no one","everyone"], a:2, e:"Phòng trống nên không có ai: no one."},
+ {u:"e20", q:"I ______ the piano since I was six.", o:["play","played","have played","will play"], a:2, e:"Bắt đầu trong quá khứ và còn tiếp tới hiện tại nên dùng hiện tại hoàn thành."},
+ {u:"e20", q:"Put the adjectives in order: a ______ vase.", o:["clay old beautiful","beautiful old clay","old beautiful clay","clay beautiful old"], a:1, e:"Thứ tự: ý kiến &rarr; tuổi &rarr; chất liệu."},
+ {u:"e20", q:"Put in order: a ______ scarf.", o:["silk long red","long red silk","red long silk","silk red long"], a:1, e:"Thứ tự: kích thước &rarr; màu &rarr; chất liệu."},
+ {u:"e20", q:"The concert ______ at seven o'clock tomorrow.", o:["start","starts","started","is start"], a:1, e:"Lịch trình cố định dùng hiện tại đơn dù nói về tương lai."},
+ {u:"e20", q:"That cloud looks ______ a dragon.", o:["like","as","same","similar"], a:0, e:"look like + danh từ nghĩa là trông giống."},
+ {u:"e20", q:"A picture of a person's face is called a:", o:["landscape","portrait","sculpture","sketch"], a:1, e:"portrait là tranh chân dung; landscape là phong cảnh."},
+ {u:"e20", q:"An artwork carved from stone or clay is a:", o:["painting","sculpture","canvas","gallery"], a:1, e:"sculpture là tác phẩm điêu khắc."},
+ {u:"e20", q:"______ has left their brushes on the table.", o:["Someone","Anyone","No one","Everyone are"], a:0, e:"Câu khẳng định dùng someone; anyone thường dùng trong câu hỏi và phủ định."}]}
+});
 syncPoints();
 ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
 render();
