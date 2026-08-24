@@ -810,7 +810,7 @@ math: { name:"Mathematics", vi:"Toán", icon:"&#128208;", ac:"--mat", acbg:"--ma
      e:"Đổi cùng đơn vị trước: 12 m = 1200 cm. Rồi 1200 &divide; 80 = 15 đoạn."},
     {q:"Nam has twice as many stickers as Lan. Together they have 36. How many does Lan have?", o:["18","12","24","9"], a:1,
      e:"Coi Lan là 1 phần, Nam là 2 phần &rarr; 3 phần bằng 36, mỗi phần 12. Lan có 12, Nam có 24."},
-    {q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Both A and B","1750 ml"], a:2,
+    {q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Cả 2750 ml và 2,75 lít","1750 ml"], a:2,
      e:"4.5 lít = 4500 ml; 4500 &minus; 1750 = 2750 ml, cũng chính là 2.75 lít. Hai cách viết đều đúng."},
     {q:"Why should you show your working?", o:["It looks tidy","You can earn method marks even if the answer is wrong","It uses more paper","The examiner asks for it"], a:1,
      e:"Đề Checkpoint chấm cả phương pháp; trình bày rõ ràng vẫn ghi điểm dù đáp số cuối bị sai."}]}
@@ -892,7 +892,7 @@ esl: { name:"English (ESL)", vi:"Tiếng Anh", icon:"&#128218;", ac:"--esl", acb
     {q:"The bridge ______ in 1998.", o:["was built","is built","built","has built"], a:0,
      e:"Có mốc quá khứ 1998 nên dùng bị động quá khứ đơn: was built."},
     {q:"Which sentence is passive?", o:["The chef cooked the fish.","The fish was cooked by the chef.","The chef is cooking.","The fish tastes good."], a:1,
-     e:"Chỉ câu B có be + V3 (was cooked) và chủ ngữ là vật nhận hành động."},
+     e:"Chỉ câu <i>The fish was cooked by the chef</i> có be + V3 và chủ ngữ là vật nhận hành động."},
     {q:"These toys ______ made in China.", o:["is","are","was","be"], a:1,
      e:"Chủ ngữ &lsquo;these toys&rsquo; số nhiều nên dùng are. Lỗi hay gặp là không hợp chủ ngữ với động từ be."},
     {q:"Why is the passive often used in science reports?", o:["It is shorter","The method matters more than who did it","It sounds friendlier","It is easier to spell"], a:1,
@@ -972,7 +972,7 @@ esl: { name:"English (ESL)", vi:"Tiếng Anh", icon:"&#128218;", ac:"--esl", acb
     {q:"I met a boy ______ father is a pilot.", o:["who","whose","which","that"], a:1,
      e:"Chỉ sự sở hữu (bố CỦA cậu bé) nên dùng whose."},
     {q:"Which sentence is INCORRECT?", o:["The man who called is my uncle.","The car which I bought is red.","The dog that barks is loud.","The teacher who she teaches us is kind."], a:3,
-     e:"Câu D lặp chủ ngữ: đã có &lsquo;who&rsquo; thì không dùng thêm &lsquo;she&rsquo;. Viết đúng: <i>The teacher who teaches us is kind.</i>"},
+     e:"Câu <i>The teacher who she teaches us is kind</i> lặp chủ ngữ: đã có &lsquo;who&rsquo; thì không dùng thêm &lsquo;she&rsquo;. Viết đúng: <i>The teacher who teaches us is kind.</i>"},
     {q:"Combine: &lsquo;I have a friend. He lives in Hue.&rsquo;", o:["I have a friend who lives in Hue.","I have a friend which lives in Hue.","I have a friend where lives in Hue.","I have a friend he lives in Hue."], a:0,
      e:"Thay &lsquo;He&rsquo; bằng đại từ quan hệ who để nối hai câu thành một câu mượt hơn."},
     {q:"In &lsquo;My bike, which is new, was expensive&rsquo;, the part between commas is:", o:["The main idea","Extra information that can be removed","A question","A mistake"], a:1,
@@ -2052,8 +2052,9 @@ function vExamResult(){
   const rec = store[key] || {best:0, tries:0};
   rec.best=Math.max(rec.best,p); rec.last=p; rec.tries++; rec.date=today();
   store[key]=rec; addMinutes(ex.mins);
-  const _b=(S.pts&&S.pts.claimed["exam_"+k])||0; syncPoints();
-  LAST_DELTA = ST.paper ? 0 : (((S.pts&&S.pts.claimed["exam_"+k])||0)-_b); save();
+  const pkey = ST.paper ? ("test_"+ST.paper.key) : ("exam_"+k);
+  const _b=(S.pts&&S.pts.claimed[pkey])||0; syncPoints();
+  LAST_DELTA = ((S.pts&&S.pts.claimed[pkey])||0)-_b; save();
   const byUnit={};
   ex.qs.forEach((q,i)=>{ if(!q.u) return; byUnit[q.u]=byUnit[q.u]||{r:0,n:0}; byUnit[q.u].n++; if(ST.ans[i]===q.a) byUnit[q.u].r++; });
   const weak = Object.keys(byUnit).filter(id=>byUnit[id].r<byUnit[id].n);
@@ -2417,7 +2418,7 @@ e8:{d:[{en:"Vary sentence length: a short sentence after two long ones adds impa
  {en:"A report needs headings, facts and the passive; a story needs description and dialogue.",vi:"Bài báo cáo cần tiêu đề, số liệu và câu bị động; truyện cần miêu tả và lời thoại."}],
  a:["Viết một email 5 câu cho ông bà kể về tuần vừa rồi.","Viết lại một câu kể cảm xúc thành câu tả hành động.","Lập dàn ý 3 đoạn cho một câu chuyện trước khi ngủ."],
  c:{q:"Which sentence &lsquo;shows&rsquo; rather than &lsquo;tells&rsquo;?",o:["I was very happy.","The party was fun.","I could not stop grinning as I opened the box.","It was a good day."],a:2,
-  e:"Câu C miêu tả hành động cụ thể để người đọc tự cảm nhận được niềm vui, thay vì nói thẳng."}},
+  e:"Câu về việc cười mãi không thôi miêu tả hành động cụ thể, để người đọc tự cảm nhận niềm vui thay vì nói thẳng."}},
 e9:{d:[{en:"<i>im-</i> is used before m and p, <i>ir-</i> before r, <i>il-</i> before l: impossible, irregular, illegal.",vi:"im- dùng trước m và p, ir- trước r, il- trước l: impossible, irregular, illegal."},
  {en:"Many science words come from Latin or Greek: <i>bio</i> = life, <i>photo</i> = light, <i>thermo</i> = heat.",vi:"Nhiều từ khoa học gốc Latin hoặc Hy Lạp: bio là sự sống, photo là ánh sáng, thermo là nhiệt."},
  {en:"Recording a new word with a sentence, not just a translation, makes it stick far better.",vi:"Ghi từ mới kèm một câu ví dụ thay vì chỉ ghi nghĩa sẽ nhớ lâu hơn nhiều."}],
@@ -2603,7 +2604,8 @@ vResult = function(){
 /* ---------- TÀI KHOẢN VÀ ĐIỂM THƯỞNG ---------- */
 const DIEM_MOI_BAI = 5;       // mỗi bài học tối đa 5 điểm
 const DONG_MOI_DIEM = 1000;   // 100 điểm = 100.000đ
-const GOI_DOI = 100;          // đổi theo lô 100 điểm
+const TOI_THIEU_DOI = 10;     // xin đổi từ 10 điểm trở lên
+const PHUT_MOI_DIEM = 15;     // học 15 phút được 1 điểm
 let LAST_DELTA = 0;
 
 if(!S.pts) S.pts = {claimed:{}, spent:0, reqs:[]};
@@ -2615,11 +2617,26 @@ const ptsFor = (percent)=> Math.max(0, Math.min(DIEM_MOI_BAI, Math.round(percent
 function syncPoints(){
   allUnits().forEach(({u})=>{ const r=S.units[u.id]; if(r) S.pts.claimed[u.id]=ptsFor(r.best); });
   SUBJ_IDS.forEach(k=>{ const r=S.exams[k]; if(r) S.pts.claimed["exam_"+k]=ptsFor(r.best); });
+  if(S.tests) Object.keys(S.tests).forEach(key=>{ S.pts.claimed["test_"+key]=ptsFor(S.tests[key].best); });
+  const phut = Object.keys(S.hist||{}).reduce((a,d)=>a+(S.hist[d]||0), 0);
+  S.pts.claimed["_time"] = Math.floor(phut / PHUT_MOI_DIEM);
+}
+function ptsBreakdown(){
+  const b={bai:0, de:0, kt:0, on:0, tg:0};
+  Object.keys(S.pts.claimed).forEach(k=>{
+    const v=S.pts.claimed[k]||0;
+    if(k==="_time") b.tg+=v;
+    else if(k.indexOf("exam_")===0) b.de+=v;
+    else if(k.indexOf("test_review:")===0) b.on+=v;
+    else if(k.indexOf("test_")===0) b.kt+=v;
+    else b.bai+=v;
+  });
+  return b;
 }
 const totalEarned = ()=> Object.keys(S.pts.claimed).reduce((a,k)=>a+S.pts.claimed[k],0);
 const pendingPts  = ()=> S.pts.reqs.filter(r=>r.st==="cho").reduce((a,r)=>a+r.pts,0);
 const balance     = ()=> totalEarned() - S.pts.spent - pendingPts();
-const maxPts      = ()=> (allUnits().length + SUBJ_IDS.length) * DIEM_MOI_BAI;
+const maxPts      = ()=> (allUnits().length + SUBJ_IDS.length + Object.keys(TESTS).filter(k=>k.indexOf("review:")!==0).length) * DIEM_MOI_BAI;
 syncPoints();
 
 /* ---------- CHỌN TÀI KHOẢN ---------- */
@@ -2670,41 +2687,53 @@ function vLogin(){
 function vWallet(){
   ttl.textContent = "Điểm thưởng";
   const bal = Math.max(0, balance()), earned = totalEarned(), cho = pendingPts();
-  const canDoi = Math.floor(bal/GOI_DOI);
-  const toNext = canDoi>0 ? 0 : GOI_DOI - bal;
+  const b = ptsBreakdown();
+  const phut = Object.keys(S.hist||{}).reduce((a,d)=>a+(S.hist[d]||0), 0);
+  const toiPhut = PHUT_MOI_DIEM - (phut % PHUT_MOI_DIEM);
   view.innerHTML = `<div class="stack" style="--ac:var(--mat); --ac-bg:var(--mat-bg)">
     <div class="hero" style="text-align:center">
       <p class="eyebrow">Ví điểm của ${KID}</p>
       <p class="coin" style="color:var(--mat);margin:12px 0 6px">${bal}</p>
       <p class="money">= ${tien(bal)}</p>
       <p style="font-size:13px;color:var(--ink-soft);margin-top:8px">
-        Đã kiếm ${earned} điểm${cho?` &middot; đang chờ duyệt ${cho} điểm`:""}</p>
-      ${toNext? `<div class="bar" style="margin-top:16px"><i style="width:${(bal%GOI_DOI)/GOI_DOI*100}%"></i></div>
-        <p style="font-size:13px;margin-top:8px">Còn <b class="mono">${toNext}</b> điểm nữa là đổi được ${tien(GOI_DOI)}</p>`
-       : `<p style="font-size:14px;margin-top:14px;color:var(--good)"><b>Đổi được ${canDoi} lần &times; ${tien(GOI_DOI)}</b></p>`}
-      ${canDoi>0? `<button class="btn btn-accent" id="doi" style="margin-top:14px">Xin đổi ${GOI_DOI} điểm &rarr; ${tien(GOI_DOI)}</button>`:""}
+        Đã kiếm tất cả ${earned} điểm${cho?` &middot; đang chờ duyệt ${cho} điểm`:""}</p>
+      ${bal>=TOI_THIEU_DOI
+        ? `<button class="btn btn-accent" id="doi" style="margin-top:14px">Xin đổi ${bal} điểm &rarr; ${tien(bal)}</button>`
+        : `<p style="font-size:13.5px;margin-top:14px">Còn <b class="mono">${TOI_THIEU_DOI-bal}</b> điểm nữa là xin đổi được</p>`}
     </div>
+    <div><p class="label" style="margin-bottom:9px">&#127942; Thành tích của con</p>
+      <div class="card">
+        <div class="kv"><span>&#128218; Bài học đã làm</span><b class="mono">${b.bai} điểm</b></div>
+        <div class="kv"><span>&#128221; Bài kiểm tra cuối unit</span><b class="mono">${b.kt} điểm</b></div>
+        <div class="kv"><span>&#128197; Ôn tuần, tháng, cả năm</span><b class="mono">${b.on} điểm</b></div>
+        <div class="kv"><span>&#128203; Đề thi thử</span><b class="mono">${b.de} điểm</b></div>
+        <div class="kv"><span>&#9203; Thời gian học ${phut} phút</span><b class="mono">${b.tg} điểm</b></div>
+        <div class="kv" style="background:var(--ac-bg)"><span><b>Tổng cộng</b></span><b class="mono">${earned} điểm = ${tien(earned)}</b></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-faint);margin-top:8px">Còn ${toiPhut} phút học nữa là được thêm 1 điểm thời gian.</p></div>
     <div class="card">
       <div class="kv"><span>Mỗi bài học tối đa</span><b class="mono">${DIEM_MOI_BAI} điểm</b></div>
-      <div class="kv"><span>Mỗi đề thi thử tối đa</span><b class="mono">${DIEM_MOI_BAI} điểm</b></div>
-      <div class="kv"><span>Quy đổi</span><b class="mono">${GOI_DOI} điểm = ${tien(GOI_DOI)}</b></div>
-      <div class="kv"><span>Tối đa cả chương trình</span><b class="mono">${maxPts()} điểm = ${tien(maxPts())}</b></div>
+      <div class="kv"><span>Mỗi bài kiểm tra tối đa</span><b class="mono">${DIEM_MOI_BAI} điểm</b></div>
+      <div class="kv"><span>Học ${PHUT_MOI_DIEM} phút</span><b class="mono">1 điểm</b></div>
+      <div class="kv"><span>Quy đổi</span><b class="mono">1 điểm = ${tien(1)}</b></div>
+      <div class="kv"><span>Từ bài học và bài kiểm tra</span><b class="mono">tối đa ${maxPts()} điểm</b></div>
+      <div class="kv"><span>Từ thời gian học</span><b>không giới hạn</b></div>
     </div>
     <div><p class="label" style="margin-bottom:9px">Còn kiếm được điểm ở đây</p>
       <div class="card" id="todo"></div></div>
     ${S.pts.reqs.length? `<div><p class="label" style="margin-bottom:9px">Lịch sử đổi thưởng</p>
       <div class="stack-s" id="rq"></div></div>`:""}
-    <div class="note">Điểm mỗi bài tính theo điểm quiz cao nhất: đúng 100% được ${DIEM_MOI_BAI} điểm,
-      đúng 80% được ${Math.round(0.8*DIEM_MOI_BAI)} điểm. Làm lại tốt hơn thì điểm tự tăng, không bị mất điểm cũ.</div></div>`;
+    <div class="note">Điểm mỗi bài tính theo lần làm tốt nhất: đúng 100% được ${DIEM_MOI_BAI} điểm,
+      đúng 80% được ${Math.round(0.8*DIEM_MOI_BAI)} điểm. Làm lại tốt hơn thì điểm tự tăng, không bao giờ bị mất điểm cũ.</div></div>`;
   const todo = view.querySelector('#todo');
   const gaps = allUnits().map(({k,u})=>({k,u,p:S.pts.claimed[u.id]||0}))
     .filter(x=>x.p<DIEM_MOI_BAI).sort((a,b)=>b.p-a.p).slice(0,6);
   if(!gaps.length) todo.innerHTML = `<div class="earn"><span>Đã lấy đủ điểm tất cả các bài. Giỏi quá!</span></div>`;
   gaps.forEach(x=>{
-    const b = el(`<button class="earn" style="${subjStyle(x.k)};width:100%">
+    const n = el(`<button class="earn" style="${subjStyle(x.k)};width:100%">
       <span style="flex:1;text-align:left">${x.u.vi}<br><span style="font-size:12px;color:var(--ink-faint)">${DATA[x.k].name}</span></span>
       <span class="chip">+${DIEM_MOI_BAI-x.p}</span></button>`);
-    b.onclick=()=>go("unit",{k:x.k,uid:x.u.id}); todo.appendChild(b);
+    n.onclick=()=>go("unit",{k:x.k,uid:x.u.id}); todo.appendChild(n);
   });
   const rq = view.querySelector('#rq');
   if(rq) S.pts.reqs.slice().reverse().forEach(r=>{
@@ -2716,8 +2745,9 @@ function vWallet(){
   });
   const d = view.querySelector('#doi');
   if(d) d.onclick=()=>{
-    if(balance() < GOI_DOI){ alert("Chưa đủ "+GOI_DOI+" điểm để đổi."); return go("wallet"); }
-    S.pts.reqs.push({id:Date.now(), pts:GOI_DOI, date:new Date().toLocaleDateString('vi-VN'), st:"cho"});
+    const n = balance();
+    if(n < TOI_THIEU_DOI){ alert("Cần ít nhất "+TOI_THIEU_DOI+" điểm mới xin đổi được."); return go("wallet"); }
+    S.pts.reqs.push({id:Date.now(), pts:n, date:new Date().toLocaleDateString('vi-VN'), st:"cho"});
     save(); go("wallet");
   };
 }
@@ -2748,7 +2778,7 @@ function vAdmin(){
       <button class="btn btn-ghost" id="out">Thoát về tài khoản của ${KID}</button></div>
     <div id="pinbox"></div></div>`;
   const box = view.querySelector('#cho');
-  if(!cho.length) box.innerHTML = `<div class="note">Chưa có yêu cầu nào. Khi ${KID} đủ ${GOI_DOI} điểm, con bấm xin đổi thì yêu cầu sẽ hiện ở đây.</div>`;
+  if(!cho.length) box.innerHTML = `<div class="note">Chưa có yêu cầu nào. Khi ${KID} đủ ${TOI_THIEU_DOI} điểm, con bấm xin đổi thì yêu cầu sẽ hiện ở đây.</div>`;
   cho.forEach(r=>{
     const n = el(`<div class="req"><div class="row" style="margin-bottom:11px">
         <div style="flex:1"><b class="mono" style="font-size:16px">${r.pts} điểm &rarr; ${tien(r.pts)}</b>
@@ -4545,7 +4575,7 @@ DATA.esl.units.push(
     {q:"The story of a film is called the:", o:["scene","plot","screen","review"], a:1,
      e:"plot là cốt truyện. scene là một cảnh, screen là màn hình."},
     {q:"Which sentence is passive?", o:["Spielberg directed the film.","The film was directed by Spielberg.","Spielberg is a director.","The film is long."], a:1,
-     e:"Chỉ câu B có be + V3 và chủ ngữ là vật nhận hành động."}]},
+     e:"Chỉ câu <i>The film was directed by Spielberg</i> có be + V3 và chủ ngữ là vật nhận hành động."}]},
 
 { id:"e20", subject:"esl", t:"Unit 9: Amazing arts", vi:"Unit 9: Nghệ thuật",
   kp:[
@@ -4790,7 +4820,7 @@ Object.assign(TESTS, {
  {q:"Write 2 106 045 in words.", o:["Two million, one hundred and six thousand and forty-five","Two million, sixteen thousand and forty-five","Twenty-one million, six thousand and forty-five","Two million, one hundred and sixty thousand and forty-five"], a:0, e:"Tách nhóm ba chữ số: 2 | 106 | 045 &rarr; hai triệu, một trăm linh sáu nghìn và bốn mươi lăm."},
  {q:"Round 5.348 to one decimal place.", o:["5.3","5.4","5.35","6.0"], a:0, e:"Giữ một chữ số thập phân, nhìn chữ số kế tiếp là 4 (<5) nên giữ nguyên: 5.3."},
  {q:"Round 5.348 to two decimal places.", o:["5.34","5.35","5.3","5.4"], a:1, e:"Chữ số thứ ba là 8 (&ge;5) nên tăng 4 lên 5 &rarr; 5.35."},
- {q:"Which list is in order from smallest to largest?", o:["0.7, 0.68, 0.702","0.68, 0.7, 0.702","0.68, 0.702, 0.7","0.702, 0.7, 0.68"], a:2, e:"Viết đều: 0.680, 0.700, 0.702 &rarr; thứ tự đúng là 0.68, 0.7, 0.702. Đáp án B đảo hai số cuối."},
+ {q:"Which list is in order from smallest to largest?", o:["0.7, 0.68, 0.702","0.68, 0.7, 0.702","0.68, 0.702, 0.7","0.702, 0.7, 0.68"], a:1, e:"Viết đều: 0.680, 0.700, 0.702 nên thứ tự đúng là 0.68, 0.7, 0.702. Dãy 0.68, 0.702, 0.7 bị đảo hai số cuối."},
  {q:"0.07 &times; 100 =", o:["0.7","7","70","0.0007"], a:1, e:"Nhân 100 thì dịch hai cột sang trái: 0.07 &rarr; 0.7 &rarr; 7."},
  {q:"A number rounds to 6.5 when rounded to one decimal place. What is the largest it could be?", o:["6.54","6.549","6.5499","just under 6.55"], a:3, e:"Mọi số nhỏ hơn 6.55 đều làm tròn xuống 6.5; đúng 6.55 thì làm tròn lên 6.6."},
  {q:"Round 149 500 to the nearest thousand.", o:["149 000","150 000","149 500","140 000"], a:1, e:"Chữ số hàng trăm là 5 nên tăng hàng nghìn từ 149 lên 150 &rarr; 150 000."},
@@ -4883,7 +4913,7 @@ Object.assign(TESTS, {
  {q:"What must you do before adding 1/3 and 2/7?", o:["Add the denominators","Find a common denominator","Multiply the fractions","Simplify 2/7"], a:1, e:"Bắt buộc quy đồng mẫu trước; mẫu chung ở đây là 21."},
  {q:"Estimate 19.7 + 8.15 first. About how much is it?", o:["About 12","About 28","About 100","About 2.8"], a:1, e:"Làm tròn: 20 + 8 = 28. Kết quả chính xác 27.85 rất sát."},
  {q:"9.05 &minus; 2.7 =", o:["6.35","7.35","6.98","6.25"], a:0, e:"Viết 2.7 thành 2.70 rồi trừ: 9.05 &minus; 2.70 = 6.35."},
- {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Both B and C"], a:3, e:"3/4 = 6/8, nên 6/8 + 5/8 = 11/8 = 1 và 3/8. Hai cách viết đều đúng."}]},
+ {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Cả 11/8 và 1 3/8"], a:3, e:"3/4 = 6/8, nên 6/8 + 5/8 = 11/8 = 1 và 3/8. Hai cách viết đều đúng."}]},
 
 "math:9":{ name:"Unit 9 test", vi:"Kiểm tra Unit 9: Xác suất", mins:12, qs:[
  {q:"What is the probability of rolling a number greater than 4 on a fair dice?", o:["1/6","1/3","1/2","2/3"], a:1, e:"Chỉ 5 và 6 thoả mãn &rarr; 2/6 = 1/3."},
@@ -4900,7 +4930,7 @@ Object.assign(TESTS, {
 "math:10":{ name:"Unit 10 test", vi:"Kiểm tra Unit 10: Nhân chia (1)", mins:15, qs:[
  {q:"What is 46 &times; 32?", o:["1372","1472","1462","1572"], a:1, e:"46&times;30 = 1380 và 46&times;2 = 92; cộng lại 1472."},
  {q:"What is 384 &divide; 8?", o:["46","48","47","44"], a:1, e:"8 &times; 48 = 384. Kiểm tra bằng phép nhân ngược lại."},
- {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Số dư 5 nhỏ hơn 6 nên hợp lệ; đáp án D có dư lớn hơn số chia nên sai."},
+ {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Số dư 5 nhỏ hơn 6 nên hợp lệ; cách viết 44 dư 11 có số dư lớn hơn số chia nên sai."},
  {q:"Which number is divisible by 9?", o:["3627","3628","3629","3630"], a:0, e:"3+6+2+7 = 18 chia hết cho 9."},
  {q:"Which number is divisible by both 3 and 4?", o:["114","124","132","142"], a:2, e:"132: tổng chữ số 6 chia hết 3, và hai chữ số cuối 32 chia hết 4."},
  {q:"A quick way to multiply by 25 is:", o:["Multiply by 100 then divide by 4","Multiply by 5 twice then add","Divide by 4 then times 10","Add 25 each time"], a:0, e:"25 = 100 &divide; 4, nên nhân 100 rồi chia 4. Ví dụ 16&times;25 = 1600&divide;4 = 400."},
@@ -4950,7 +4980,7 @@ Object.assign(TESTS, {
  {q:"An equilateral triangle has each angle equal to:", o:["45&deg;","60&deg;","90&deg;","120&deg;"], a:1, e:"Ba góc bằng nhau và tổng 180&deg; nên mỗi góc 60&deg;."}]},
 
 "math:14":{ name:"Unit 14 test", vi:"Kiểm tra Unit 14: Nhân chia (2)", mins:15, qs:[
- {q:"3/4 &times; 2/5 =", o:["5/9","6/20","3/10","Both B and C"], a:3, e:"Nhân tử với tử, mẫu với mẫu: 6/20, rút gọn thành 3/10. Hai cách viết cùng giá trị."},
+ {q:"3/4 &times; 2/5 =", o:["5/9","6/20","3/10","Cả 6/20 và 3/10"], a:3, e:"Nhân tử với tử, mẫu với mẫu: 6/20, rút gọn thành 3/10. Hai cách viết cùng giá trị."},
  {q:"What is 2/3 of 45?", o:["15","30","67.5","22.5"], a:1, e:"45 &divide; 3 = 15 rồi &times; 2 = 30."},
  {q:"1/3 &divide; 4 =", o:["4/3","1/12","3/4","1/7"], a:1, e:"Chia phân số cho số nguyên thì nhân mẫu lên: 1/3 &divide; 4 = 1/12."},
  {q:"0.7 &times; 0.8 =", o:["5.6","0.56","0.056","56"], a:1, e:"7 &times; 8 = 56; tổng hai chữ số thập phân nên kết quả 0.56."},
@@ -5437,7 +5467,7 @@ DATA.math.units.push(
     {q:"1/4 + 1/3 =", o:["2/7","7/12","5/12","1/12"], a:1, e:"Mẫu chung 12: 3/12 + 4/12 = 7/12."},
     {q:"5/6 &minus; 1/3 =", o:["4/3","1/2","4/6","1/6"], a:1, e:"1/3 = 2/6 nên 5/6 &minus; 2/6 = 3/6 = 1/2."},
     {q:"1/2 + 3/8 =", o:["4/10","7/8","4/8","5/8"], a:1, e:"2 chia hết 8 nên lấy mẫu 8: 4/8 + 3/8 = 7/8."},
-    {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Both B and C"], a:3, e:"3/4 = 6/8 nên 6/8 + 5/8 = 11/8 = 1 và 3/8; hai cách viết cùng giá trị."},
+    {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Cả 11/8 và 1 3/8"], a:3, e:"3/4 = 6/8 nên 6/8 + 5/8 = 11/8 = 1 và 3/8; hai cách viết cùng giá trị."},
     {q:"2/5 + 1/4 =", o:["3/9","13/20","3/20","7/20"], a:1, e:"Mẫu chung 20: 8/20 + 5/20 = 13/20."},
     {q:"What must you do BEFORE adding 1/3 and 2/7?", o:["Add the denominators","Find a common denominator","Multiply the fractions","Simplify 2/7"], a:1, e:"Phải quy đồng mẫu trước; mẫu chung ở đây là 21."}]}
 );
@@ -5456,7 +5486,7 @@ DATA.math.units.push(
   voc:[["divide","chia"],["divisor","số chia"],["dividend","số bị chia"],["quotient","thương"],["remainder","số dư"],["share equally","chia đều"],["exactly","vừa hết, không dư"],["round up","làm tròn lên"]],
   quiz:[
     {q:"What is 456 &divide; 8?", o:["57","56","58","64"], a:0, e:"8 &times; 57 = 456. Kiểm tra ngược lại là chắc chắn nhất."},
-    {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Đáp án D sai vì dư 11 lớn hơn số chia 6."},
+    {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Cách viết 44 dư 11 sai vì số dư lớn hơn số chia 6."},
     {q:"A bus holds 45 people. How many buses for 200 people?", o:["4","4.4","5","6"], a:2, e:"200 &divide; 45 = 4 dư 20, vẫn cần thêm một xe cho 20 người &rarr; 5 xe."},
     {q:"Eggs are packed in boxes of 12. How many FULL boxes from 100 eggs?", o:["8","8.3","9","12"], a:0, e:"100 &divide; 12 = 8 dư 4. Hộp đầy chỉ có 8, nên ở đây làm tròn XUỐNG."},
     {q:"25 &divide; 4 written as a decimal is:", o:["6.1","6.25","6.4","6.5"], a:1, e:"Dư 1 trên 4 là 0.25, nên kết quả là 6.25."},
@@ -5890,7 +5920,7 @@ m13:{kp:[
   {en:"Every whole number above 1 is either prime or can be broken into a product of primes.", vi:"Mọi số lớn hơn 1 đều hoặc là số nguyên tố, hoặc tách được thành tích các số nguyên tố."},
   {en:"To test if a number is prime, try dividing by 2, 3, 5, 7 and 11 only.", vi:"Kiểm tra số nguyên tố: chỉ cần thử chia cho 2, 3, 5, 7 và 11."},
   {en:"Triangular numbers come from adding 1 + 2 + 3 + ...: 1, 3, 6, 10, 15, 21.", vi:"Số tam giác sinh ra từ 1 + 2 + 3 + ...: 1, 3, 6, 10, 15, 21."}],
- q:[{q:"Break 60 into a product of primes.", o:["6 &times; 10","2 &times; 2 &times; 3 &times; 5","4 &times; 15","2 &times; 30"], a:1, e:"Chỉ đáp án B gồm toàn số nguyên tố: 2 &times; 2 &times; 3 &times; 5 = 60."},
+ q:[{q:"Break 60 into a product of primes.", o:["6 &times; 10","2 &times; 2 &times; 3 &times; 5","4 &times; 15","2 &times; 30"], a:1, e:"Chỉ cách tách 2 &times; 2 &times; 3 &times; 5 gồm toàn số nguyên tố, và nhân lại đúng bằng 60."},
     {q:"Is 91 prime?", o:["Yes","No, it is 7 &times; 13","No, it is even","Yes, it ends in 1"], a:1, e:"91 = 7 &times; 13 nên là hợp số. Tận cùng bằng 1 không có nghĩa là nguyên tố."},
     {q:"What is the next triangular number after 10?", o:["12","13","15","20"], a:2, e:"Cộng thêm 5: 10 + 5 = 15. Dãy là 1, 3, 6, 10, 15, 21."}],
  mm:["Break into prime factors|Tách thành thừa số nguyên tố","Test with 2, 3, 5, 7, 11|Cách thử số nguyên tố","Triangular numbers|Số tam giác"]},
@@ -5943,7 +5973,7 @@ m19:{kp:[
   {en:"To multiply fractions, multiply the tops together and the bottoms together. No common denominator needed.", vi:"Nhân phân số: tử nhân tử, mẫu nhân mẫu. Không cần quy đồng."},
   {en:"&lsquo;Of&rsquo; means multiply: 2/3 of 45 is 2/3 &times; 45 = 30.", vi:"Chữ &lsquo;của&rsquo; nghĩa là nhân: 2/3 của 45 là 30."},
   {en:"Dividing a fraction by a whole number makes the pieces smaller: 1/3 &divide; 4 = 1/12.", vi:"Chia phân số cho số nguyên làm các phần nhỏ đi: 1/3 &divide; 4 = 1/12."}],
- q:[{q:"2/3 &times; 3/5 =", o:["5/8","6/15","2/5","Both B and C"], a:3, e:"6/15 rút gọn thành 2/5; hai cách viết cùng giá trị."},
+ q:[{q:"2/3 &times; 3/5 =", o:["5/8","6/15","2/5","Cả 6/15 và 2/5"], a:3, e:"6/15 rút gọn thành 2/5; hai cách viết cùng giá trị."},
     {q:"What is 3/4 of 60?", o:["45","20","80","15"], a:0, e:"60 &divide; 4 = 15 rồi &times; 3 = 45."},
     {q:"1/2 &divide; 3 =", o:["3/2","1/6","1/5","2/3"], a:1, e:"Chia phân số cho 3 thì nhân mẫu lên 3 lần: 1/6."}],
  mm:["Tops and bottoms|Tử với tử, mẫu với mẫu","&lsquo;Of&rsquo; means multiply|Chữ của là nhân","Dividing makes pieces smaller|Chia thì phần nhỏ đi"]},
@@ -6319,7 +6349,7 @@ e6:{kp:[
   {en:"<i>that</i> cannot be used in a clause between commas. Use <i>which</i> or <i>who</i> instead.", vi:"Không dùng that cho mệnh đề giữa hai dấu phẩy; phải dùng which hoặc who."},
   {en:"The relative pronoun can be left out when it is the object: <i>the book (which) I read</i>.", vi:"Có thể lược bỏ đại từ quan hệ khi nó là tân ngữ."}],
  q:[{q:"Which sentence is correct?", o:["My sister, that lives in Hue, is a nurse.","My sister, who lives in Hue, is a nurse.","My sister who, lives in Hue, is a nurse.","My sister which lives in Hue is a nurse."], a:1, e:"Mệnh đề giữa hai dấu phẩy nói về người nên dùng who, không dùng that."},
-    {q:"In which sentence can the relative pronoun be left out?", o:["The man who called is my uncle.","The book which I read was long.","The dog that barks is loud.","The girl who won is here."], a:1, e:"Trong câu B, đại từ quan hệ là tân ngữ của &lsquo;read&rsquo; nên bỏ được: <i>The book I read was long.</i>"}],
+    {q:"In which sentence can the relative pronoun be left out?", o:["The man who called is my uncle.","The book which I read was long.","The dog that barks is loud.","The girl who won is here."], a:1, e:"Trong câu về cuốn sách, đại từ quan hệ là tân ngữ của &lsquo;read&rsquo; nên bỏ được: <i>The book I read was long.</i>"}],
  mm:["No that between commas|Không dùng that giữa phẩy","Object pronoun can drop|Bỏ được khi là tân ngữ"]}
 });
 </script>
@@ -6340,7 +6370,7 @@ e16:{kp:[
   {en:"Give an opinion with a reason: <i>In my view, ... because ...</i>", vi:"Nêu ý kiến kèm lý do: In my view... because..."}],
  q:[{q:"I spent all my money ______ books.", o:["for","on","to","in"], a:1, e:"spend money ON something; nhưng pay FOR something."},
     {q:"How ______ money do you have?", o:["many","much","lots","several"], a:1, e:"Money là danh từ không đếm được nên dùng much."},
-    {q:"Which sentence gives an opinion WITH a reason?", o:["Money is important.","In my view, saving is wise because emergencies happen.","I like money.","Money, yes."], a:1, e:"Câu B vừa nêu quan điểm vừa có lý do — đúng yêu cầu bài viết ý kiến."}],
+    {q:"Which sentence gives an opinion WITH a reason?", o:["Money is important.","In my view, saving is wise because emergencies happen.","I like money.","Money, yes."], a:1, e:"Câu <i>In my view, saving is wise because emergencies happen</i> vừa nêu quan điểm vừa có lý do — đúng yêu cầu bài viết ý kiến."}],
  mm:["spend on, pay for|Giới từ đi với tiền","much and many|Không đếm và đếm được","Opinion plus reason|Ý kiến kèm lý do"]},
 e17:{kp:[
   {en:"Job names often end in -er, -or or -ist: teacher, doctor, scientist.", vi:"Tên nghề thường kết thúc -er, -or hoặc -ist."},
@@ -6368,7 +6398,7 @@ e19:{kp:[
   {en:"Give an opinion about films with <i>I find it ...</i> rather than only <i>It is ...</i>", vi:"Nêu cảm nhận bằng I find it... thay vì chỉ It is..."},
   {en:"Talk about a story's plot in the present simple: <i>The hero escapes and finds the treasure.</i>", vi:"Kể nội dung phim hay truyện bằng hiện tại đơn."},
   {en:"Recommend with <i>You should watch it because ...</i>", vi:"Giới thiệu bằng You should watch it because..."}],
- q:[{q:"Which sounds most natural when giving an opinion?", o:["It is good.","I find it exciting because of the ending.","Good film.","Yes good."], a:1, e:"Câu B vừa nêu cảm nhận vừa có lý do, ghi điểm cao hơn hẳn."},
+ q:[{q:"Which sounds most natural when giving an opinion?", o:["It is good.","I find it exciting because of the ending.","Good film.","Yes good."], a:1, e:"Câu <i>I find it exciting because of the ending</i> vừa nêu cảm nhận vừa có lý do, ghi điểm cao hơn hẳn."},
     {q:"Which tense do you use to retell the plot of a film?", o:["Past simple","Present simple","Future","Past perfect"], a:1, e:"Kể nội dung tác phẩm dùng hiện tại đơn: <i>The hero escapes...</i>"},
     {q:"Complete the recommendation: &lsquo;You ______ watch it because it is very funny.&rsquo;", o:["should","must to","will","are"], a:0, e:"should dùng để khuyên hoặc giới thiệu."}],
  mm:["I find it ...|Cách nêu cảm nhận","Plot in present simple|Kể chuyện dùng hiện tại đơn","Recommend with should|Giới thiệu bằng should"]},
@@ -6381,7 +6411,7 @@ e3:{kp:[
 e20:{kp:[
   {en:"Describe art with sense words: colours, shapes, textures and the feeling it gives.", vi:"Tả tác phẩm bằng từ về màu sắc, hình khối, chất liệu và cảm xúc nó gợi ra."},
   {en:"Use <i>looks like</i> and <i>reminds me of</i> to compare: <i>It looks like a storm.</i>", vi:"So sánh bằng looks like và reminds me of."}],
- q:[{q:"Which description is richest?", o:["It is nice.","It is a picture.","The dark blues remind me of a storm at sea.","I like it."], a:2, e:"Câu C có màu sắc, so sánh và cảm xúc — đúng cách chấm điểm phần miêu tả."},
+ q:[{q:"Which description is richest?", o:["It is nice.","It is a picture.","The dark blues remind me of a storm at sea.","I like it."], a:2, e:"Câu <i>The dark blues remind me of a storm at sea</i> có màu sắc, so sánh và cảm xúc — đúng cách chấm điểm phần miêu tả."},
     {q:"Complete: &lsquo;The shape ______ a bird taking off.&rsquo;", o:["looks like","looks","is like to","seems as"], a:0, e:"looks like + danh từ là cách so sánh tự nhiên nhất."}],
  mm:["Colour, shape, feeling|Màu, hình, cảm xúc","looks like, reminds me of|Cách so sánh"]}
 });
@@ -6398,7 +6428,7 @@ e2:{kp:[
 e8:{kp:[
   {en:"Vary sentence length: one short sentence after two long ones creates impact.", vi:"Đổi độ dài câu: một câu ngắn sau hai câu dài tạo nhấn mạnh."},
   {en:"Show, do not tell: instead of &lsquo;I was scared&rsquo;, write &lsquo;My hands were shaking.&rsquo;", vi:"Tả thay vì kể: thay &lsquo;I was scared&rsquo; bằng &lsquo;My hands were shaking.&rsquo;"}],
- q:[{q:"Which sentence &lsquo;shows&rsquo; rather than &lsquo;tells&rsquo;?", o:["I was very happy.","The party was fun.","I could not stop grinning as I opened the box.","It was a good day."], a:2, e:"Câu C tả hành động cụ thể để người đọc tự cảm nhận."},
+ q:[{q:"Which sentence &lsquo;shows&rsquo; rather than &lsquo;tells&rsquo;?", o:["I was very happy.","The party was fun.","I could not stop grinning as I opened the box.","It was a good day."], a:2, e:"Câu <i>I could not stop grinning as I opened the box</i> tả hành động cụ thể để người đọc tự cảm nhận."},
     {q:"Why vary the length of your sentences?", o:["To fill the page","To keep the reader interested and add emphasis","To use more words","Because it is a rule"], a:1, e:"Câu dài ngắn xen kẽ làm bài viết có nhịp và nhấn được ý quan trọng."}],
  mm:["Vary sentence length|Đổi độ dài câu","Show, do not tell|Tả thay vì kể"]},
 e9:{kp:[
@@ -6431,7 +6461,7 @@ Object.assign(TESTS, {
  {u:"m12", q:"A pen costs $2.40. Mai buys 3 pens and pays with a $10 note. How much change?", o:["$7.20","$2.80","$7.60","$2.60"], a:1, e:"Bước 1: 3 &times; 2.40 = $7.20. Bước 2: 10 &minus; 7.20 = $2.80. Dừng ở bước 1 là chọn nhầm."},
  {u:"m12", q:"A rope 12 m long is cut into pieces of 80 cm. How many pieces?", o:["15","12","150","96"], a:0, e:"Đổi cùng đơn vị trước: 12 m = 1200 cm, rồi 1200 &divide; 80 = 15."},
  {u:"m12", q:"Nam has twice as many stickers as Lan. Together they have 36. How many does Lan have?", o:["18","12","24","9"], a:1, e:"Lan 1 phần, Nam 2 phần, tổng 3 phần bằng 36 nên mỗi phần 12."},
- {u:"m12", q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Both A and B","1750 ml"], a:2, e:"4500 &minus; 1750 = 2750 ml, cũng chính là 2,75 lít."},
+ {u:"m12", q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Cả 2750 ml và 2,75 lít","1750 ml"], a:2, e:"4500 &minus; 1750 = 2750 ml, cũng chính là 2,75 lít."},
  {u:"m12", q:"A shop sells apples at $1.20 per kg. Lan buys 2.5 kg and pays $5. What is her change?", o:["$3.00","$2.00","$1.80","$2.50"], a:1, e:"Bước 1: 1.20 &times; 2.5 = $3.00. Bước 2: 5 &minus; 3 = $2.00."},
  {u:"m12", q:"45 children go on a trip. Each minibus holds 12. How many minibuses are needed?", o:["3","3.75","4","5"], a:2, e:"45 &divide; 12 = 3 dư 9, vẫn cần thêm một xe &rarr; 4 xe. Làm tròn LÊN."},
  {u:"m12", q:"A film lasts 95 minutes and starts at 19:40. When does it end?", o:["20:35","21:15","21:35","20:15"], a:1, e:"95 phút là 1 giờ 35 phút. 19:40 + 1 giờ = 20:40, thêm 35 phút &rarr; 21:15."},
@@ -6670,6 +6700,23 @@ e8:[{en:"The shape of a good story", vi:"Mở đầu giới thiệu bối cảnh
 </script>
 
 <script>
+</script>
+
+<script>
+/* Xáo trộn vị trí bốn đáp án mỗi lần mở app, để không đoán được theo vị trí */
+function shuffleQ(q){
+  if(!q || !q.o || q.o.length!==4 || !(q.a>=0 && q.a<4)) return;
+  const idx=[0,1,2,3];
+  for(let i=3;i>0;i--){ const j=Math.random()*(i+1)|0; const t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
+  const newA = idx.indexOf(q.a);
+  q.o = idx.map(i=>q.o[i]);
+  q.a = newA;
+}
+SUBJ_IDS.forEach(k=>DATA[k].units.forEach(u=>u.quiz.forEach(shuffleQ)));
+Object.keys(TESTS).forEach(key=>{ if(key.indexOf("review:")!==0) TESTS[key].qs.forEach(shuffleQ); });
+SUBJ_IDS.forEach(k=>EXAMS[k].qs.forEach(shuffleQ));
+Object.keys(EXT).forEach(id=>{ if(EXT[id].c) shuffleQ(EXT[id].c); });
+
 if(S.goal===undefined) S.goal = 1;
 if(S.appPin===undefined) S.appPin = null;
 syncPoints();

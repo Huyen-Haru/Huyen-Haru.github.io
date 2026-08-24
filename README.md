@@ -54,7 +54,7 @@ Mã PIN chỉ để cháu không tự duyệt điểm của mình — không ph�
 Làm lại tốt hơn thì điểm tự tăng, làm lại kém hơn không bị mất điểm, và **một bài không bao giờ
 cộng quá 10 điểm** dù làm bao nhiêu lần.
 
-Đủ 100 điểm thì cháu bấm *Xin đổi thưởng* → yêu cầu chuyển sang tài khoản Bố mẹ chờ duyệt
+Đủ 10 điểm thì cháu bấm *Xin đổi thưởng* → yêu cầu chuyển sang tài khoản Bố mẹ chờ duyệt
 (điểm bị giữ tạm trong lúc chờ). Bố mẹ bấm **Duyệt · đã đưa tiền** thì điểm mới bị trừ thật
 và ghi vào lịch sử.
 
@@ -65,6 +65,8 @@ và ghi vào lịch sử.
 - **Ôn tập định kỳ**: đề tự sinh mới mỗi lần, không cộng điểm thưởng —
   *Ôn tuần* (15 câu, lấy từ bài học trong 7 ngày gần nhất), *Ôn tháng* (25 câu),
   *Thi thử cả năm* (40 câu rút từ toàn bộ 83 bài và 32 bài kiểm tra unit).
+- **Chống đoán mẹo**: vị trí bốn đáp án được xáo lại mỗi lần mở app, nên không đoán được
+  theo vị trí. Tab **⭐ Thưởng** có bảng **Thành tích** tách rõ điểm đến từ đâu.
 - **Mật mã mở app**: lần đầu vào app sẽ hỏi đặt mã 4 số (bỏ qua được, đặt lại trong Cài đặt bất cứ lúc nào).
   Mã này độc lập với mã riêng của bố mẹ dùng để duyệt đổi thưởng.
 - **Mindmap cho cả 83 bài** cùng **19 sơ đồ** và **55 hình minh hoạ**: Science 43, Toán 7, ESL 5,
