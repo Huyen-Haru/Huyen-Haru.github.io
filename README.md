@@ -40,12 +40,12 @@ Mã PIN chỉ để cháu không tự duyệt điểm của mình — không ph�
 
 | Quy tắc | Giá trị |
 |---|---|
-| Mỗi bài học tối đa | 10 điểm |
-| Mỗi đề thi thử tối đa | 10 điểm |
+| Mỗi bài học tối đa | 5 điểm |
+| Mỗi đề thi thử tối đa | 5 điểm |
 | Quy đổi | 100 điểm = 100.000đ |
-| Tối đa cả chương trình | 690 điểm = 690.000đ |
+| Tối đa cả chương trình | 345 điểm = 345.000đ |
 
-Điểm mỗi bài tính theo **điểm quiz cao nhất**: đúng 100% được 10 điểm, đúng 70% được 7 điểm.
+Điểm mỗi bài tính theo **điểm quiz cao nhất**: đúng 100% được 5 điểm, đúng 80% được 4 điểm.
 Làm lại tốt hơn thì điểm tự tăng, làm lại kém hơn không bị mất điểm, và **một bài không bao giờ
 cộng quá 10 điểm** dù làm bao nhiêu lần.
 

@@ -2555,7 +2555,7 @@ vResult = function(){
 
 <script>
 /* ---------- TÀI KHOẢN VÀ ĐIỂM THƯỞNG ---------- */
-const DIEM_MOI_BAI = 10;      // mỗi bài học tối đa 10 điểm
+const DIEM_MOI_BAI = 5;       // mỗi bài học tối đa 5 điểm
 const DONG_MOI_DIEM = 1000;   // 100 điểm = 100.000đ
 const GOI_DOI = 100;          // đổi theo lô 100 điểm
 let LAST_DELTA = 0;
@@ -2565,7 +2565,7 @@ if(S.role===undefined) S.role = null;
 if(S.pin===undefined) S.pin = null;
 
 const tien = (p)=> (p*DONG_MOI_DIEM).toLocaleString('vi-VN')+"đ";
-const ptsFor = (percent)=> Math.max(0, Math.min(DIEM_MOI_BAI, Math.round(percent/10)));
+const ptsFor = (percent)=> Math.max(0, Math.min(DIEM_MOI_BAI, Math.round(percent/100*DIEM_MOI_BAI)));
 function syncPoints(){
   allUnits().forEach(({u})=>{ const r=S.units[u.id]; if(r) S.pts.claimed[u.id]=ptsFor(r.best); });
   SUBJ_IDS.forEach(k=>{ const r=S.exams[k]; if(r) S.pts.claimed["exam_"+k]=ptsFor(r.best); });
@@ -2648,8 +2648,8 @@ function vWallet(){
       <div class="card" id="todo"></div></div>
     ${S.pts.reqs.length? `<div><p class="label" style="margin-bottom:9px">Lịch sử đổi thưởng</p>
       <div class="stack-s" id="rq"></div></div>`:""}
-    <div class="note">Điểm mỗi bài tính theo điểm quiz cao nhất: đúng 100% được 10 điểm, đúng 70% được 7 điểm.
-      Làm lại tốt hơn thì điểm tự tăng, không bị mất điểm cũ.</div></div>`;
+    <div class="note">Điểm mỗi bài tính theo điểm quiz cao nhất: đúng 100% được ${DIEM_MOI_BAI} điểm,
+      đúng 80% được ${Math.round(0.8*DIEM_MOI_BAI)} điểm. Làm lại tốt hơn thì điểm tự tăng, không bị mất điểm cũ.</div></div>`;
   const todo = view.querySelector('#todo');
   const gaps = allUnits().map(({k,u})=>({k,u,p:S.pts.claimed[u.id]||0}))
     .filter(x=>x.p<DIEM_MOI_BAI).sort((a,b)=>b.p-a.p).slice(0,6);
