@@ -12,19 +12,18 @@ App xếp bài theo unit của sách:
 | Môn | Sách | Cấu trúc trong app |
 |---|---|---|
 | Science | Cambridge Primary Science 6 — Learner's Book và Workbook (CUP, **2nd edition**), bản song ngữ Vinschool | **6 unit sách, 21 bài, kèm số trang** + 1 phần ôn thêm |
-| Mathematics | Toán học 6 — Sách bài tập Quyển 1 (HK1) và Quyển 2 (HK2) | 12 học phần chia theo hai học kì |
-| English (ESL) | Cambridge Global English 6 (CUP) | 6 phần theo kỹ năng của đề Checkpoint ESL |
+| Mathematics | *Cambridge Primary Mathematics 6* (CUP, 2nd edition) | **17 unit, 33 bài nhỏ, 6 Project**, kèm số trang |
+| English (ESL) | *Cambridge Global English 6* (CUP) | **9 unit theo chủ đề**, mỗi unit có Vocabulary và Use of English |
 
-Science đã được **đối chiếu trực tiếp với ảnh chụp mục lục sách của học sinh**, từng bài ghi kèm
-số trang trong sách để mở ra so được ngay. Toán và ESL vẫn đang xếp theo khung Cambridge Stage 6,
-chưa đối chiếu được với mục lục sách in — màn hình *"Thứ tự unit này lấy từ đâu?"* trong app nói rõ điều này.
+**Cả ba môn** đã được đối chiếu trực tiếp với ảnh chụp mục lục sách của học sinh, từng bài ghi kèm
+số trang để mở sách ra so được ngay. Màn hình *"Thứ tự unit này lấy từ đâu?"* trong app ghi rõ nguồn.
 
 ## Nội dung
 
-- **37 unit sách**, **48 bài học**, **345 ý chính**, **345 câu quiz** — mỗi bài có số câu quiz
+- **35 unit sách**, **66 bài học**, **451 ý chính**, **451 câu quiz** — mỗi bài có số câu quiz
   đúng bằng số ý chính, mỗi câu đều có lời giải thích tiếng Việt.
-- **280 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
-- **48 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
+- **602 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
+- **66 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
   và 1 câu hỏi thử thách.
 
 ## Hai tài khoản
@@ -44,7 +43,7 @@ Mã PIN chỉ để cháu không tự duyệt điểm của mình — không ph�
 | Mỗi bài học tối đa | 10 điểm |
 | Mỗi đề thi thử tối đa | 10 điểm |
 | Quy đổi | 100 điểm = 100.000đ |
-| Tối đa cả chương trình | 380 điểm = 380.000đ |
+| Tối đa cả chương trình | 690 điểm = 690.000đ |
 
 Điểm mỗi bài tính theo **điểm quiz cao nhất**: đúng 100% được 10 điểm, đúng 70% được 7 điểm.
 Làm lại tốt hơn thì điểm tự tăng, làm lại kém hơn không bị mất điểm, và **một bài không bao giờ
@@ -57,7 +56,7 @@ và ghi vào lịch sử.
 ## Tính năng
 
 - **Phiên ôn 15 phút/ngày**: thẻ lật → mindmap và ý chính → quiz, có đồng hồ đếm ngược.
-- **Mindmap cho cả 48 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
+- **Mindmap cho cả 66 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
   tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
   quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,
   đường đi của thức ăn, nhung mao ruột non, thận và bàng quang, năm nhóm động vật có xương sống,
