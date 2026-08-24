@@ -12,7 +12,7 @@ App xếp bài theo unit của sách:
 | Môn | Sách | Cấu trúc trong app |
 |---|---|---|
 | Science | Cambridge Primary Science 6 — Learner's Book và Workbook (CUP, **2nd edition**), bản song ngữ Vinschool | **6 unit sách, 21 bài, kèm số trang** + 1 phần ôn thêm |
-| Mathematics | *Cambridge Primary Mathematics 6* (CUP, 2nd edition) | **17 unit, 33 bài nhỏ, 6 Project**, kèm số trang |
+| Mathematics | *Cambridge Primary Mathematics 6* (CUP, 2nd edition) | **17 unit, 37 bài nhỏ** — mỗi mục nhỏ trong sách là một bài học riêng |
 | English (ESL) | *Cambridge Global English 6* (CUP) | **9 unit theo chủ đề**, mỗi unit có Vocabulary và Use of English |
 
 **Cả ba môn** đã được đối chiếu trực tiếp với ảnh chụp mục lục sách của học sinh, từng bài ghi kèm
@@ -20,15 +20,15 @@ số trang để mở sách ra so được ngay. Màn hình *"Thứ tự unit n�
 
 ## Nội dung
 
-- **35 unit sách**, **66 bài học**, **451 ý chính**, **451 câu quiz** — mỗi bài có số câu quiz
+- **35 unit sách**, **83 bài học**, **553 ý chính**, **553 câu quiz** — mỗi bài có số câu quiz
   đúng bằng số ý chính, mỗi câu đều có lời giải thích tiếng Việt.
-- **602 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
+- **738 mục từ vựng** Anh–Việt và **3 đề thi thử** (36 câu).
 - **32 bài kiểm tra cuối unit** (320 câu): Toán 17 bài, Science 6 bài, ESL 9 bài — mỗi unit một bài.
   Làm liên tục có đồng hồ, không lộ đáp án cho tới khi nộp bài, chấm xong mới hiện lời giải từng câu.
   Câu hỏi phủ kín mọi mục nhỏ của unit đó trong sách.
 - Bài kiểm tra Science và ESL còn **gắn từng câu với bài học tương ứng**, nên chấm xong app chỉ ra
   đúng bài cần ôn lại và bấm thẳng vào học được ngay — con không phải tự mò xem mình yếu chỗ nào.
-- **66 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
+- **83 phần Mở rộng**: mỗi bài có 3 ý đào sâu vượt trên sách, 3 việc ứng dụng làm ngay ở nhà,
   và 1 câu hỏi thử thách.
 
 ## Hai tài khoản
@@ -48,7 +48,7 @@ Mã PIN chỉ để cháu không tự duyệt điểm của mình — không ph�
 | Mỗi bài học tối đa | 5 điểm |
 | Mỗi đề thi thử tối đa | 5 điểm |
 | Quy đổi | 100 điểm = 100.000đ |
-| Tối đa cả chương trình | 345 điểm = 345.000đ |
+| Tối đa cả chương trình | 430 điểm = 430.000đ |
 
 Điểm mỗi bài tính theo **điểm quiz cao nhất**: đúng 100% được 5 điểm, đúng 80% được 4 điểm.
 Làm lại tốt hơn thì điểm tự tăng, làm lại kém hơn không bị mất điểm, và **một bài không bao giờ
@@ -64,9 +64,9 @@ và ghi vào lịch sử.
   Đặt được **mục tiêu 1, 2 hoặc 3 phiên mỗi ngày** trong Cài đặt.
 - **Ôn tập định kỳ**: đề tự sinh mới mỗi lần, không cộng điểm thưởng —
   *Ôn tuần* (15 câu, lấy từ bài học trong 7 ngày gần nhất), *Ôn tháng* (25 câu),
-  *Thi thử cả năm* (40 câu rút từ toàn bộ 66 bài và 32 bài kiểm tra unit).
+  *Thi thử cả năm* (40 câu rút từ toàn bộ 83 bài và 32 bài kiểm tra unit).
 - **Mật mã mở app** (tuỳ chọn): bật trong Cài đặt để chỉ người biết mật mã mới mở được.
-- **Mindmap cho cả 66 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
+- **Mindmap cho cả 83 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
   tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
   quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,
   đường đi của thức ăn, nhung mao ruột non, thận và bàng quang, năm nhóm động vật có xương sống,

@@ -2191,14 +2191,14 @@ function vSettings(){
   view.querySelector('#applock').onclick=()=>{
     const b = view.querySelector('#lockbox');
     b.innerHTML = `<div class="fade" style="padding:0 15px 15px">
-      <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:10px">Nhập 4 tới 6 chữ số. Để trống rồi bấm Lưu là tắt mật mã.</p>
-      <input class="pin" id="ap" type="tel" inputmode="numeric" maxlength="6" placeholder="- - - -" autocomplete="off">
+      <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:10px">Nhập đúng 4 chữ số. Để trống rồi bấm Lưu là tắt mật mã.</p>
+      <input class="pin" id="ap" type="tel" inputmode="numeric" maxlength="4" placeholder="- - - -" autocomplete="off">
       <p id="ae" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
       <button class="btn btn-ghost" id="asv">Lưu</button></div>`;
     b.querySelector('#asv').onclick=()=>{
       const v=b.querySelector('#ap').value.trim();
       if(v===""){ S.appPin=null; save(); go("settings"); return; }
-      if(!/^\d{4,6}$/.test(v)){ b.querySelector('#ae').textContent="Mật mã phải là 4 tới 6 chữ số."; return; }
+      if(!/^\d{4}$/.test(v)){ b.querySelector('#ae').textContent="Mật mã phải đúng 4 chữ số."; return; }
       S.appPin=v; UNLOCKED=true; save(); go("settings");
     };
   };
@@ -5280,7 +5280,7 @@ function vLock(){
       <p style="font-size:44px;margin-bottom:6px">&#128274;</p>
       <h2 style="font-size:20px">Nhập mật mã của gia đình</h2>
       <p style="font-size:13.5px;color:var(--ink-soft);margin-top:6px">Bố mẹ đã đặt mật mã cho app này.</p>
-      <input class="pin" id="p" type="tel" inputmode="numeric" maxlength="6" placeholder="- - - -" autocomplete="off" style="margin-top:16px">
+      <input class="pin" id="p" type="tel" inputmode="numeric" maxlength="4" placeholder="- - - -" autocomplete="off" style="margin-top:16px">
       <p id="err" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
       <button class="btn" id="ok">Mở khoá</button></div></div>`;
   const inp=view.querySelector('#p'), err=view.querySelector('#err');
@@ -5296,6 +5296,477 @@ function vLock(){
 </script>
 
 <script>
+</script>
+
+<script>
+/* Tách thành một bài cho mỗi mục nhỏ trong sách — đợt Toán */
+DATA.math.units.push(
+{ id:"m22", subject:"math", t:"Rounding decimal numbers", vi:"Làm tròn số thập phân",
+  kp:[
+    {en:"To round, look ONLY at the digit immediately after the place you are rounding to.", vi:"Làm tròn thì chỉ nhìn chữ số NGAY SAU vị trí cần làm tròn."},
+    {en:"If that digit is 5 or more, round up. If it is 4 or less, keep the digit the same.", vi:"Chữ số đó từ 5 trở lên thì tăng thêm 1; từ 4 trở xuống thì giữ nguyên."},
+    {en:"Never round twice. 4.348 to 1 d.p. is 4.3, not 4.4.", vi:"Không làm tròn hai lần. 4.348 làm tròn 1 chữ số thập phân ra 4.3 chứ không phải 4.4."},
+    {en:"Rounding up can change more than one digit: 2.97 to 1 d.p. becomes 3.0.", vi:"Làm tròn lên có thể đổi nhiều chữ số: 2.97 thành 3.0."},
+    {en:"Keep the zero: 4.50 to 2 d.p. is written 4.50, not 4.5, when the question asks for 2 decimal places.", vi:"Đề hỏi 2 chữ số thập phân thì phải giữ số 0 ở cuối: viết 4.50."},
+    {en:"Working backwards: a number that rounds to 6.5 lies from 6.45 up to just below 6.55.", vi:"Bài ngược: số làm tròn thành 6.5 nằm từ 6.45 đến dưới 6.55."}],
+  voc:[["round up","làm tròn lên"],["round down","làm tròn xuống"],["decimal place","chữ số thập phân"],["nearest whole number","số nguyên gần nhất"],["nearest tenth","phần mười gần nhất"],["approximate","xấp xỉ"],["accurate","chính xác"],["estimate","ước lượng"]],
+  quiz:[
+    {q:"Round 7.264 to one decimal place.", o:["7.2","7.3","7.26","7.0"], a:1, e:"Chữ số sau phần mười là 6 (&ge;5) nên tăng 2 lên 3 &rarr; 7.3."},
+    {q:"Round 7.264 to two decimal places.", o:["7.26","7.27","7.2","7.3"], a:0, e:"Chữ số thứ ba là 4 (<5) nên giữ nguyên &rarr; 7.26."},
+    {q:"Round 2.97 to one decimal place.", o:["2.9","2.10","3.0","2.0"], a:2, e:"9 tăng lên thành 10 nên nhớ sang hàng đơn vị: 2.97 &rarr; 3.0."},
+    {q:"Round 4.348 to one decimal place.", o:["4.3","4.4","4.35","4.0"], a:0, e:"Nhìn thẳng chữ số hàng phần trăm là 4 nên giữ nguyên. Làm tròn hai lần (4.35 rồi 4.4) là sai."},
+    {q:"A number rounds to 3.8 to one decimal place. What is the smallest it could be?", o:["3.7","3.75","3.79","3.8"], a:1, e:"3.75 là số nhỏ nhất làm tròn lên thành 3.8."},
+    {q:"Round 0.0649 to two decimal places.", o:["0.06","0.07","0.065","0.1"], a:0, e:"Chữ số thứ ba là 4 (<5) nên giữ nguyên &rarr; 0.06."}]},
+
+{ id:"m23", subject:"math", t:"Common multiples and factors", vi:"Bội chung và ước chung",
+  kp:[
+    {en:"A common factor divides exactly into BOTH numbers. A common multiple is in the times table of both.", vi:"Ước chung chia hết cả HAI số; bội chung có trong bảng nhân của cả hai."},
+    {en:"To find the HCF, list the factors of each number and pick the biggest one they share.", vi:"Tìm ƯCLN: liệt kê ước của từng số rồi chọn số chung lớn nhất."},
+    {en:"To find the LCM, count up in each number until you meet the first shared value.", vi:"Tìm BCNN: đếm theo từng số cho tới khi gặp giá trị chung đầu tiên."},
+    {en:"Two numbers with no common factor except 1 are called co-prime, like 8 and 9.", vi:"Hai số chỉ có ước chung là 1 gọi là nguyên tố cùng nhau, ví dụ 8 và 9."},
+    {en:"The HCF is used to simplify fractions; the LCM is used to find a common denominator.", vi:"ƯCLN dùng để rút gọn phân số; BCNN dùng để quy đồng mẫu số."},
+    {en:"If one number divides into the other, the smaller IS the HCF: HCF of 6 and 18 is 6.", vi:"Nếu số này chia hết số kia thì số nhỏ chính là ƯCLN: ƯCLN của 6 và 18 là 6."}],
+  voc:[["common factor","ước chung"],["common multiple","bội chung"],["highest common factor","ước chung lớn nhất"],["lowest common multiple","bội chung nhỏ nhất"],["co-prime","nguyên tố cùng nhau"],["divides exactly","chia hết"],["times table","bảng nhân"],["simplify","rút gọn"]],
+  quiz:[
+    {q:"What is the highest common factor of 20 and 30?", o:["5","10","2","60"], a:1, e:"Ước chung của 20 và 30 là 1, 2, 5, 10; lớn nhất là 10."},
+    {q:"What is the lowest common multiple of 4 and 10?", o:["2","14","20","40"], a:2, e:"Bội của 4: 4, 8, 12, 16, 20... Bội của 10: 10, 20... Chung nhỏ nhất là 20."},
+    {q:"What is the HCF of 7 and 12?", o:["1","7","12","84"], a:0, e:"7 là số nguyên tố và không chia hết 12, nên ước chung duy nhất là 1 — hai số nguyên tố cùng nhau."},
+    {q:"Use the HCF to simplify 30/45.", o:["6/9","10/15","2/3","3/4"], a:2, e:"ƯCLN của 30 và 45 là 15: 30&divide;15 = 2, 45&divide;15 = 3 &rarr; 2/3."},
+    {q:"Two bells ring every 6 and 8 minutes. After how many minutes do they ring together?", o:["14","24","48","2"], a:1, e:"Đây là bài tìm BCNN: bội chung nhỏ nhất của 6 và 8 là 24 phút."},
+    {q:"What is the HCF of 9 and 27?", o:["3","9","27","1"], a:1, e:"9 chia hết 27 nên số nhỏ chính là ƯCLN."}]},
+
+{ id:"m24", subject:"math", t:"Using letters to represent numbers", vi:"Dùng chữ thay cho số",
+  kp:[
+    {en:"A letter stands for a number we do not know yet. It is called a variable.", vi:"Chữ cái thay cho số chưa biết, gọi là ẩn số hay biến."},
+    {en:"Write 3n, not 3 &times; n. Write n/2, not n &divide; 2, when writing expressions.", vi:"Viết 3n chứ không viết 3 &times; n; viết n/2 thay cho n &divide; 2."},
+    {en:"An expression has no equals sign (3n + 2). An equation does (3n + 2 = 14).", vi:"Biểu thức không có dấu bằng; phương trình thì có."},
+    {en:"To substitute, replace the letter with its value and follow the order of operations.", vi:"Thay số vào thì thay chữ bằng giá trị rồi tính theo đúng thứ tự phép tính."},
+    {en:"To solve, do the opposite operation to BOTH sides until the letter is alone.", vi:"Giải phương trình: làm phép ngược ở CẢ HAI vế cho tới khi ẩn đứng một mình."},
+    {en:"Turn words into algebra: &lsquo;five more than twice a number&rsquo; is 2n + 5.", vi:"Đổi lời văn sang đại số: &lsquo;hơn hai lần một số 5 đơn vị&rsquo; là 2n + 5."}],
+  voc:[["variable","biến, ẩn số"],["expression","biểu thức"],["equation","phương trình"],["substitute","thay số vào"],["solve","giải"],["inverse operation","phép tính ngược"],["term","hạng tử"],["unknown","số chưa biết"]],
+  quiz:[
+    {q:"If n = 9, what is 4n &minus; 6?", o:["30","36","42","24"], a:0, e:"4 &times; 9 = 36, trừ 6 &rarr; 30."},
+    {q:"Which is written correctly?", o:["3 &times; n","n3","3n","n &times; 3 only"], a:2, e:"Trong đại số viết liền hệ số trước chữ: 3n."},
+    {q:"Solve 6n + 5 = 41.", o:["n = 6","n = 7","n = 36","n = 46"], a:0, e:"Trừ 5 hai vế: 6n = 36; chia 6: n = 6."},
+    {q:"Which is an equation, not an expression?", o:["5n + 2","n &minus; 7","2n = 10","3n"], a:2, e:"Chỉ 2n = 10 có dấu bằng nên là phương trình."},
+    {q:"&lsquo;Three less than a number&rsquo; is written as:", o:["3 &minus; n","n &minus; 3","3n","n/3"], a:1, e:"&lsquo;Kém một số 3 đơn vị&rsquo; là n &minus; 3. Chú ý thứ tự, 3 &minus; n là phép khác."},
+    {q:"If a = 4 and b = 5, what is 2a + 3b?", o:["23","27","35","17"], a:0, e:"2&times;4 = 8 và 3&times;5 = 15; cộng lại 23."}]},
+
+{ id:"m25", subject:"math", t:"Circles", vi:"Hình tròn",
+  kp:[
+    {en:"The centre is the middle point. The radius goes from the centre to the edge.", vi:"Tâm là điểm chính giữa; bán kính đi từ tâm ra mép."},
+    {en:"The diameter goes right across through the centre. Diameter = 2 &times; radius.", vi:"Đường kính đi ngang qua tâm; đường kính = 2 &times; bán kính."},
+    {en:"The circumference is the distance all the way round the circle.", vi:"Chu vi hình tròn là độ dài đường bao quanh."},
+    {en:"The circumference is always about 3.14 times the diameter, whatever the size of the circle.", vi:"Chu vi luôn gấp khoảng 3,14 lần đường kính, dù hình tròn to hay nhỏ."},
+    {en:"A chord joins two points on the edge; an arc is part of the circumference.", vi:"Dây cung nối hai điểm trên đường tròn; cung là một phần của chu vi."},
+    {en:"Every circle has infinitely many lines of symmetry, all passing through the centre.", vi:"Hình tròn có vô số trục đối xứng, tất cả đều đi qua tâm."}],
+  voc:[["centre","tâm"],["radius","bán kính"],["diameter","đường kính"],["circumference","chu vi hình tròn"],["chord","dây cung"],["arc","cung tròn"],["compasses","com-pa"],["semicircle","nửa hình tròn"]],
+  quiz:[
+    {q:"A circle has a radius of 6 cm. What is its diameter?", o:["3 cm","6 cm","12 cm","36 cm"], a:2, e:"Đường kính gấp đôi bán kính: 6 &times; 2 = 12 cm."},
+    {q:"A circle has a diameter of 30 cm. What is its radius?", o:["15 cm","30 cm","60 cm","10 cm"], a:0, e:"Bán kính bằng nửa đường kính: 30 &divide; 2 = 15 cm."},
+    {q:"A circle has a diameter of 10 cm. Its circumference is about:", o:["10 cm","20 cm","31 cm","100 cm"], a:2, e:"Chu vi &asymp; 3,14 &times; 10 = 31 cm."},
+    {q:"What is a chord?", o:["A line from the centre to the edge","A line joining two points on the edge","The distance round the circle","The middle point"], a:1, e:"Dây cung nối hai điểm trên đường tròn; nếu đi qua tâm thì thành đường kính."},
+    {q:"How many lines of symmetry does a circle have?", o:["1","2","4","Infinitely many"], a:3, e:"Mọi đường thẳng qua tâm đều chia hình tròn thành hai nửa khớp nhau."},
+    {q:"To draw a circle of radius 5 cm you set your compasses to:", o:["10 cm","5 cm","2.5 cm","3.14 cm"], a:1, e:"Khẩu độ com-pa chính bằng bán kính cần vẽ."}]}
+);
+</script>
+
+<script>
+DATA.math.units.push(
+{ id:"m26", subject:"math", t:"Rotational symmetry", vi:"Đối xứng quay",
+  kp:[
+    {en:"A shape has rotational symmetry if it looks exactly the same after being turned less than a full circle.", vi:"Hình có đối xứng quay nếu quay chưa hết một vòng mà đã trông giống hệt ban đầu."},
+    {en:"The ORDER is how many times it looks the same during one full turn.", vi:"BẬC đối xứng quay là số lần hình trông giống ban đầu trong một vòng quay."},
+    {en:"Order 1 means no rotational symmetry at all &mdash; it only matches when back at the start.", vi:"Bậc 1 nghĩa là KHÔNG có đối xứng quay, vì chỉ khớp khi quay về đúng chỗ cũ."},
+    {en:"Square: order 4. Equilateral triangle: order 3. Rectangle and rhombus: order 2.", vi:"Hình vuông bậc 4; tam giác đều bậc 3; chữ nhật và hình thoi bậc 2."},
+    {en:"The angle of turn between matches is 360&deg; divided by the order.", vi:"Góc quay giữa hai lần khớp bằng 360&deg; chia cho bậc."},
+    {en:"Rotational symmetry is different from line symmetry. A shape can have one without the other.", vi:"Đối xứng quay khác đối xứng trục; một hình có thể có cái này mà không có cái kia."}],
+  voc:[["rotational symmetry","đối xứng quay"],["order","bậc"],["full turn","một vòng quay"],["line of symmetry","trục đối xứng"],["centre of rotation","tâm quay"],["clockwise","theo chiều kim đồng hồ"],["match","khớp, trùng khít"],["regular polygon","đa giác đều"]],
+  quiz:[
+    {q:"What is the order of rotational symmetry of a square?", o:["1","2","4","8"], a:2, e:"Quay một vòng thì bốn lần trông giống ban đầu, mỗi lần 90&deg;."},
+    {q:"A shape has rotational symmetry of order 1. What does that mean?", o:["It turns once","It has no rotational symmetry","It has one line of symmetry","It is a circle"], a:1, e:"Bậc 1 nghĩa là chỉ khớp khi đã quay trọn vòng, tức không có đối xứng quay."},
+    {q:"What is the order of rotational symmetry of an equilateral triangle?", o:["1","2","3","6"], a:2, e:"Ba lần khớp trong một vòng, mỗi lần 120&deg;."},
+    {q:"A shape has rotational symmetry of order 6. What angle turns it to the next match?", o:["30&deg;","60&deg;","90&deg;","120&deg;"], a:1, e:"360 &divide; 6 = 60&deg;."},
+    {q:"Which shape has rotational symmetry of order 2 but NO right angles?", o:["Square","Rectangle","Rhombus","Kite"], a:2, e:"Hình thoi quay 180&deg; là trùng khít nhưng các góc không vuông."},
+    {q:"A regular pentagon has rotational symmetry of order:", o:["2","4","5","10"], a:2, e:"Đa giác đều n cạnh có bậc đối xứng quay bằng n, nên ngũ giác đều là bậc 5."}]},
+
+{ id:"m27", subject:"math", t:"Percentages", vi:"Phần trăm",
+  kp:[
+    {en:"Per cent means &lsquo;out of 100&rsquo;. 40% means 40 out of every 100.", vi:"Phần trăm nghĩa là &lsquo;trên 100&rsquo;: 40% là 40 phần trong 100."},
+    {en:"Quick keys: 50% = &divide;2, 25% = &divide;4, 10% = &divide;10, 1% = &divide;100.", vi:"Mốc tính nhanh: 50% chia 2, 25% chia 4, 10% chia 10, 1% chia 100."},
+    {en:"Build any percentage from these: 35% = 25% + 10%; 15% = 10% + 5%.", vi:"Ghép các mốc lại để ra phần trăm bất kỳ: 35% = 25% + 10%."},
+    {en:"To find a percentage of an amount, work out 10% first, then scale it.", vi:"Tính phần trăm của một số: tính 10% trước rồi nhân lên."},
+    {en:"A discount question has two steps: find the amount off, then subtract it from the original price.", vi:"Bài giảm giá có hai bước: tính số tiền giảm, rồi trừ khỏi giá gốc."},
+    {en:"To go backwards from a part to the whole: if 20% is 30, then 10% is 15 and 100% is 150.", vi:"Từ phần suy ngược ra tổng: 20% là 30 thì 10% là 15 và 100% là 150."}],
+  voc:[["per cent","phần trăm"],["discount","giảm giá"],["increase","tăng"],["decrease","giảm"],["original price","giá gốc"],["sale price","giá bán sau giảm"],["profit","lợi nhuận"],["interest","lãi"]],
+  quiz:[
+    {q:"What is 45% of 200?", o:["45","80","90","110"], a:2, e:"10% của 200 là 20, nên 40% = 80; 5% = 10. Cộng lại 90."},
+    {q:"What is 15% of 60?", o:["6","9","12","15"], a:1, e:"10% là 6 và 5% là 3, cộng lại 9."},
+    {q:"A jacket costs $80 with 25% off. What do you pay?", o:["$20","$55","$60","$75"], a:2, e:"25% của 80 = 20 là số tiền giảm; phải trả 80 &minus; 20 = $60."},
+    {q:"25% of a number is 18. What is the number?", o:["4.5","36","72","90"], a:2, e:"25% là một phần tư nên số đó gấp 4 lần: 18 &times; 4 = 72."},
+    {q:"A price rises by 10% then falls by 10%. Compared with the start it is:", o:["The same","1% lower","1% higher","10% lower"], a:1, e:"100 &rarr; 110 &rarr; 99. Giảm 10% của 110 là 11 chứ không phải 10."},
+    {q:"Which is the same as 3/4?", o:["34%","43%","75%","0.34"], a:2, e:"3 &divide; 4 = 0.75, nhân 100 ra 75%."}]},
+
+{ id:"m28", subject:"math", t:"Equivalence and comparison", vi:"Quy đổi và so sánh phân số, thập phân, phần trăm",
+  kp:[
+    {en:"Learn the key set by heart: 1/2 = 0.5 = 50%, 1/4 = 0.25 = 25%, 1/5 = 0.2 = 20%, 1/8 = 0.125.", vi:"Học thuộc bộ quy đổi này, đề Checkpoint dùng liên tục."},
+    {en:"Fraction to decimal: divide the top by the bottom. Decimal to percentage: multiply by 100.", vi:"Phân số sang thập phân: tử chia mẫu. Thập phân sang phần trăm: nhân 100."},
+    {en:"To compare different forms, change them all into decimals first &mdash; then it is easy.", vi:"Muốn so sánh các dạng khác nhau, đổi hết về số thập phân trước là dễ nhất."},
+    {en:"To compare two fractions quickly, cross-multiply: for 3/5 and 5/8, compare 24 with 25.", vi:"So sánh nhanh hai phân số bằng nhân chéo: 3/5 và 5/8 &rarr; 24 và 25."},
+    {en:"Equivalent fractions come from multiplying or dividing top AND bottom by the same number.", vi:"Phân số bằng nhau: nhân hoặc chia cả tử và mẫu cho cùng một số."},
+    {en:"A longer decimal is not always bigger: 0.5 is greater than 0.45.", vi:"Số thập phân dài hơn chưa chắc lớn hơn: 0.5 > 0.45."}],
+  voc:[["equivalent","tương đương"],["convert","đổi dạng"],["compare","so sánh"],["ascending order","thứ tự tăng dần"],["descending order","thứ tự giảm dần"],["numerator","tử số"],["denominator","mẫu số"],["simplest form","dạng rút gọn nhất"]],
+  quiz:[
+    {q:"Which is the largest?", o:["0.6","3/5","62%","5/8"], a:3, e:"Đổi hết ra thập phân: 0.6, 0.6, 0.62, 0.625 &rarr; 5/8 lớn nhất."},
+    {q:"Write 3/8 as a percentage.", o:["3.8%","37.5%","38%","83%"], a:1, e:"3 &divide; 8 = 0.375, nhân 100 ra 37,5%."},
+    {q:"Which is bigger: 2/5 or 0.45?", o:["2/5","0.45","Equal","Cannot tell"], a:1, e:"2/5 = 0.4, nhỏ hơn 0.45."},
+    {q:"Put in order, smallest first: 0.7, 68%, 3/4.", o:["0.7, 68%, 3/4","68%, 0.7, 3/4","3/4, 0.7, 68%","68%, 3/4, 0.7"], a:1, e:"Đổi ra thập phân: 0.68, 0.7, 0.75."},
+    {q:"Which fraction is equivalent to 0.25?", o:["1/4","1/25","2/5","25/10"], a:0, e:"0.25 = 25/100, rút gọn thành 1/4."},
+    {q:"Which pair are equal?", o:["1/3 and 0.3","2/3 and 66%","1/8 and 0.125","3/5 and 35%"], a:2, e:"1 &divide; 8 = 0.125 chính xác. 1/3 và 2/3 là số thập phân vô hạn nên không bằng 0.3 hay 66%."}]},
+
+{ id:"m29", subject:"math", t:"Adding and subtracting fractions", vi:"Cộng trừ phân số",
+  kp:[
+    {en:"Fractions can only be added or subtracted when the denominators are the SAME.", vi:"Chỉ cộng trừ được phân số khi mẫu số GIỐNG NHAU."},
+    {en:"Find a common denominator using the lowest common multiple of the two denominators.", vi:"Tìm mẫu chung bằng bội chung nhỏ nhất của hai mẫu."},
+    {en:"Change both fractions, then add or subtract ONLY the numerators.", vi:"Đổi cả hai phân số rồi chỉ cộng trừ TỬ SỐ."},
+    {en:"Never add the denominators. 1/4 + 1/3 is 7/12, not 2/7.", vi:"Không bao giờ cộng mẫu với mẫu. 1/4 + 1/3 = 7/12."},
+    {en:"If one denominator divides into the other, use the bigger one: for 1/2 and 3/8, use eighths.", vi:"Nếu mẫu này chia hết mẫu kia thì lấy mẫu lớn làm mẫu chung."},
+    {en:"Simplify the answer at the end, and turn a top-heavy fraction into a mixed number if asked.", vi:"Rút gọn kết quả ở bước cuối, và đổi phân số lớn hơn 1 thành hỗn số khi đề yêu cầu."}],
+  voc:[["common denominator","mẫu số chung"],["lowest common multiple","bội chung nhỏ nhất"],["numerator","tử số"],["mixed number","hỗn số"],["improper fraction","phân số lớn hơn 1"],["simplify","rút gọn"],["equivalent fraction","phân số bằng nhau"],["whole","đơn vị, một phần nguyên"]],
+  quiz:[
+    {q:"1/4 + 1/3 =", o:["2/7","7/12","5/12","1/12"], a:1, e:"Mẫu chung 12: 3/12 + 4/12 = 7/12."},
+    {q:"5/6 &minus; 1/3 =", o:["4/3","1/2","4/6","1/6"], a:1, e:"1/3 = 2/6 nên 5/6 &minus; 2/6 = 3/6 = 1/2."},
+    {q:"1/2 + 3/8 =", o:["4/10","7/8","4/8","5/8"], a:1, e:"2 chia hết 8 nên lấy mẫu 8: 4/8 + 3/8 = 7/8."},
+    {q:"3/4 + 5/8 =", o:["8/12","11/8","1 3/8","Both B and C"], a:3, e:"3/4 = 6/8 nên 6/8 + 5/8 = 11/8 = 1 và 3/8; hai cách viết cùng giá trị."},
+    {q:"2/5 + 1/4 =", o:["3/9","13/20","3/20","7/20"], a:1, e:"Mẫu chung 20: 8/20 + 5/20 = 13/20."},
+    {q:"What must you do BEFORE adding 1/3 and 2/7?", o:["Add the denominators","Find a common denominator","Multiply the fractions","Simplify 2/7"], a:1, e:"Phải quy đồng mẫu trước; mẫu chung ở đây là 21."}]}
+);
+</script>
+
+<script>
+DATA.math.units.push(
+{ id:"m30", subject:"math", t:"Division", vi:"Phép chia",
+  kp:[
+    {en:"Division shares a number into equal groups, or asks how many groups fit inside.", vi:"Phép chia là chia đều thành các nhóm, hoặc hỏi bên trong chứa được bao nhiêu nhóm."},
+    {en:"Check every division with multiplication: if 96 &divide; 8 = 12, then 12 &times; 8 must be 96.", vi:"Luôn kiểm tra phép chia bằng phép nhân ngược lại."},
+    {en:"The remainder must always be SMALLER than the divisor.", vi:"Số dư luôn phải NHỎ HƠN số chia."},
+    {en:"A remainder can be written three ways: 25 &divide; 4 = 6 r 1, or 6 &frac14;, or 6.25.", vi:"Số dư viết được ba cách: 6 dư 1, hỗn số 6 và 1/4, hoặc 6.25."},
+    {en:"Read the question to decide what to do with the remainder: round UP for &lsquo;how many buses&rsquo;, round DOWN for &lsquo;how many full boxes&rsquo;.", vi:"Đọc kỹ đề để xử lý số dư: cần bao nhiêu xe thì làm tròn LÊN, được bao nhiêu hộp đầy thì làm tròn XUỐNG."},
+    {en:"Divide by 10, 100 or 1000 by moving the digits right by one, two or three places.", vi:"Chia 10, 100, 1000 thì dịch các chữ số sang phải một, hai, ba cột."}],
+  voc:[["divide","chia"],["divisor","số chia"],["dividend","số bị chia"],["quotient","thương"],["remainder","số dư"],["share equally","chia đều"],["exactly","vừa hết, không dư"],["round up","làm tròn lên"]],
+  quiz:[
+    {q:"What is 456 &divide; 8?", o:["57","56","58","64"], a:0, e:"8 &times; 57 = 456. Kiểm tra ngược lại là chắc chắn nhất."},
+    {q:"What is 275 &divide; 6?", o:["45 r 5","45 r 3","46 r 1","44 r 11"], a:0, e:"6 &times; 45 = 270, dư 5. Đáp án D sai vì dư 11 lớn hơn số chia 6."},
+    {q:"A bus holds 45 people. How many buses for 200 people?", o:["4","4.4","5","6"], a:2, e:"200 &divide; 45 = 4 dư 20, vẫn cần thêm một xe cho 20 người &rarr; 5 xe."},
+    {q:"Eggs are packed in boxes of 12. How many FULL boxes from 100 eggs?", o:["8","8.3","9","12"], a:0, e:"100 &divide; 12 = 8 dư 4. Hộp đầy chỉ có 8, nên ở đây làm tròn XUỐNG."},
+    {q:"25 &divide; 4 written as a decimal is:", o:["6.1","6.25","6.4","6.5"], a:1, e:"Dư 1 trên 4 là 0.25, nên kết quả là 6.25."},
+    {q:"0.6 &divide; 100 =", o:["0.06","0.006","6","60"], a:1, e:"Chia 100 thì dịch hai cột sang phải: 0.6 &rarr; 0.06 &rarr; 0.006."}]},
+
+{ id:"m31", subject:"math", t:"Capacity and volume", vi:"Dung tích và thể tích",
+  kp:[
+    {en:"Volume is the space a solid takes up. Capacity is how much a container can hold.", vi:"Thể tích là phần không gian vật chiếm; dung tích là lượng chứa được bên trong."},
+    {en:"Volume of a cuboid = length &times; width &times; height, in cm&sup3; or m&sup3;.", vi:"Thể tích hình hộp chữ nhật = dài &times; rộng &times; cao, đơn vị mũ ba."},
+    {en:"1 cm&sup3; holds exactly 1 ml, so 1000 cm&sup3; = 1000 ml = 1 litre.", vi:"1 cm&sup3; chứa đúng 1 ml, nên 1000 cm&sup3; = 1 lít."},
+    {en:"Volume of any prism = area of the cross-section &times; length.", vi:"Thể tích mọi lăng trụ = diện tích mặt cắt &times; chiều dài."},
+    {en:"Count cubes to find volume of a solid built from unit cubes, including hidden ones.", vi:"Đếm khối lập phương để tính thể tích, nhớ đếm cả những khối bị che khuất."},
+    {en:"Doubling every side of a cube makes the volume 8 times bigger, not 2 times.", vi:"Gấp đôi mọi cạnh thì thể tích gấp 8 lần chứ không phải 2 lần."}],
+  voc:[["volume","thể tích"],["capacity","dung tích"],["cuboid","hình hộp chữ nhật"],["cubic centimetre","xăng-ti-mét khối"],["litre / millilitre","lít / mi-li-lít"],["cross-section","mặt cắt"],["container","vật chứa"],["unit cube","khối lập phương đơn vị"]],
+  quiz:[
+    {q:"A cuboid is 7 cm &times; 4 cm &times; 3 cm. Its volume is:", o:["14 cm&sup3;","84 cm&sup3;","84 cm&sup2;","28 cm&sup3;"], a:1, e:"7 &times; 4 &times; 3 = 84, đơn vị cm&sup3;."},
+    {q:"A container of 2500 cm&sup3; holds how many litres?", o:["0.25","2.5","25","250"], a:1, e:"1000 cm&sup3; = 1 lít nên 2500 cm&sup3; = 2,5 lít."},
+    {q:"A box 10 cm &times; 10 cm &times; 10 cm holds exactly:", o:["100 ml","1 litre","10 litres","1 ml"], a:1, e:"Thể tích 1000 cm&sup3; = 1000 ml = 1 lít."},
+    {q:"What is the difference between volume and capacity?", o:["They are the same","Volume is space taken up; capacity is how much fits inside","Volume uses litres only","Capacity uses cm&sup3; only"], a:1, e:"Một khối gỗ đặc có thể tích nhưng không có dung tích vì không chứa được gì."},
+    {q:"A prism has a cross-section of area 12 cm&sup2; and length 5 cm. Its volume is:", o:["17 cm&sup3;","60 cm&sup3;","60 cm&sup2;","2.4 cm&sup3;"], a:1, e:"Diện tích mặt cắt &times; chiều dài = 12 &times; 5 = 60 cm&sup3;."},
+    {q:"A cube of side 2 cm has every side doubled to 4 cm. The volume becomes:", o:["2 times bigger","4 times bigger","8 times bigger","16 times bigger"], a:2, e:"8 cm&sup3; thành 64 cm&sup3; vì cả ba chiều đều nhân đôi."}]},
+
+{ id:"m32", subject:"math", t:"Direct proportion", vi:"Tỉ lệ thuận",
+  kp:[
+    {en:"Two amounts are in direct proportion when doubling one doubles the other.", vi:"Hai đại lượng tỉ lệ thuận khi gấp đôi cái này thì cái kia cũng gấp đôi."},
+    {en:"The unitary method: find the value of ONE first, then multiply.", vi:"Phương pháp quy về đơn vị: tìm giá trị của MỘT trước rồi nhân lên."},
+    {en:"5 pens cost $3.50 &rarr; one pen costs $0.70 &rarr; 8 pens cost $5.60.", vi:"5 bút giá 3,50 &rarr; một bút 0,70 &rarr; 8 bút 5,60."},
+    {en:"Recipes scale the same way: for more people, find the amount per person first.", vi:"Công thức nấu ăn cũng vậy: tìm lượng cho một người trước."},
+    {en:"In direct proportion, dividing one amount by the other always gives the same number.", vi:"Với tỉ lệ thuận, thương của hai đại lượng luôn là một hằng số."},
+    {en:"Careful: not everything is in direct proportion. Two people do not always dig a hole in half the time.", vi:"Cẩn thận: không phải cái gì cũng tỉ lệ thuận. Hai người chưa chắc đào hố nhanh gấp đôi."}],
+  voc:[["direct proportion","tỉ lệ thuận"],["unitary method","quy về đơn vị"],["per","mỗi"],["scale up","tăng theo tỉ lệ"],["scale down","giảm theo tỉ lệ"],["rate","tỉ suất, đơn giá"],["equivalent","tương đương"],["constant","hằng số"]],
+  quiz:[
+    {q:"6 apples cost $4.20. What do 10 cost?", o:["$6.00","$7.00","$7.20","$8.40"], a:1, e:"Một quả 4.20 &divide; 6 = $0.70; mười quả $7.00."},
+    {q:"A recipe for 4 people uses 300 g of rice. How much for 6 people?", o:["350 g","400 g","450 g","500 g"], a:2, e:"Một người 75 g; sáu người 450 g."},
+    {q:"A car travels 240 km on 16 litres. How far on 20 litres?", o:["280 km","300 km","320 km","360 km"], a:1, e:"Một lít đi được 15 km; 20 lít đi 300 km."},
+    {q:"3 workers paint a wall in 8 hours. Is the time in direct proportion to the number of workers?", o:["Yes, more workers means more time","No, more workers means LESS time","Yes, exactly","There is no link"], a:1, e:"Đây là tỉ lệ nghịch: càng nhiều người thì càng ít thời gian, không phải tỉ lệ thuận."},
+    {q:"8 notebooks cost $12. What is the cost of one?", o:["$1.20","$1.50","$2.00","$0.80"], a:1, e:"12 &divide; 8 = $1.50 mỗi quyển."},
+    {q:"If 5 kg of flour costs $9, how much does 2 kg cost?", o:["$3.20","$3.60","$4.50","$18"], a:1, e:"Một ki-lô-gam 9 &divide; 5 = $1.80; hai ki-lô-gam $3.60."}]},
+
+{ id:"m33", subject:"math", t:"Angles in a triangle", vi:"Góc trong tam giác",
+  kp:[
+    {en:"The three angles of ANY triangle always add up to 180&deg;.", vi:"Tổng ba góc của MỌI tam giác luôn bằng 180&deg;."},
+    {en:"Find a missing angle by subtracting the two known angles from 180&deg;.", vi:"Tìm góc thiếu: lấy 180&deg; trừ đi hai góc đã biết."},
+    {en:"Equilateral triangle: all sides equal and every angle is 60&deg;.", vi:"Tam giác đều: ba cạnh bằng nhau, mỗi góc 60&deg;."},
+    {en:"Isosceles triangle: two equal sides and the two BASE angles are equal.", vi:"Tam giác cân: hai cạnh bằng nhau và hai góc ở đáy bằng nhau."},
+    {en:"A triangle can have at most one right angle and at most one obtuse angle.", vi:"Tam giác có nhiều nhất một góc vuông và nhiều nhất một góc tù."},
+    {en:"In an isosceles triangle, if you know the top angle, each base angle is (180 &minus; top) &divide; 2.", vi:"Tam giác cân biết góc đỉnh thì mỗi góc đáy bằng (180 &minus; góc đỉnh) &divide; 2."}],
+  voc:[["triangle","tam giác"],["equilateral","đều"],["isosceles","cân"],["scalene","thường (ba cạnh khác nhau)"],["base angle","góc ở đáy"],["interior angle","góc trong"],["right-angled","vuông"],["sum","tổng"]],
+  quiz:[
+    {q:"A triangle has angles 55&deg; and 72&deg;. What is the third?", o:["43&deg;","53&deg;","63&deg;","127&deg;"], a:1, e:"180 &minus; (55 + 72) = 180 &minus; 127 = 53&deg;."},
+    {q:"Each angle of an equilateral triangle is:", o:["45&deg;","60&deg;","90&deg;","30&deg;"], a:1, e:"Ba góc bằng nhau và tổng 180&deg; nên mỗi góc 60&deg;."},
+    {q:"An isosceles triangle has a top angle of 50&deg;. What is each base angle?", o:["50&deg;","65&deg;","80&deg;","130&deg;"], a:1, e:"(180 &minus; 50) &divide; 2 = 65&deg; mỗi góc đáy."},
+    {q:"Can a triangle have two right angles?", o:["Yes","No, the angles would already total 180&deg;","Only if it is large","Only if it is isosceles"], a:1, e:"Hai góc vuông đã hết 180&deg;, không còn cho góc thứ ba."},
+    {q:"A right-angled triangle has one angle of 34&deg;. What is the third angle?", o:["46&deg;","56&deg;","66&deg;","146&deg;"], a:1, e:"180 &minus; 90 &minus; 34 = 56&deg;."},
+    {q:"An isosceles triangle has a base angle of 70&deg;. What is the top angle?", o:["40&deg;","55&deg;","70&deg;","110&deg;"], a:0, e:"Hai góc đáy đều 70&deg;, nên góc đỉnh = 180 &minus; 140 = 40&deg;."}]}
+);
+</script>
+
+<script>
+DATA.math.units.push(
+{ id:"m34", subject:"math", t:"Multiplying decimals", vi:"Nhân số thập phân",
+  kp:[
+    {en:"Ignore the decimal points, multiply as whole numbers, then put the point back.", vi:"Bỏ dấu phẩy, nhân như số nguyên, rồi đặt lại dấu phẩy."},
+    {en:"Count the decimal places in BOTH numbers and give the answer that many places.", vi:"Đếm tổng số chữ số thập phân của CẢ HAI số, kết quả có đúng bấy nhiêu chữ số thập phân."},
+    {en:"0.4 &times; 0.3: 4 &times; 3 = 12, two decimal places altogether, so the answer is 0.12.", vi:"0.4 &times; 0.3 &rarr; 4&times;3 = 12, tổng 2 chữ số thập phân &rarr; 0.12."},
+    {en:"Multiplying by a number smaller than 1 makes the answer SMALLER, not bigger.", vi:"Nhân với số nhỏ hơn 1 làm kết quả NHỎ đi, không phải lớn lên."},
+    {en:"Multiplying by 0.5 is the same as halving; by 0.1 is the same as dividing by 10.", vi:"Nhân 0.5 là chia đôi; nhân 0.1 là chia 10."},
+    {en:"Estimate first: 3.9 &times; 6 is about 4 &times; 6 = 24, so an answer near 23.4 is sensible.", vi:"Ước lượng trước: 3.9 &times; 6 &asymp; 24 nên kết quả 23.4 là hợp lý."}],
+  voc:[["multiply","nhân"],["decimal place","chữ số thập phân"],["product","tích"],["estimate","ước lượng"],["halve","chia đôi"],["sensible","hợp lý"],["place the point","đặt dấu phẩy"],["whole number","số nguyên"]],
+  quiz:[
+    {q:"0.6 &times; 0.4 =", o:["2.4","0.24","0.024","24"], a:1, e:"6 &times; 4 = 24; tổng hai chữ số thập phân &rarr; 0.24."},
+    {q:"1.5 &times; 0.2 =", o:["3.0","0.3","0.03","30"], a:1, e:"15 &times; 2 = 30; tổng hai chữ số thập phân &rarr; 0.30 tức 0.3."},
+    {q:"0.5 &times; 18 =", o:["0.9","9","90","36"], a:1, e:"Nhân 0.5 là chia đôi: 18 &divide; 2 = 9."},
+    {q:"Which gives an answer SMALLER than 20?", o:["20 &times; 1.5","20 &times; 0.8","20 &times; 2","20 &times; 1"], a:1, e:"Nhân với số nhỏ hơn 1 luôn cho kết quả nhỏ hơn số ban đầu."},
+    {q:"3.9 &times; 6 =", o:["23.4","2.34","234","21.4"], a:0, e:"39 &times; 6 = 234; một chữ số thập phân &rarr; 23.4. Ước lượng 4&times;6 = 24 nên hợp lý."},
+    {q:"0.07 &times; 3 =", o:["0.21","2.1","0.021","21"], a:0, e:"7 &times; 3 = 21; hai chữ số thập phân &rarr; 0.21."}]},
+
+{ id:"m35", subject:"math", t:"Dividing decimals", vi:"Chia số thập phân",
+  kp:[
+    {en:"To divide a decimal by a whole number, keep the decimal point in line and divide as usual.", vi:"Chia số thập phân cho số nguyên: giữ dấu phẩy thẳng hàng rồi chia bình thường."},
+    {en:"7.2 &divide; 4: think 7 &divide; 4 = 1 remainder 3, carry on into the tenths &rarr; 1.8.", vi:"7.2 &divide; 4: 7 chia 4 được 1 dư 3, mang xuống phần thập phân &rarr; 1.8."},
+    {en:"Add zeros after the decimal point if you need to keep dividing: 9 &divide; 4 = 2.25.", vi:"Thêm số 0 sau dấu phẩy để chia tiếp: 9 &divide; 4 = 2.25."},
+    {en:"Dividing by a number smaller than 1 makes the answer BIGGER: 8 &divide; 0.5 = 16.", vi:"Chia cho số nhỏ hơn 1 làm kết quả LỚN lên: 8 &divide; 0.5 = 16."},
+    {en:"Dividing by 0.5 asks &lsquo;how many halves fit inside?&rsquo; &mdash; the answer is double.", vi:"Chia cho 0.5 là hỏi &lsquo;có bao nhiêu nửa bên trong?&rsquo; nên kết quả gấp đôi."},
+    {en:"Always check by multiplying back: if 8.4 &divide; 4 = 2.1, then 2.1 &times; 4 must be 8.4.", vi:"Luôn kiểm tra bằng phép nhân ngược lại."}],
+  voc:[["divide","chia"],["dividend","số bị chia"],["divisor","số chia"],["quotient","thương"],["decimal point","dấu phẩy thập phân"],["carry","mang sang, nhớ"],["exact","chính xác, không dư"],["check","kiểm tra"]],
+  quiz:[
+    {q:"8.4 &divide; 4 =", o:["2.1","21","0.21","2.4"], a:0, e:"8 &divide; 4 = 2 và 0.4 &divide; 4 = 0.1, cộng lại 2.1."},
+    {q:"9.6 &divide; 3 =", o:["3.2","32","0.32","3.6"], a:0, e:"9 &divide; 3 = 3 và 0.6 &divide; 3 = 0.2 &rarr; 3.2."},
+    {q:"9 &divide; 4 =", o:["2.2","2.25","2.5","2 r 1"], a:1, e:"Thêm số 0 sau dấu phẩy và chia tiếp: 9.00 &divide; 4 = 2.25."},
+    {q:"12 &divide; 0.5 =", o:["6","24","0.24","2.4"], a:1, e:"Hỏi có bao nhiêu nửa trong 12 &rarr; 24. Chia cho số nhỏ hơn 1 thì kết quả lớn lên."},
+    {q:"A ribbon 4.5 m long is cut into 6 equal pieces. How long is each?", o:["0.75 m","0.65 m","7.5 m","0.9 m"], a:0, e:"4.5 &divide; 6 = 0.75 m, tức 75 cm."},
+    {q:"Which calculation gives the BIGGEST answer?", o:["10 &times; 0.5","10 &divide; 0.5","10 &times; 0.2","10 &minus; 0.5"], a:1, e:"10 &divide; 0.5 = 20, lớn nhất trong bốn phép."}]},
+
+{ id:"m36", subject:"math", t:"Frequency diagrams, line graphs and scatter graphs", vi:"Biểu đồ tần số, đồ thị đường và biểu đồ phân tán",
+  kp:[
+    {en:"A frequency diagram groups continuous data into intervals, so its bars TOUCH each other.", vi:"Biểu đồ tần số nhóm số liệu liên tục theo khoảng nên các cột DÍNH nhau."},
+    {en:"A bar chart shows separate groups, so its bars have GAPS between them.", vi:"Biểu đồ cột cho các nhóm rời rạc nên các cột CÓ khoảng cách."},
+    {en:"A line graph shows change over time. Join the points only when the data is continuous.", vi:"Đồ thị đường thể hiện thay đổi theo thời gian; chỉ nối điểm khi số liệu liên tục."},
+    {en:"On a line graph, a steeper line means a faster change.", vi:"Trên đồ thị đường, đoạn càng dốc thì thay đổi càng nhanh."},
+    {en:"A scatter graph plots two things against each other to see whether they are linked.", vi:"Biểu đồ phân tán vẽ hai đại lượng theo nhau để xem có liên hệ không."},
+    {en:"Points rising together show a link, but one thing does not always CAUSE the other.", vi:"Các điểm cùng đi lên cho thấy có liên hệ, nhưng chưa chắc cái này GÂY RA cái kia."}],
+  voc:[["frequency","tần số"],["interval","khoảng"],["continuous data","số liệu liên tục"],["line graph","đồ thị đường"],["scatter graph","biểu đồ phân tán"],["trend","xu hướng"],["steep","dốc"],["axis","trục"]],
+  quiz:[
+    {q:"Why do the bars of a frequency diagram touch?", o:["To save space","Because the data is continuous, with no gaps between intervals","Because it looks neater","Because the groups are separate"], a:1, e:"Số liệu liên tục không có khoảng trống giữa các khoảng nên cột dính nhau."},
+    {q:"Which chart shows how a plant grew over 8 weeks?", o:["Pie chart","Bar chart","Line graph","Scatter graph"], a:2, e:"Thay đổi theo thời gian nên dùng đồ thị đường."},
+    {q:"On a line graph, what does a steeper section mean?", o:["Slower change","Faster change","No change","An error"], a:1, e:"Càng dốc nghĩa là giá trị thay đổi nhiều trong cùng khoảng thời gian."},
+    {q:"Which chart would show whether taller children have bigger feet?", o:["Pie chart","Scatter graph","Frequency diagram","Line graph"], a:1, e:"Biểu đồ phân tán vẽ hai đại lượng theo nhau để tìm mối liên hệ."},
+    {q:"A scatter graph shows ice cream sales and sunburn cases both rising. What can you say?", o:["Ice cream causes sunburn","They are linked, but hot weather may cause both","Sunburn causes ice cream sales","Nothing at all"], a:1, e:"Có liên hệ không có nghĩa là nhân quả; trời nắng nóng mới là nguyên nhân chung."},
+    {q:"A bar chart's bars have gaps because:", o:["The data is continuous","The groups are separate and distinct","There is not enough data","The scale is wrong"], a:1, e:"Các nhóm rời rạc, không nối tiếp nhau nên cột phải tách rời."}]},
+
+{ id:"m37", subject:"math", t:"Reflections", vi:"Phép đối xứng trục",
+  kp:[
+    {en:"A reflection flips a shape over a mirror line. The image is the same size and shape.", vi:"Phép đối xứng lật hình qua một trục; ảnh giữ nguyên kích thước và hình dạng."},
+    {en:"Every point and its image are the SAME distance from the mirror line, on opposite sides.", vi:"Mỗi điểm và ảnh của nó cách trục một khoảng BẰNG NHAU, ở hai phía đối diện."},
+    {en:"Reflecting in the y-axis changes the sign of x: (3, 5) becomes (&minus;3, 5).", vi:"Đối xứng qua trục tung thì x đổi dấu, y giữ nguyên."},
+    {en:"Reflecting in the x-axis changes the sign of y: (3, 5) becomes (3, &minus;5).", vi:"Đối xứng qua trục hoành thì y đổi dấu, x giữ nguyên."},
+    {en:"A point ON the mirror line does not move at all.", vi:"Điểm nằm NGAY TRÊN trục đối xứng thì không di chuyển."},
+    {en:"The image is congruent to the original, but the left and right sides are swapped.", vi:"Ảnh bằng hình gốc, nhưng trái phải bị đảo."}],
+  voc:[["reflection","phép đối xứng"],["mirror line","trục đối xứng"],["image","ảnh"],["congruent","bằng nhau"],["equal distance","khoảng cách bằng nhau"],["x-axis","trục hoành"],["y-axis","trục tung"],["vertex","đỉnh"]],
+  quiz:[
+    {q:"Point (4, 2) is reflected in the y-axis. Where does it land?", o:["(4, &minus;2)","(&minus;4, 2)","(&minus;4, &minus;2)","(2, 4)"], a:1, e:"Qua trục tung thì x đổi dấu, y giữ nguyên."},
+    {q:"Point (4, 2) is reflected in the x-axis. Where does it land?", o:["(4, &minus;2)","(&minus;4, 2)","(&minus;4, &minus;2)","(2, 4)"], a:0, e:"Qua trục hoành thì y đổi dấu, x giữ nguyên."},
+    {q:"A point is 3 squares from the mirror line. Its image is:", o:["3 squares away on the other side","6 squares away","On the line","1.5 squares away"], a:0, e:"Ảnh cách trục đúng bằng khoảng cách của điểm gốc, nhưng ở phía bên kia."},
+    {q:"After a reflection the shape is:", o:["Bigger","Smaller","The same size and shape","Rotated 90&deg;"], a:2, e:"Phép đối xứng chỉ lật hình nên hai hình bằng nhau."},
+    {q:"A point lies exactly on the mirror line. Where is its image?", o:["In the same place","On the other side","At the origin","It disappears"], a:0, e:"Khoảng cách tới trục bằng 0 nên điểm đó đứng yên."},
+    {q:"Point (&minus;5, 1) is reflected in the y-axis. Where does it land?", o:["(5, 1)","(&minus;5, &minus;1)","(5, &minus;1)","(1, &minus;5)"], a:0, e:"x đổi dấu từ &minus;5 thành 5, y giữ nguyên."}]},
+
+{ id:"m38", subject:"math", t:"Rotations", vi:"Phép quay",
+  kp:[
+    {en:"A rotation turns a shape about a fixed point called the centre of rotation.", vi:"Phép quay xoay hình quanh một điểm cố định gọi là tâm quay."},
+    {en:"You must state three things: the centre, the angle, and the direction (clockwise or anticlockwise).", vi:"Phải nêu đủ ba điều: tâm quay, góc quay và chiều quay."},
+    {en:"A 90&deg; turn is a quarter turn; 180&deg; is a half turn; 270&deg; is three quarters.", vi:"Quay 90&deg; là một phần tư vòng; 180&deg; là nửa vòng; 270&deg; là ba phần tư."},
+    {en:"A rotation of 180&deg; about the origin turns (a, b) into (&minus;a, &minus;b).", vi:"Quay 180&deg; quanh gốc toạ độ biến (a, b) thành (&minus;a, &minus;b)."},
+    {en:"Two 90&deg; turns in the same direction make one 180&deg; turn.", vi:"Hai lần quay 90&deg; cùng chiều cộng lại thành 180&deg;."},
+    {en:"The shape stays exactly the same size after a rotation &mdash; only its position and direction change.", vi:"Sau phép quay hình giữ nguyên kích thước, chỉ đổi vị trí và hướng."}],
+  voc:[["rotation","phép quay"],["centre of rotation","tâm quay"],["clockwise","theo chiều kim đồng hồ"],["anticlockwise","ngược chiều kim đồng hồ"],["quarter turn","một phần tư vòng"],["half turn","nửa vòng"],["origin","gốc toạ độ"],["congruent","bằng nhau"]],
+  quiz:[
+    {q:"Point (3, 4) is rotated 180&deg; about the origin. Where does it land?", o:["(&minus;3, &minus;4)","(&minus;3, 4)","(4, 3)","(3, &minus;4)"], a:0, e:"Quay 180&deg; quanh gốc thì cả hai toạ độ đổi dấu."},
+    {q:"Two 90&deg; clockwise rotations are the same as:", o:["No turn","A 180&deg; turn","A 270&deg; turn","A reflection"], a:1, e:"90 + 90 = 180&deg;."},
+    {q:"Which three things must you give to describe a rotation fully?", o:["Centre, angle, direction","Size, colour, shape","Length, width, height","Only the angle"], a:0, e:"Thiếu một trong ba thì phép quay chưa xác định."},
+    {q:"A 270&deg; clockwise turn is the same as:", o:["90&deg; clockwise","90&deg; anticlockwise","180&deg; clockwise","360&deg;"], a:1, e:"Quay 270&deg; theo chiều kim đồng hồ trùng với 90&deg; ngược chiều kim đồng hồ."},
+    {q:"After a rotation the shape is:", o:["Smaller","Bigger","Congruent to the original","Flipped over"], a:2, e:"Phép quay giữ nguyên kích thước và hình dạng, chỉ đổi hướng và vị trí."},
+    {q:"A quarter turn is how many degrees?", o:["45&deg;","90&deg;","180&deg;","270&deg;"], a:1, e:"Một vòng là 360&deg; nên một phần tư vòng là 90&deg;."}]}
+);
+</script>
+
+<script>
+Object.assign(MM, {
+m22:["Look at the next digit only|Chỉ nhìn chữ số kế tiếp","5 or more rounds up|Từ 5 thì tăng lên","Never round twice|Không làm tròn hai lần","2.97 becomes 3.0|Có khi đổi nhiều chữ số","Keep the final zero|Giữ số 0 cuối","Work backwards too|Bài ngược: tìm khoảng"],
+m23:["Common factor divides both|Ước chung chia hết cả hai","Common multiple in both tables|Bội chung của cả hai","HCF: biggest shared factor|ƯCLN là ước chung lớn nhất","LCM: first shared multiple|BCNN là bội chung đầu tiên","Co-prime shares only 1|Nguyên tố cùng nhau","HCF simplifies fractions|ƯCLN dùng rút gọn"],
+m24:["Letter stands for a number|Chữ thay cho số","Write 3n not 3 &times; n|Cách viết đúng","Expression has no equals|Biểu thức không có dấu bằng","Substitute then calculate|Thay số rồi tính","Inverse on both sides|Phép ngược ở hai vế","Words into algebra|Đổi lời văn sang đại số"],
+m25:["Radius: centre to edge|Bán kính từ tâm ra mép","Diameter = 2 &times; radius|Đường kính gấp đôi","Circumference goes round|Chu vi bao quanh","About 3.14 times diameter|Gấp khoảng 3,14 lần","Chord and arc|Dây cung và cung","Infinite lines of symmetry|Vô số trục đối xứng"],
+m26:["Looks same before full turn|Giống lại trước khi hết vòng","Order = number of matches|Bậc là số lần khớp","Order 1 means none|Bậc 1 là không có","Square 4, triangle 3|Vuông 4, tam giác đều 3","Angle = 360 &divide; order|Góc quay = 360 chia bậc","Different from line symmetry|Khác đối xứng trục"],
+m27:["Per cent means out of 100|Phần trăm là trên 100","50, 25, 10, 1 per cent keys|Các mốc tính nhanh","Build from the keys|Ghép các mốc lại","Find 10% first|Tính 10% trước","Discount has two steps|Giảm giá có hai bước","Part back to whole|Từ phần suy ra tổng"],
+m28:["Learn the key set|Thuộc bộ quy đổi","Top &divide; bottom, then &times;100|Đổi sang % thế nào","Compare as decimals|So sánh bằng thập phân","Cross-multiply two fractions|Nhân chéo so nhanh","Equivalent fractions|Phân số bằng nhau","Longer is not bigger|Dài hơn chưa chắc lớn hơn"],
+m29:["Same denominator first|Quy đồng mẫu trước","Use the LCM|Dùng bội chung nhỏ nhất","Add only the numerators|Chỉ cộng tử số","Never add denominators|Không cộng mẫu","One divides the other|Khi mẫu này chia hết mẫu kia","Simplify at the end|Rút gọn cuối cùng"],
+m30:["Sharing into equal groups|Chia thành nhóm bằng nhau","Check by multiplying|Kiểm tra bằng phép nhân","Remainder &lt; divisor|Số dư nhỏ hơn số chia","Three ways to write it|Ba cách viết số dư","Round up or down?|Làm tròn lên hay xuống","Divide by 10, 100, 1000|Chia cho bội của 10"],
+m31:["Volume is space taken up|Thể tích là chỗ chiếm","l &times; w &times; h for a cuboid|Công thức hình hộp","1 cm&sup3; = 1 ml|Quy đổi quan trọng","Prism: cross-section &times; length|Lăng trụ tính sao","Count hidden cubes too|Đếm cả khối bị che","Double sides, 8 times volume|Gấp đôi cạnh, gấp 8 thể tích"],
+m32:["Double one, double the other|Gấp đôi cùng lúc","Find one first|Quy về một đơn vị","Pens and prices|Ví dụ giá bút","Recipes scale the same|Công thức nấu ăn","Dividing gives a constant|Thương luôn không đổi","Not everything is proportional|Không phải cái gì cũng thuận"],
+m33:["Three angles make 180&deg;|Tổng ba góc 180 độ","Subtract from 180|Lấy 180 trừ đi","Equilateral: all 60&deg;|Tam giác đều 60 độ","Isosceles: equal base angles|Tam giác cân hai góc đáy","At most one right angle|Nhiều nhất một góc vuông","(180 &minus; top) &divide; 2|Công thức góc đáy"],
+m34:["Ignore points, multiply|Bỏ dấu phẩy rồi nhân","Count decimal places|Đếm chữ số thập phân","0.4 &times; 0.3 = 0.12|Ví dụ mẫu","Smaller than 1 shrinks it|Nhân số nhỏ hơn 1","&times;0.5 halves it|Nhân 0.5 là chia đôi","Estimate to check|Ước lượng kiểm tra"],
+m35:["Keep the point in line|Giữ dấu phẩy thẳng hàng","Carry into the tenths|Mang xuống phần thập phân","Add zeros to continue|Thêm số 0 chia tiếp","Divide by &lt;1 grows it|Chia số nhỏ hơn 1","&divide;0.5 doubles it|Chia 0.5 là gấp đôi","Multiply back to check|Nhân ngược kiểm tra"],
+m36:["Frequency bars touch|Cột tần số dính nhau","Bar chart bars have gaps|Cột thường có khoảng cách","Line graph over time|Đường theo thời gian","Steeper means faster|Dốc hơn là nhanh hơn","Scatter finds a link|Phân tán tìm liên hệ","Link is not cause|Liên hệ khác nhân quả"],
+m37:["Flip over a mirror line|Lật qua trục","Equal distance both sides|Cách đều hai bên","y-axis flips x|Trục tung đổi dấu x","x-axis flips y|Trục hoành đổi dấu y","Points on the line stay|Điểm trên trục đứng yên","Congruent, left-right swapped|Bằng nhau, đảo trái phải"],
+m38:["Turn about a centre|Quay quanh một tâm","Centre, angle, direction|Ba điều phải nêu","90, 180, 270 degrees|Các góc quay quen thuộc","180&deg; flips both signs|Quay 180 đổi dấu cả hai","Two 90s make 180|Hai lần 90 thành 180","Size never changes|Kích thước không đổi"]
+});
+Object.assign(EXT, {
+m22:{d:[{en:"Money is always rounded to 2 decimal places, so $3.5 must be written $3.50.",vi:"Tiền luôn làm tròn 2 chữ số thập phân, nên viết $3.50 chứ không phải $3.5."},
+ {en:"Shops often round up to the nearest cent, which is why a bill can be one cent more than you expect.",vi:"Cửa hàng thường làm tròn lên tới xu gần nhất, nên hoá đơn có thể lệch một xu."},
+ {en:"Rounding to a sensible level matters: saying a room is 4.283 m long is silly, 4.3 m is enough.",vi:"Làm tròn tới mức hợp lý mới có ý nghĩa: nói phòng dài 4,283 m là thừa, 4,3 m là đủ."}],
+ a:["Làm tròn giá ba món trong bếp tới nghìn gần nhất rồi cộng nhẩm.","Đo chiều cao của mình rồi làm tròn tới cm và tới 0,1 m.","Xem dự báo nhiệt độ và làm tròn tới độ gần nhất."],
+ c:{q:"A number rounds to 4.2 to one decimal place. Which could it NOT be?",o:["4.15","4.19","4.24","4.25"],a:3,
+  e:"4.25 làm tròn lên thành 4.3. Khoảng hợp lệ là từ 4.15 đến dưới 4.25."}},
+m23:{d:[{en:"The HCF of two numbers can never be bigger than the smaller number.",vi:"ƯCLN của hai số không bao giờ lớn hơn số nhỏ."},
+ {en:"The LCM of two numbers can never be smaller than the bigger number.",vi:"BCNN không bao giờ nhỏ hơn số lớn."},
+ {en:"For two co-prime numbers, the LCM is simply the two numbers multiplied together.",vi:"Với hai số nguyên tố cùng nhau, BCNN chính là tích của chúng."}],
+ a:["Tìm ƯCLN của tuổi mình và tuổi anh chị em.","Hai đèn nháy mỗi 4 giây và 6 giây, tính khi nào chúng nháy cùng lúc.","Rút gọn ba phân số trong sách bài tập bằng ƯCLN."],
+ c:{q:"What is the LCM of 5 and 7?",o:["12","35","1","70"],a:1,
+  e:"5 và 7 nguyên tố cùng nhau nên BCNN là 5 &times; 7 = 35."}},
+m24:{d:[{en:"Whatever you do to one side of an equation you must do to the other &mdash; like keeping scales balanced.",vi:"Làm gì ở vế này thì phải làm y hệt ở vế kia, giống giữ cân thăng bằng."},
+ {en:"2n is always even and 2n + 1 is always odd, for any whole number n.",vi:"2n luôn chẵn và 2n + 1 luôn lẻ với mọi số nguyên n."},
+ {en:"A formula is an equation that works for every case, like area = length &times; width.",vi:"Công thức là phương trình đúng cho mọi trường hợp, ví dụ diện tích = dài &times; rộng."}],
+ a:["Nghĩ một số, nhân 3 cộng 4, nói kết quả rồi đố bố mẹ tìm lại số ban đầu.","Viết công thức tính chu vi hình chữ nhật bằng chữ.","Thay n = 1, 2, 3 vào 2n + 1 và nhận xét kết quả."],
+ c:{q:"Nam thinks of a number, multiplies by 4 and subtracts 7 to get 25. What was it?",o:["7","8","18","32"],a:1,
+  e:"Làm ngược: 25 + 7 = 32, rồi 32 &divide; 4 = 8."}},
+m25:{d:[{en:"The number 3.14 is called pi. It is the same for every circle in the universe.",vi:"Con số 3,14 gọi là số pi, giống nhau với mọi hình tròn."},
+ {en:"A wheel turns one full circumference for each complete turn, which is how bike computers measure distance.",vi:"Bánh xe quay một vòng thì đi được đúng một chu vi — đó là cách đồng hồ xe đạp đo quãng đường."},
+ {en:"A semicircle is half a circle, and a quarter circle is called a quadrant.",vi:"Nửa hình tròn là semicircle; một phần tư hình tròn gọi là quadrant."}],
+ a:["Dùng dây đo chu vi một cái đĩa rồi chia cho đường kính xem có ra khoảng 3,14 không.","Vẽ ba hình tròn bằng com-pa với bán kính 3, 5 và 7 cm.","Tìm 5 vật hình tròn trong nhà và đo đường kính từng vật."],
+ c:{q:"A bicycle wheel has a diameter of 60 cm. Roughly how far does it travel in one turn?",o:["60 cm","120 cm","188 cm","300 cm"],a:2,
+  e:"Một vòng đi được đúng một chu vi: 3,14 &times; 60 &asymp; 188 cm."}},
+m26:{d:[{en:"A regular polygon with n sides always has rotational symmetry of order n.",vi:"Đa giác đều n cạnh luôn có bậc đối xứng quay bằng n."},
+ {en:"A circle has infinite rotational symmetry &mdash; it matches at every possible angle.",vi:"Hình tròn có bậc đối xứng quay vô hạn vì quay góc nào cũng khớp."},
+ {en:"The letter S has rotational symmetry of order 2 but no line of symmetry at all.",vi:"Chữ S có đối xứng quay bậc 2 nhưng không có trục đối xứng nào."}],
+ a:["Xoay một tấm bìa hình chữ nhật và đếm số lần trông giống ban đầu.","Tìm 3 logo hoặc hoa văn trong nhà có đối xứng quay.","Viết các chữ cái in hoa và tìm chữ nào có đối xứng quay bậc 2."],
+ c:{q:"Which letter has rotational symmetry of order 2 but no lines of symmetry?",o:["A","H","S","T"],a:2,
+  e:"Chữ S quay 180&deg; là trùng khít, nhưng không gấp đôi được theo trục nào."}},
+m27:{d:[{en:"A 20% increase then a 20% decrease does NOT return to the start: 100 &rarr; 120 &rarr; 96.",vi:"Tăng 20% rồi giảm 20% không về số cũ: 100 &rarr; 120 &rarr; 96."},
+ {en:"Two discounts of 10% are not the same as one discount of 20% &mdash; the second is taken off a smaller price.",vi:"Giảm 10% hai lần không bằng giảm 20% một lần, vì lần sau tính trên giá đã nhỏ đi."},
+ {en:"Percentages over 100% are possible: 150% of 40 is 60.",vi:"Phần trăm có thể lớn hơn 100%: 150% của 40 là 60."}],
+ a:["Tìm một món giảm giá ở siêu thị và tính giá phải trả trước khi nhìn bảng.","Tính 10%, 25% và 50% của số tiền tiêu vặt tuần này.","Xem phần trăm pin điện thoại và tính còn bao nhiêu phần trăm nữa thì đầy."],
+ c:{q:"A $200 coat is reduced by 10%, then by another 10%. What is the final price?",o:["$160","$162","$180","$170"],a:1,
+  e:"200 &rarr; 180 (giảm 20), rồi 180 &rarr; 162 (giảm 18). Không phải $160."}},
+m28:{d:[{en:"1/3 = 0.333... goes on forever. It is a recurring decimal, written 0.3 with a dot above.",vi:"1/3 = 0,333... kéo dài vô hạn, gọi là số thập phân tuần hoàn."},
+ {en:"Any fraction whose denominator is only made of 2s and 5s gives an exact decimal.",vi:"Phân số có mẫu chỉ gồm thừa số 2 và 5 thì cho số thập phân hữu hạn."},
+ {en:"Percentages make comparison fair: 18 out of 25 and 7 out of 10 are easier to compare as 72% and 70%.",vi:"Phần trăm giúp so sánh công bằng: 18/25 và 7/10 đổi ra 72% và 70% là thấy ngay."}],
+ a:["Xếp 0.7, 3/4 và 72% theo thứ tự tăng dần.","Đổi điểm kiểm tra của mình sang phần trăm.","Tìm ba cách viết khác nhau cho cùng một nửa."],
+ c:{q:"Which of these does NOT equal 0.75?",o:["3/4","75%","6/8","7/10"],a:3,
+  e:"7/10 = 0,7 chứ không phải 0,75. Ba dạng còn lại đều bằng nhau."}},
+m29:{d:[{en:"You can always use the two denominators multiplied together as a common denominator, though it may not be the lowest.",vi:"Có thể lấy tích hai mẫu làm mẫu chung, tuy không phải nhỏ nhất."},
+ {en:"Adding fractions is like adding different units &mdash; you cannot add 3 metres and 4 centimetres without converting.",vi:"Cộng phân số khác mẫu giống cộng mét với xăng-ti-mét: phải đổi cùng đơn vị trước."},
+ {en:"An improper fraction like 11/8 can be written as the mixed number 1 3/8.",vi:"Phân số lớn hơn 1 như 11/8 viết được thành hỗn số 1 và 3/8."}],
+ a:["Cắt một chiếc bánh và cộng phần của hai người thành một phân số.","Cộng 1/2 giờ với 1/4 giờ rồi đổi ra phút.","Tìm ba cặp phân số có mẫu chia hết cho nhau và cộng thử."],
+ c:{q:"7/10 + 1/5 =",o:["8/15","9/10","8/10","1"],a:1,
+  e:"1/5 = 2/10 nên 7/10 + 2/10 = 9/10."}},
+m30:{d:[{en:"Division and multiplication are opposites, so every division fact gives you a multiplication fact.",vi:"Chia và nhân là hai phép ngược nhau, nên mỗi phép chia cho ta một phép nhân."},
+ {en:"Dividing by 4 is the same as halving twice; dividing by 5 is doubling then dividing by 10.",vi:"Chia 4 là chia đôi hai lần; chia 5 là nhân đôi rồi chia 10."},
+ {en:"You can never divide by zero &mdash; there is no answer to &lsquo;how many zeros fit into 6?&rsquo;",vi:"Không bao giờ chia được cho 0, vì không có câu trả lời cho &lsquo;bao nhiêu số 0 nằm trong 6?&rsquo;"}],
+ a:["Chia đều số kẹo cho cả nhà và nêu rõ số dư.","Tính xem 250 ml sữa chia được mấy cốc 60 ml và còn thừa bao nhiêu.","Nhẩm 96 &divide; 4 bằng cách chia đôi hai lần."],
+ c:{q:"Cakes are packed in boxes of 8. There are 60 cakes. How many boxes are FULL?",o:["7","7.5","8","6"],a:0,
+  e:"60 &divide; 8 = 7 dư 4, nên chỉ có 7 hộp đầy. Đề hỏi hộp đầy nên làm tròn xuống."}},
+m31:{d:[{en:"A litre of water has a mass of about 1 kilogram, which makes estimating easy.",vi:"Một lít nước nặng khoảng 1 ki-lô-gam, rất tiện để ước lượng."},
+ {en:"Two containers with the same capacity can look completely different in shape.",vi:"Hai vật chứa cùng dung tích có thể có hình dạng khác hẳn nhau."},
+ {en:"Displacement: dropping a stone into water raises the level by exactly the stone's volume.",vi:"Thả hòn đá vào nước thì mực nước dâng đúng bằng thể tích hòn đá."}],
+ a:["Đo hộp sữa và tính thể tích, so với số ml ghi trên vỏ.","Thả một vật vào cốc nước có vạch chia và đo mực nước dâng lên.","Đếm số khối lập phương trong một hình xếp bằng đồ chơi."],
+ c:{q:"A stone is dropped into a measuring jug. The water rises from 200 ml to 260 ml. What is the stone's volume?",o:["200 cm&sup3;","60 cm&sup3;","260 cm&sup3;","460 cm&sup3;"],a:1,
+  e:"Mực nước dâng 60 ml, mà 1 ml = 1 cm&sup3; nên thể tích hòn đá là 60 cm&sup3;."}},
+m32:{d:[{en:"On a graph, two amounts in direct proportion give a straight line through the origin.",vi:"Trên đồ thị, hai đại lượng tỉ lệ thuận cho một đường thẳng đi qua gốc toạ độ."},
+ {en:"Exchange rates work by direct proportion, which is how you convert money between countries.",vi:"Tỉ giá tiền tệ hoạt động theo tỉ lệ thuận, đó là cách đổi tiền giữa các nước."},
+ {en:"Best-value questions compare the price per unit, not the total price.",vi:"Bài &lsquo;mua cái nào lợi hơn&rsquo; phải so đơn giá chứ không so tổng tiền."}],
+ a:["So sánh hai gói bánh khác cỡ xem gói nào rẻ hơn tính theo gam.","Tính tiền đi taxi 5 km nếu biết giá 3 km.","Nhân đôi công thức món ăn cho gấp đôi số người."],
+ c:{q:"Which is better value: 500 g for $4 or 800 g for $6?",o:["500 g for $4","800 g for $6","They are the same","Cannot tell"],a:1,
+  e:"Đơn giá: 4 &divide; 500 = 0,8 xu mỗi gam; 6 &divide; 800 = 0,75 xu mỗi gam. Gói lớn rẻ hơn."}},
+m33:{d:[{en:"Tear the three corners off any paper triangle and put them together &mdash; they always make a straight line, 180&deg;.",vi:"Xé ba góc của một tam giác giấy rồi ghép lại, chúng luôn tạo thành đường thẳng 180&deg;."},
+ {en:"An exterior angle of a triangle equals the sum of the two opposite interior angles.",vi:"Góc ngoài của tam giác bằng tổng hai góc trong không kề với nó."},
+ {en:"The longest side of a triangle is always opposite the biggest angle.",vi:"Cạnh dài nhất luôn đối diện góc lớn nhất."}],
+ a:["Vẽ một tam giác bất kỳ, đo ba góc rồi cộng lại xem có đúng 180&deg; không.","Xé ba góc tam giác giấy và ghép lại thành đường thẳng.","Tìm 5 tam giác quanh nhà và đoán loại nào là cân, đều hay thường."],
+ c:{q:"A triangle has angles in the ratio 1 : 2 : 3. What is the largest angle?",o:["60&deg;","90&deg;","120&deg;","30&deg;"],a:1,
+  e:"Tổng 6 phần bằng 180&deg;, mỗi phần 30&deg;. Góc lớn nhất là 3 phần = 90&deg;."}},
+m34:{d:[{en:"Multiplying two numbers each less than 1 always gives an answer smaller than both of them.",vi:"Nhân hai số đều nhỏ hơn 1 thì kết quả nhỏ hơn cả hai số."},
+ {en:"Money problems often need multiplying decimals: 2.5 kg at $1.20 per kg costs $3.00.",vi:"Bài tính tiền hay dùng nhân thập phân: 2,5 kg giá 1,20 mỗi kg thì hết 3,00."},
+ {en:"Estimating first catches misplaced decimal points, the most common mistake in this topic.",vi:"Ước lượng trước bắt được lỗi đặt sai dấu phẩy — lỗi phổ biến nhất ở phần này."}],
+ a:["Tính tiền 1,5 kg một loại quả khi biết giá một ki-lô-gam.","Nhân 0,5 với năm số khác nhau và nhận xét kết quả.","Ước lượng rồi mới tính 4,9 &times; 8 và so sánh."],
+ c:{q:"Rice costs $1.40 per kg. What is the cost of 2.5 kg?",o:["$3.00","$3.50","$3.90","$4.00"],a:1,
+  e:"14 &times; 25 = 350; đếm hai chữ số thập phân &rarr; $3.50."}},
+m35:{d:[{en:"To divide by a decimal, make it a whole number first: 6 &divide; 0.2 becomes 60 &divide; 2 = 30.",vi:"Chia cho số thập phân thì đưa về số nguyên trước: 6 &divide; 0.2 thành 60 &divide; 2 = 30."},
+ {en:"Sharing money is division of decimals: $18.60 shared by 4 people gives $4.65 each.",vi:"Chia tiền chính là chia số thập phân: 18,60 chia cho 4 người được 4,65 mỗi người."},
+ {en:"If the division does not end, round the answer to a sensible number of decimal places.",vi:"Nếu phép chia không hết, làm tròn tới số chữ số thập phân hợp lý."}],
+ a:["Chia hoá đơn bữa ăn cho số người trong nhà.","Tính giá một chiếc bút nếu 4 chiếc giá 13 nghìn.","Chia 2,4 lít nước vào 8 cốc bằng nhau."],
+ c:{q:"$18.60 is shared equally between 4 people. How much each?",o:["$4.15","$4.65","$4.60","$5.65"],a:1,
+  e:"18.60 &divide; 4 = 4.65. Kiểm tra ngược: 4.65 &times; 4 = 18.60."}},
+m36:{d:[{en:"A line graph can be read both ways: find the time for a value, or the value at a time.",vi:"Đồ thị đường đọc được hai chiều: tìm thời điểm ứng với một giá trị, hoặc ngược lại."},
+ {en:"A flat section on a line graph means no change at all during that period.",vi:"Đoạn nằm ngang trên đồ thị nghĩa là không thay đổi trong khoảng đó."},
+ {en:"A line of best fit on a scatter graph is a smooth straight line through the trend, not joining every dot.",vi:"Đường xu hướng trên biểu đồ phân tán là đường thẳng mượt đi qua xu hướng chung, không nối từng điểm."}],
+ a:["Ghi nhiệt độ mỗi giờ trong một buổi chiều và vẽ đồ thị đường.","Đo chiều cao và cỡ giày của cả nhà rồi vẽ biểu đồ phân tán.","Tìm một đồ thị trên báo và chỉ ra đoạn nào dốc nhất."],
+ c:{q:"On a line graph of a journey, a flat horizontal section means the car was:",o:["Speeding up","Slowing down","Not moving","Going backwards"],a:2,
+  e:"Đoạn nằm ngang nghĩa là quãng đường không đổi theo thời gian, tức xe đang đứng yên."}},
+m37:{d:[{en:"Reflecting twice in the same mirror line brings the shape back to exactly where it started.",vi:"Đối xứng hai lần qua cùng một trục thì hình trở về đúng chỗ cũ."},
+ {en:"Reflecting in the x-axis then the y-axis gives the same result as a 180&deg; rotation about the origin.",vi:"Đối xứng qua trục hoành rồi trục tung cho kết quả giống quay 180&deg; quanh gốc."},
+ {en:"Mirror writing is a reflection: that is why AMBULANCE is written backwards on the front of the vehicle.",vi:"Chữ viết ngược trên đầu xe cứu thương chính là phép đối xứng, để tài xế phía trước đọc được qua gương."}],
+ a:["Vẽ một chữ cái trên giấy kẻ ô rồi vẽ ảnh đối xứng qua trục dọc.","Soi gương và thử đọc một dòng chữ trong sách.","Gấp đôi một hình vẽ để kiểm tra hai nửa có khớp không."],
+ c:{q:"Point (2, 3) is reflected in the x-axis, then in the y-axis. Where does it end up?",o:["(2, 3)","(&minus;2, &minus;3)","(&minus;2, 3)","(2, &minus;3)"],a:1,
+  e:"Lần một cho (2, &minus;3), lần hai cho (&minus;2, &minus;3) — giống hệt quay 180&deg;."}},
+m38:{d:[{en:"Rotating by 360&deg; brings a shape back to exactly where it started.",vi:"Quay 360&deg; thì hình trở về đúng vị trí ban đầu."},
+ {en:"Clock hands rotate clockwise by 30&deg; every hour, because 360 &divide; 12 = 30.",vi:"Kim đồng hồ quay 30&deg; mỗi giờ, vì 360 chia 12 bằng 30."},
+ {en:"The centre of rotation does not have to be inside the shape &mdash; it can be a corner or a point outside.",vi:"Tâm quay không nhất thiết nằm trong hình; nó có thể là một đỉnh hoặc một điểm bên ngoài."}],
+ a:["Xoay một quyển sách 90&deg; rồi 180&deg; và mô tả bằng lời.","Nhìn đồng hồ lúc 3 giờ và tính góc giữa hai kim.","Vẽ một hình rồi quay nó 90&deg; quanh một đỉnh trên giấy kẻ ô."],
+ c:{q:"Through how many degrees does the hour hand of a clock turn between 3 pm and 6 pm?",o:["30&deg;","60&deg;","90&deg;","180&deg;"],a:2,
+  e:"Mỗi giờ kim giờ quay 30&deg;, ba giờ là 90&deg;."}}
+});
+</script>
+
+<script>
+/* Toán: một bài cho mỗi mục nhỏ trong sách — 37 mục */
+(function(){
+  const rename = {
+    m1:["Place value","Giá trị theo vị trí"],
+    m5:["Counting and sequences","Đếm và dãy số"],
+    m13:["Special numbers","Số đặc biệt: nguyên tố, chính phương, lập phương"],
+    m10:["Mode, median, mean and range","Mốt, trung vị, trung bình và khoảng biến thiên"],
+    m14:["Positive and negative integers","Số nguyên âm và dương"],
+    m15:["Quadrilaterals","Tứ giác"],
+    m2:["Understanding fractions","Hiểu về phân số"],
+    m9:["Rectangles and triangles","Hình chữ nhật và tam giác: diện tích, chu vi"],
+    m8:["Time","Thời gian"],
+    m17:["Adding and subtracting decimal numbers","Cộng trừ số thập phân"],
+    m11:["Describing and predicting likelihood","Mô tả và dự đoán khả năng xảy ra"],
+    m4:["Multiplication","Phép nhân"],
+    m18:["Tests of divisibility","Dấu hiệu chia hết"],
+    m16:["Shapes and nets","Hình khối và hình khai triển"],
+    m3:["Ratio","Tỉ số"],
+    m6:["Measuring and drawing angles","Đo và vẽ góc"],
+    m19:["Multiplying and dividing fractions","Nhân và chia phân số"],
+    m20:["Bar charts, dot plots, waffle diagrams and pie charts","Biểu đồ cột, chấm, ô vuông và tròn"],
+    m21:["The laws of arithmetic","Các quy tắc của phép tính"],
+    m7:["Coordinates and translations","Toạ độ và phép tịnh tiến"],
+    m12:["Problem solving","Giải toán có lời văn"]
+  };
+  Object.keys(rename).forEach(id=>{ const u=findUnit(id); if(u){ u.t=rename[id][0]; u.vi=rename[id][1]; } });
+
+  const U = PROG.math.units, map = {
+    1:["m1","m22"], 2:["m5","m13","m23"], 3:["m10"], 4:["m14","m24"], 5:["m15","m25","m26"],
+    6:["m2","m27","m28"], 7:["m9","m8"], 8:["m17","m29"], 9:["m11"], 10:["m4","m30","m18"],
+    11:["m16","m31"], 12:["m3","m32"], 13:["m6","m33"], 14:["m19","m34","m35"],
+    15:["m20","m36"], 16:["m21"], 17:["m7","m37","m38"], 18:["m12"]
+  };
+  U.forEach(bu=>{ if(map[bu.no]) bu.lessons = map[bu.no]; });
+  PROG.math.book = "Cambridge Primary Mathematics 6 (CUP, 2nd edition) &mdash; 17 unit, 37 bài nhỏ, mỗi bài nhỏ là một bài học riêng trong app";
+})();
 if(S.goal===undefined) S.goal = 1;
 if(S.appPin===undefined) S.appPin = null;
 syncPoints();
