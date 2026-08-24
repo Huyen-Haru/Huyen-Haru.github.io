@@ -67,7 +67,7 @@ và ghi vào lịch sử.
   *Thi thử cả năm* (40 câu rút từ toàn bộ 83 bài và 32 bài kiểm tra unit).
 - **Mật mã mở app**: lần đầu vào app sẽ hỏi đặt mã 4 số (bỏ qua được, đặt lại trong Cài đặt bất cứ lúc nào).
   Mã này độc lập với mã riêng của bố mẹ dùng để duyệt đổi thưởng.
-- **Mindmap cho cả 83 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
+- **Mindmap cho cả 83 bài** cùng **19 sơ đồ** và **55 hình minh hoạ**: Science 43, Toán 7, ESL 5,
   tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
   quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,
   đường đi của thức ăn, nhung mao ruột non, thận và bàng quang, năm nhóm động vật có xương sống,

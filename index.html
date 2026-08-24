@@ -6423,6 +6423,253 @@ e11:{kp:[
 </script>
 
 <script>
+</script>
+
+<script>
+Object.assign(TESTS, {
+"math:18":{ name:"Problem solving test", vi:"Kiểm tra: Giải toán có lời văn", mins:20, qs:[
+ {u:"m12", q:"A pen costs $2.40. Mai buys 3 pens and pays with a $10 note. How much change?", o:["$7.20","$2.80","$7.60","$2.60"], a:1, e:"Bước 1: 3 &times; 2.40 = $7.20. Bước 2: 10 &minus; 7.20 = $2.80. Dừng ở bước 1 là chọn nhầm."},
+ {u:"m12", q:"A rope 12 m long is cut into pieces of 80 cm. How many pieces?", o:["15","12","150","96"], a:0, e:"Đổi cùng đơn vị trước: 12 m = 1200 cm, rồi 1200 &divide; 80 = 15."},
+ {u:"m12", q:"Nam has twice as many stickers as Lan. Together they have 36. How many does Lan have?", o:["18","12","24","9"], a:1, e:"Lan 1 phần, Nam 2 phần, tổng 3 phần bằng 36 nên mỗi phần 12."},
+ {u:"m12", q:"A tank holds 4.5 litres. 1750 ml is poured out. How much is left?", o:["2750 ml","2.75 litres","Both A and B","1750 ml"], a:2, e:"4500 &minus; 1750 = 2750 ml, cũng chính là 2,75 lít."},
+ {u:"m12", q:"A shop sells apples at $1.20 per kg. Lan buys 2.5 kg and pays $5. What is her change?", o:["$3.00","$2.00","$1.80","$2.50"], a:1, e:"Bước 1: 1.20 &times; 2.5 = $3.00. Bước 2: 5 &minus; 3 = $2.00."},
+ {u:"m12", q:"45 children go on a trip. Each minibus holds 12. How many minibuses are needed?", o:["3","3.75","4","5"], a:2, e:"45 &divide; 12 = 3 dư 9, vẫn cần thêm một xe &rarr; 4 xe. Làm tròn LÊN."},
+ {u:"m12", q:"A film lasts 95 minutes and starts at 19:40. When does it end?", o:["20:35","21:15","21:35","20:15"], a:1, e:"95 phút là 1 giờ 35 phút. 19:40 + 1 giờ = 20:40, thêm 35 phút &rarr; 21:15."},
+ {u:"m12", q:"Nam thinks of a number, doubles it, adds 6 and gets 20. What was the number?", o:["7","13","10","26"], a:0, e:"Làm ngược: 20 &minus; 6 = 14, rồi 14 &divide; 2 = 7."},
+ {u:"m12", q:"A box of 6 eggs costs $2.10. What do 10 eggs cost?", o:["$3.20","$3.50","$4.20","$2.60"], a:1, e:"Một quả 2.10 &divide; 6 = $0.35; mười quả $3.50."},
+ {u:"m12", q:"Why should you always write the unit in your answer?", o:["It looks tidy","The answer is incomplete without it and marks are lost","It uses more space","The teacher likes it"], a:1, e:"Số không có đơn vị thì chưa trả lời được câu hỏi và bài chấm sẽ trừ điểm."}]},
+
+"science:7":{ name:"Science skills test", vi:"Kiểm tra: Kỹ năng khoa học và ôn thêm", mins:20, qs:[
+ {u:"s9", q:"In a test on how the length of a pendulum affects its swing time, what is the independent variable?", o:["The swing time","The length of the pendulum","The mass of the bob","The number of swings"], a:1, e:"Biến độc lập là thứ ta chủ động thay đổi — chiều dài dây."},
+ {u:"s9", q:"Why should a measurement be repeated three times?", o:["To use more time","To make results more reliable and spot mistakes","To change the answer","Because the teacher says so"], a:1, e:"Lặp lại giúp phát hiện phép đo sai và lấy trung bình."},
+ {u:"s9", q:"Four readings are 21, 22, 21 and 45. Which is anomalous?", o:["21","22","45","There is none"], a:2, e:"45 lệch hẳn khỏi ba giá trị còn lại nên cần đo lại hoặc loại khỏi trung bình."},
+ {u:"s9", q:"Three readings are 24.1, 24.2 and 24.0 cm but the true value is 30 cm. The results are:", o:["Accurate but not precise","Precise but not accurate","Both","Neither"], a:1, e:"Rất gần nhau nên ổn định, nhưng lệch xa giá trị thật nên không chính xác."},
+ {u:"s3", q:"In the food chain grass &rarr; rabbit &rarr; fox, what does the arrow mean?", o:["&ldquo;is eaten by&rdquo;","&ldquo;eats&rdquo;","&ldquo;lives near&rdquo;","&ldquo;is bigger than&rdquo;"], a:0, e:"Mũi tên chỉ chiều năng lượng: cỏ <i>bị ăn bởi</i> thỏ."},
+ {u:"s3", q:"Which animal group has a backbone, lays eggs and has dry scaly skin?", o:["Amphibians","Reptiles","Fish","Mammals"], a:1, e:"Bò sát da khô có vảy và đẻ trứng trên cạn; lưỡng cư da ẩm đẻ trứng dưới nước."},
+ {u:"s4", q:"Which state has particles far apart and moving very fast?", o:["Solid","Liquid","Gas","All the same"], a:2, e:"Chất khí có hạt cách xa nhau và chuyển động rất nhanh."},
+ {u:"s4", q:"A sealed bottle full of water is put in the freezer. What happens?", o:["It shrinks","It bulges or splits because water expands as it freezes","The water disappears","Nothing"], a:1, e:"Nước nở ra khi đóng băng nên chai bị phồng hoặc nứt."},
+ {u:"s11", q:"Where are most nutrients absorbed into the blood?", o:["The stomach","The small intestine","The large intestine","The kidneys"], a:1, e:"Ruột non dài và phủ đầy nhung mao nên diện tích hấp thụ rất lớn."},
+ {u:"s11", q:"What do the kidneys do?", o:["Digest fat","Filter the blood and make urine","Pump blood","Store air"], a:1, e:"Thận lọc máu, giữ chất cần và thải chất thừa cùng nước ra ngoài."}]},
+
+"esl:10":{ name:"Exam skills test", vi:"Kiểm tra: Kỹ năng làm bài thi", mins:20, qs:[
+ {u:"e2", q:"To find a date quickly in a text you should:", o:["Skim","Scan","Infer","Translate"], a:1, e:"Tìm chi tiết cụ thể như ngày tháng là kỹ năng scan."},
+ {u:"e2", q:"An option says &lsquo;Everyone in the world recycles.&rsquo; The text says many countries recycle more. The option is:", o:["Correct","Too absolute, so wrong","Impossible to judge","The main idea"], a:1, e:"Từ tuyệt đối như <i>everyone</i> thường làm đáp án sai."},
+ {u:"e2", q:"You cannot find the answer to question 5. Where should you look first?", o:["At the very start","Between the answers to questions 4 and 6","At the very end","Anywhere"], a:1, e:"Câu hỏi bám theo thứ tự bài đọc."},
+ {u:"e8", q:"Which sentence &lsquo;shows&rsquo; rather than &lsquo;tells&rsquo;?", o:["I was very happy.","The party was fun.","I could not stop grinning as I opened the box.","It was a good day."], a:2, e:"Tả hành động cụ thể để người đọc tự cảm nhận, thay vì nói thẳng cảm xúc."},
+ {u:"e8", q:"When should you start a new paragraph?", o:["Every three lines","When you start a new idea","When the page is full","Never"], a:1, e:"Mỗi đoạn một ý — đây là tiêu chí chấm điểm phần Writing."},
+ {u:"e9", q:"Which prefix is correct: ______regular?", o:["im-","ir-","il-","un-"], a:1, e:"Trước phụ âm r dùng ir- &rarr; irregular."},
+ {u:"e9", q:"What is the best way to record a new word?", o:["Just the translation","The word in a sentence you made yourself","The word alone","Its first letter"], a:1, e:"Đặt từ vào câu của chính mình tạo ngữ cảnh nên nhớ lâu hơn."},
+ {u:"e10", q:"The speaker says &lsquo;fifteen hundred people came&rsquo;. How do you write this?", o:["15","150","1 500","15 000"], a:2, e:"fifteen hundred = 15 &times; 100 = 1 500."},
+ {u:"e10", q:"The speaker says &lsquo;We meet at six... sorry, at seven.&rsquo; What is the answer?", o:["Six","Seven","Both","Neither"], a:1, e:"Khi người nói tự sửa, thông tin sau cùng mới đúng."},
+ {u:"e11", q:"Which reply keeps the conversation going best?", o:["Yes.","I like football. What about you?","Football.","I don't know."], a:1, e:"Trả lời đầy đủ rồi hỏi ngược lại vừa thể hiện vốn từ vừa duy trì hội thoại."}]}
+});
+</script>
+
+<script>
+Object.assign(IMG, {
+m25:[{en:"The parts of a circle", vi:"Bán kính đi từ tâm ra mép, đường kính gấp đôi bán kính và đi qua tâm, chu vi là đường bao quanh",
+ svg:`<svg viewBox="0 0 320 190" ${SV}>
+  <circle cx="150" cy="95" r="70" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="3"/>
+  <circle cx="150" cy="95" r="4" fill="var(--ink)"/>
+  <path d="M150 95 L220 95" stroke="#D9484F" stroke-width="3"/>
+  <path d="M80 95 L220 95" stroke="#3B5A9A" stroke-width="3" stroke-dasharray="7 5"/>
+  <path d="M104 45 L196 145" stroke="#7A55C4" stroke-width="2.5"/>
+  <g font-family="Lexend,sans-serif" font-size="10">
+   <text x="185" y="88" fill="#D9484F">radius</text>
+   <text x="150" y="118" fill="#3B5A9A" text-anchor="middle">diameter</text>
+   <text x="214" y="150" fill="#7A55C4">chord</text>
+   <text x="150" y="18" text-anchor="middle" fill="var(--ac)">circumference</text>
+   <text x="150" y="182" text-anchor="middle" font-size="9" fill="var(--ink-faint)">đường kính = 2 &times; bán kính &middot; chu vi &asymp; 3,14 &times; đường kính</text>
+   <text x="128" y="92" font-size="9" fill="var(--ink-soft)">tâm</text></g>
+  <path d="M150 25 a70 70 0 0 1 60 34" fill="none" stroke="var(--ac)" stroke-width="4"/></svg>`}],
+m27:[{en:"35% shown on a hundred square", vi:"Mỗi ô là 1%. Tô 35 ô là 35%, cũng chính là 0,35 hay 35/100",
+ svg:`<svg viewBox="0 0 320 175" ${SV}>
+  <g>${(function(){var s="";for(var r=0;r<10;r++)for(var c=0;c<10;c++){var i=r*10+c;s+='<rect x="'+(60+c*20)+'" y="'+(14+r*14)+'" width="20" height="14" fill="'+(i<35?"var(--ac)":"var(--card)")+'" stroke="var(--line)" stroke-width="1"/>';}return s;})()}</g>
+  <g font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">
+   <text x="160" y="172" text-anchor="middle">35 ô tô màu trên 100 ô</text>
+   <text x="30" y="80" text-anchor="middle" font-size="11" fill="var(--ac)">35%</text>
+   <text x="30" y="96" text-anchor="middle" font-size="9" fill="var(--ink-soft)">= 0,35</text>
+   <text x="30" y="110" text-anchor="middle" font-size="9" fill="var(--ink-soft)">= 35/100</text></g></svg>`}],
+m29:[{en:"Why fractions need the same denominator", vi:"Một phần tư và một phần ba không cộng thẳng được. Cắt cả hai thành phần mười hai thì cộng được ngay: 3 + 4 = 7 phần mười hai",
+ svg:`<svg viewBox="0 0 320 190" ${SV}>
+  <g stroke="var(--ink-soft)" stroke-width="1.5">
+   <rect x="20" y="20" width="280" height="30" fill="none"/>
+   <rect x="20" y="20" width="70" height="30" fill="#E8A33C"/>
+   <path d="M90 20 v30 M160 20 v30 M230 20 v30"/></g>
+  <text x="55" y="40" text-anchor="middle" font-family="Lexend,sans-serif" font-size="11" fill="#fff">1/4</text>
+  <g stroke="var(--ink-soft)" stroke-width="1.5">
+   <rect x="20" y="62" width="280" height="30" fill="none"/>
+   <rect x="20" y="62" width="93" height="30" fill="#4FA85C"/>
+   <path d="M113 62 v30 M206 62 v30"/></g>
+  <text x="66" y="82" text-anchor="middle" font-family="Lexend,sans-serif" font-size="11" fill="#fff">1/3</text>
+  <g stroke="var(--ink-soft)" stroke-width="1.2">
+   <rect x="20" y="112" width="280" height="30" fill="none"/>
+   <rect x="20" y="112" width="70" height="30" fill="#E8A33C"/>
+   <rect x="90" y="112" width="93" height="30" fill="#4FA85C"/>
+   ${(function(){var s="";for(var i=1;i<12;i++)s+='<path d="M'+(20+i*280/12)+' 112 v30"/>';return s;})()}</g>
+  <g font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">
+   <text x="55" y="132" text-anchor="middle" fill="#fff">3/12</text>
+   <text x="136" y="132" text-anchor="middle" fill="#fff">4/12</text>
+   <text x="160" y="162" text-anchor="middle">cùng chia 12 phần thì cộng được</text>
+   <text x="160" y="180" text-anchor="middle" font-size="12" fill="var(--ac)">3/12 + 4/12 = 7/12</text></g></svg>`}],
+m33:[{en:"The three angles always make a straight line", vi:"Xé ba góc của bất kỳ tam giác giấy nào rồi ghép lại, chúng luôn tạo thành nửa vòng tròn 180 độ",
+ svg:`<svg viewBox="0 0 320 175" ${SV}>
+  <path d="M30 120 L110 30 L150 120 Z" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2.5"/>
+  <path d="M42 120 a14 14 0 0 0 9 -11" fill="none" stroke="#D9484F" stroke-width="2.5"/>
+  <path d="M104 44 a14 14 0 0 0 12 4" fill="none" stroke="#3B5A9A" stroke-width="2.5"/>
+  <path d="M138 118 a14 14 0 0 0 -6 -13" fill="none" stroke="#4FA85C" stroke-width="2.5"/>
+  <g font-family="Lexend,sans-serif" font-size="10">
+   <text x="52" y="112" fill="#D9484F">a</text><text x="110" y="60" fill="#3B5A9A">b</text><text x="128" y="112" fill="#4FA85C">c</text>
+   <text x="90" y="146" text-anchor="middle" fill="var(--ink-soft)" font-size="9">tam giác bất kỳ</text></g>
+  <path d="M176 116 h22" stroke="var(--ink-faint)" stroke-width="2"/><path d="M192 110 l8 6 -8 6" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+  <path d="M214 116 a52 52 0 0 1 92 0 z" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+  <path d="M214 116 a52 52 0 0 1 16 -31 z" fill="#F5C6C4"/>
+  <path d="M230 85 a52 52 0 0 1 40 -5 z" fill="#C6D3F0"/>
+  <path d="M270 80 a52 52 0 0 1 36 36 z" fill="#C6E8CE"/>
+  <path d="M214 116 h92" stroke="var(--ink)" stroke-width="2.5"/>
+  <g font-family="Lexend,sans-serif" font-size="10">
+   <text x="224" y="108" fill="#D9484F">a</text><text x="252" y="98" fill="#3B5A9A">b</text><text x="284" y="108" fill="#4FA85C">c</text>
+   <text x="260" y="140" text-anchor="middle" font-size="11" fill="var(--ac)">a + b + c = 180&deg;</text></g>
+  <text x="160" y="168" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Đúng với MỌI tam giác, không cần đo</text></svg>`}],
+m31:[{en:"Volume built from unit cubes", vi:"Đếm khối lập phương 1 cm để thấy vì sao thể tích là dài nhân rộng nhân cao, và nhớ 1 cm khối chứa đúng 1 ml",
+ svg:`<svg viewBox="0 0 320 175" ${SV}>
+  <g stroke="var(--ac)" stroke-width="1.6" fill="var(--ac-bg)">
+   ${(function(){var s="";for(var r=0;r<2;r++)for(var c=0;c<4;c++){var x=40+c*30-r*14, y=70+r*16;s+='<path d="M'+x+' '+y+' l26 0 l0 26 l-26 0 z"/>';}return s;})()}
+   ${(function(){var s="";for(var c=0;c<4;c++){var x=40+c*30, y=70;s+='<path d="M'+x+' '+y+' l14 -16 l26 0 l-14 16 z" fill="var(--ac)" opacity=".75"/><path d="M'+(x+26)+' '+y+' l14 -16 l0 26 l-14 16 z" fill="var(--ac)" opacity=".5"/>';}return s;})()}</g>
+  <g font-family="Lexend,sans-serif" font-size="10" fill="var(--ink)">
+   <text x="105" y="130" text-anchor="middle">4 &times; 2 &times; 3 = 24 khối</text>
+   <text x="105" y="146" text-anchor="middle" font-size="9" fill="var(--ink-soft)">dài &times; rộng &times; cao</text></g>
+  <g><rect x="222" y="40" width="34" height="34" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
+   <path d="M222 40 l12 -14 h34 l-12 14 z" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+   <path d="M256 40 l12 -14 v34 l-12 14 z" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+   <path d="M226 60 h26 v10 h-26 z" fill="#7FB4D8"/>
+   <text x="244" y="96" text-anchor="middle" font-family="Lexend,sans-serif" font-size="11" fill="var(--ink)">1 cm&sup3;</text>
+   <text x="244" y="112" text-anchor="middle" font-family="Lexend,sans-serif" font-size="11" fill="#3B7CA8">= 1 ml</text>
+   <text x="244" y="130" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">1000 cm&sup3; = 1 lít</text></g>
+  <text x="160" y="166" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-faint)">Nhớ đếm cả những khối bị che khuất phía sau</text></svg>`}],
+m37:[{en:"Reflecting a shape in a mirror line", vi:"Mỗi điểm và ảnh của nó cách trục đúng bằng nhau. Qua trục tung thì x đổi dấu, qua trục hoành thì y đổi dấu",
+ svg:`<svg viewBox="0 0 320 180" ${SV}>
+  <g stroke="var(--line)" stroke-width="1">${(function(){var s="";for(var i=0;i<=8;i++)s+='<path d="M'+(20+i*35)+' 20 v130"/>';for(var j=0;j<=5;j++)s+='<path d="M20 '+(20+j*26)+' h280"/>';return s;})()}</g>
+  <path d="M160 14 v142" stroke="#D9484F" stroke-width="3"/>
+  <path d="M90 46 L125 46 L90 98 Z" fill="var(--ac-bg)" stroke="var(--ac)" stroke-width="2.5"/>
+  <path d="M230 46 L195 46 L230 98 Z" fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <g stroke="var(--ink-faint)" stroke-width="1.2" stroke-dasharray="3 3">
+   <path d="M125 46 h70"/><path d="M90 98 h140"/></g>
+  <g font-family="Lexend,sans-serif" font-size="9.5">
+   <text x="100" y="120" fill="var(--ac)">hình gốc</text>
+   <text x="220" y="120" fill="var(--ac)">ảnh</text>
+   <text x="160" y="172" text-anchor="middle" fill="#D9484F">trục đối xứng &middot; mirror line</text>
+   <text x="143" y="42" text-anchor="middle" font-size="8" fill="var(--ink-faint)">bằng nhau</text></g></svg>`}],
+m22:[{en:"Rounding on a number line", vi:"Đặt số lên trục rồi nhìn xem nó gần mốc nào hơn. Đúng ở giữa thì luôn làm tròn LÊN",
+ svg:`<svg viewBox="0 0 320 150" ${SV}>
+  <path d="M30 80 h260" stroke="var(--ink)" stroke-width="2.5"/>
+  <g stroke="var(--ink)" stroke-width="2.5"><path d="M30 70 v20"/><path d="M160 72 v16"/><path d="M290 70 v20"/></g>
+  <g stroke="var(--ink-faint)" stroke-width="1.2">${(function(){var s="";for(var i=1;i<10;i++){if(i===5)continue;s+='<path d="M'+(30+i*26)+' 75 v10"/>';}return s;})()}</g>
+  <circle cx="212" cy="80" r="6" fill="#D9484F"/>
+  <path d="M212 66 v-16" stroke="#D9484F" stroke-width="2"/>
+  <g font-family="JetBrains Mono,monospace" font-size="11" fill="var(--ink)" text-anchor="middle">
+   <text x="30" y="106">4.2</text><text x="160" y="106">4.25</text><text x="290" y="106">4.3</text></g>
+  <g font-family="Lexend,sans-serif" font-size="9.5" text-anchor="middle">
+   <text x="212" y="44" fill="#D9484F">4.27</text>
+   <text x="212" y="126" fill="var(--ac)">gần 4.3 hơn &rarr; làm tròn thành 4.3</text>
+   <text x="160" y="120" font-size="8.5" fill="var(--ink-faint)">điểm giữa</text>
+   <text x="160" y="142" font-size="9" fill="var(--ink-faint)">Đúng 4.25 thì làm tròn LÊN thành 4.3</text></g></svg>`}]
+});
+</script>
+
+<script>
+Object.assign(IMG, {
+e3:[{en:"Turning an active sentence into a passive one", vi:"Tân ngữ của câu chủ động nhảy lên làm chủ ngữ, động từ đổi thành be cộng cột ba, người làm lùi ra sau by",
+ svg:`<svg viewBox="0 0 320 165" ${SV}>
+  <g font-family="Lexend,sans-serif" font-size="11">
+   <rect x="16" y="26" width="78" height="30" rx="8" fill="#C6D3F0" stroke="#3B5A9A" stroke-width="2"/>
+   <rect x="102" y="26" width="60" height="30" rx="8" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+   <rect x="170" y="26" width="82" height="30" rx="8" fill="#F5C6C4" stroke="#B14434" stroke-width="2"/>
+   <text x="55" y="46" text-anchor="middle" fill="var(--ink)">The chef</text>
+   <text x="132" y="46" text-anchor="middle" fill="var(--ink)">cooked</text>
+   <text x="211" y="46" text-anchor="middle" fill="var(--ink)">the fish</text>
+   <text x="278" y="46" font-size="9" fill="var(--ink-faint)">chủ động</text>
+   <rect x="16" y="106" width="82" height="30" rx="8" fill="#F5C6C4" stroke="#B14434" stroke-width="2"/>
+   <rect x="106" y="106" width="96" height="30" rx="8" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2"/>
+   <rect x="210" y="106" width="94" height="30" rx="8" fill="#C6D3F0" stroke="#3B5A9A" stroke-width="2"/>
+   <text x="57" y="126" text-anchor="middle" fill="var(--ink)">The fish</text>
+   <text x="154" y="126" text-anchor="middle" fill="var(--ink)">was cooked</text>
+   <text x="257" y="126" text-anchor="middle" fill="var(--ink)">by the chef</text>
+   <text x="278" y="156" font-size="9" fill="var(--ink-faint)" text-anchor="end">bị động</text></g>
+  <g stroke="#B14434" stroke-width="2" fill="none"><path d="M196 60 C150 78 90 84 58 100"/><path d="M64 94 l-8 8 10 4"/></g>
+  <g stroke="#3B5A9A" stroke-width="2" fill="none"><path d="M60 60 C120 80 210 84 254 100"/><path d="M246 94 l10 8 -12 4"/></g>
+  <text x="160" y="86" text-anchor="middle" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-soft)">be + past participle</text></svg>`}],
+e5:[{en:"What changes in reported speech", vi:"Ba thứ đổi cùng lúc: thì lùi một bậc, đại từ đổi theo người kể, và từ chỉ thời gian cũng đổi",
+ svg:`<svg viewBox="0 0 320 180" ${SV}>
+  <path d="M22 22 h150 a10 10 0 0 1 10 10 v34 a10 10 0 0 1 -10 10 h-118 l-18 16 v-16 h-14 a10 10 0 0 1 -10 -10 v-34 a10 10 0 0 1 10 -10 z" fill="var(--esl-bg)" stroke="var(--esl)" stroke-width="2"/>
+  <g font-family="Lexend,sans-serif" font-size="11" fill="var(--ink)">
+   <text x="36" y="46">&ldquo;I am busy</text><text x="36" y="64">today.&rdquo;</text>
+   <text x="200" y="40" font-size="9.5" fill="var(--ink-soft)">Lan nói</text></g>
+  <path d="M160 118 h30" stroke="var(--ink-faint)" stroke-width="2"/><path d="M184 112 l8 6 -8 6" fill="none" stroke="var(--ink-faint)" stroke-width="2"/>
+  <g font-family="Lexend,sans-serif" font-size="11" fill="var(--ink)">
+   <text x="20" y="122">She said</text>
+   <text x="20" y="142"><tspan fill="#D9484F">she</tspan> <tspan fill="#4FA85C">was</tspan> busy</text>
+   <text x="20" y="160"><tspan fill="#3B5A9A">that day</tspan>.</text></g>
+  <g font-family="Lexend,sans-serif" font-size="9" text-anchor="middle">
+   <text x="252" y="96" fill="#D9484F">I &rarr; she</text>
+   <text x="252" y="116" fill="#4FA85C">am &rarr; was</text>
+   <text x="252" y="136" fill="#3B5A9A">today &rarr; that day</text>
+   <text x="252" y="74" fill="var(--ink)" font-size="10">Ba thứ đổi</text></g></svg>`}],
+e9:[{en:"Building a word from its parts", vi:"Tiền tố đổi nghĩa, hậu tố đổi loại từ. Nhìn ra ba phần này là đoán được nghĩa của từ chưa gặp bao giờ",
+ svg:`<svg viewBox="0 0 320 170" ${SV}>
+  <g font-family="Lexend,sans-serif">
+   <rect x="14" y="40" width="70" height="40" rx="9" fill="#F5C6C4" stroke="#B14434" stroke-width="2"/>
+   <rect x="90" y="40" width="82" height="40" rx="9" fill="var(--card-2)" stroke="var(--ink-soft)" stroke-width="2.5"/>
+   <rect x="178" y="40" width="76" height="40" rx="9" fill="#C6E8CE" stroke="#357A40" stroke-width="2"/>
+   <text x="49" y="65" text-anchor="middle" font-size="14" fill="var(--ink)">un</text>
+   <text x="131" y="65" text-anchor="middle" font-size="14" fill="var(--ink)">help</text>
+   <text x="216" y="65" text-anchor="middle" font-size="14" fill="var(--ink)">ful</text>
+   <text x="49" y="100" text-anchor="middle" font-size="9" fill="#B14434">prefix</text>
+   <text x="49" y="112" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">tiền tố</text>
+   <text x="131" y="100" text-anchor="middle" font-size="9" fill="var(--ink-soft)">root</text>
+   <text x="131" y="112" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">từ gốc</text>
+   <text x="216" y="100" text-anchor="middle" font-size="9" fill="#357A40">suffix</text>
+   <text x="216" y="112" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">hậu tố</text>
+   <text x="134" y="26" text-anchor="middle" font-size="12" fill="var(--ac)">unhelpful</text>
+   <text x="160" y="140" text-anchor="middle" font-size="9.5" fill="var(--ink)">un = không &middot; help = giúp &middot; -ful = đầy, có tính chất</text>
+   <text x="160" y="158" text-anchor="middle" font-size="9" fill="var(--ink-faint)">im- trước m và p &middot; ir- trước r &middot; il- trước l</text></g></svg>`}],
+e2:[{en:"Three ways of reading, three different jobs", vi:"Đọc lướt để nắm ý chính, rà tìm để lấy chi tiết, suy luận để trả lời câu không có sẵn trong bài",
+ svg:`<svg viewBox="0 0 320 165" ${SV}>
+  <g font-family="Lexend,sans-serif">
+   <rect x="12" y="20" width="94" height="96" rx="10" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+   <g stroke="var(--ink-faint)" stroke-width="2" opacity=".35">${(function(){var s="";for(var i=0;i<7;i++)s+='<path d="M22 '+(36+i*11)+' h74"/>';return s;})()}</g>
+   <path d="M22 36 h74" stroke="#E8A33C" stroke-width="4"/>
+   <path d="M22 80 h48" stroke="#E8A33C" stroke-width="4"/>
+   <text x="59" y="132" text-anchor="middle" font-size="10" fill="var(--ink)">SKIM</text>
+   <text x="59" y="146" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">đọc lướt lấy ý chính</text>
+   <rect x="113" y="20" width="94" height="96" rx="10" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+   <g stroke="var(--ink-faint)" stroke-width="2" opacity=".35">${(function(){var s="";for(var i=0;i<7;i++)s+='<path d="M123 '+(36+i*11)+' h74"/>';return s;})()}</g>
+   <circle cx="168" cy="69" r="15" fill="none" stroke="#4FA85C" stroke-width="2.5"/>
+   <path d="M179 80 l10 10" stroke="#4FA85C" stroke-width="3"/>
+   <text x="160" y="132" text-anchor="middle" font-size="10" fill="var(--ink)">SCAN</text>
+   <text x="160" y="146" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">rà tìm chi tiết</text>
+   <rect x="214" y="20" width="94" height="96" rx="10" fill="var(--card-2)" stroke="var(--line)" stroke-width="1.5"/>
+   <g stroke="var(--ink-faint)" stroke-width="2" opacity=".35">${(function(){var s="";for(var i=0;i<7;i++)s+='<path d="M224 '+(36+i*11)+' h74"/>';return s;})()}</g>
+   <text x="261" y="76" text-anchor="middle" font-size="26" fill="#7A55C4">?</text>
+   <text x="261" y="132" text-anchor="middle" font-size="10" fill="var(--ink)">INFER</text>
+   <text x="261" y="146" text-anchor="middle" font-size="8.5" fill="var(--ink-faint)">suy luận từ bằng chứng</text></g></svg>`}],
+e8:[{en:"The shape of a good story", vi:"Mở đầu giới thiệu bối cảnh và nhân vật, giữa bài xuất hiện vấn đề, cuối bài giải quyết. Mỗi phần một đoạn riêng",
+ svg:`<svg viewBox="0 0 320 165" ${SV}>
+  <path d="M20 120 L110 120 L190 40 L250 92 L300 120" fill="none" stroke="var(--ac)" stroke-width="3"/>
+  <g fill="var(--ac)"><circle cx="20" cy="120" r="5"/><circle cx="110" cy="120" r="5"/><circle cx="190" cy="40" r="6"/><circle cx="250" cy="92" r="5"/><circle cx="300" cy="120" r="5"/></g>
+  <g stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 4"><path d="M20 128 h280"/></g>
+  <g font-family="Lexend,sans-serif" font-size="9.5" text-anchor="middle" fill="var(--ink)">
+   <text x="62" y="146">BEGINNING</text>
+   <text x="190" y="28">PROBLEM</text>
+   <text x="272" y="146">ENDING</text></g>
+  <g font-family="Lexend,sans-serif" font-size="8.5" text-anchor="middle" fill="var(--ink-faint)">
+   <text x="62" y="158">bối cảnh, nhân vật</text>
+   <text x="272" y="158">giải quyết xong</text></g>
+  <text x="150" y="72" font-family="Lexend,sans-serif" font-size="9" fill="var(--ink-soft)">căng dần lên</text></svg>`}]
+});
+</script>
+
+<script>
 if(S.goal===undefined) S.goal = 1;
 if(S.appPin===undefined) S.appPin = null;
 syncPoints();
