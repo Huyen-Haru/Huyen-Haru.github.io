@@ -11,7 +11,7 @@ App xếp bài theo unit của sách:
 
 | Môn | Sách | Cấu trúc trong app |
 |---|---|---|
-| Science | Cambridge Primary Science 6 — Learner's Book và Workbook (CUP, **2nd edition**), bản song ngữ Vinschool | **6 unit sách, 21 bài, kèm số trang** + 1 phần ôn thêm |
+| Science | Cambridge Primary Science 6 — Learner's Book và Workbook (CUP, **2nd edition**), bản song ngữ Vinschool | **6 unit, 21 bài nhỏ kèm số trang**, mỗi bài 9 ý chính + 1 phần ôn thêm |
 | Mathematics | *Cambridge Primary Mathematics 6* (CUP, 2nd edition) | **17 unit, 37 bài nhỏ** — mỗi mục nhỏ trong sách là một bài học riêng |
 | English (ESL) | *Cambridge Global English 6* (CUP) | **9 unit theo chủ đề**, mỗi unit có Vocabulary và Use of English |
 
