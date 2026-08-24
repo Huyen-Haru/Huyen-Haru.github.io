@@ -61,6 +61,11 @@ và ghi vào lịch sử.
 ## Tính năng
 
 - **Phiên ôn 15 phút/ngày**: thẻ lật → mindmap và ý chính → quiz, có đồng hồ đếm ngược.
+  Đặt được **mục tiêu 1, 2 hoặc 3 phiên mỗi ngày** trong Cài đặt.
+- **Ôn tập định kỳ**: đề tự sinh mới mỗi lần, không cộng điểm thưởng —
+  *Ôn tuần* (15 câu, lấy từ bài học trong 7 ngày gần nhất), *Ôn tháng* (25 câu),
+  *Thi thử cả năm* (40 câu rút từ toàn bộ 66 bài và 32 bài kiểm tra unit).
+- **Mật mã mở app** (tuỳ chọn): bật trong Cài đặt để chỉ người biết mật mã mới mở được.
 - **Mindmap cho cả 66 bài** cùng **19 sơ đồ** và **43 hình minh hoạ chi tiết cho môn Science**,
   tất cả vẽ bằng SVG nội tuyến nên chạy offline và tự đổi màu theo nền sáng/tối:
   quả tim bổ đôi 4 ngăn, ống máu lắng ba lớp, cách bắt mạch cổ tay, phổi và phế nang,

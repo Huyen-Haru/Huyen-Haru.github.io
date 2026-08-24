@@ -1593,23 +1593,23 @@ const diagramFor = (uid)=> DIA[uid] ? `<div class="card" style="padding:14px 12p
 
 /* ---------- router ---------- */
 let ST = {v:"home"};
-const ROOTS = ["home","subjects","review","progress","wallet","admin","login"];
+const ROOTS = ["home","subjects","review","progress","wallet","admin","login","lock"];
 function go(v, patch){ ST = Object.assign({}, patch||{}, {v}); render(); window.scrollTo(0,0); }
 backBtn.onclick = ()=>{
   if(ST.v==="unit") go(ST.bu!=null?"bookunit":"subject",{k:ST.k,bu:ST.bu});
   else if(ST.v==="bookunit"||ST.v==="source") go("subject",{k:ST.k});
   else if(ST.v==="quiz"||ST.v==="result") go(ST.src==="unit"?"unit":(ST.src==="mix"?"bookunit":"home"),{k:ST.k,uid:ST.uid,bu:ST.bu});
-  else if(ST.v==="exam"||ST.v==="examresult") go(ST.paper?"bookunit":"exams",{k:ST.k,bu:ST.bu});
+  else if(ST.v==="exam"||ST.v==="examresult") go(ST.paper ? (ST.paper.back||"bookunit") : "exams",{k:ST.k,bu:ST.bu});
   else if(ST.v==="session") go("home");
   else go(S.role==="admin" ? "admin" : "home");
 };
 function render(){
   backBtn.hidden = ROOTS.includes(ST.v);
   topright.innerHTML = "";
-  tabsEl.style.display = (ST.v==="session"||ST.v==="exam"||ST.v==="login") ? "none" : "flex";
+  tabsEl.style.display = (ST.v==="session"||ST.v==="exam"||ST.v==="login"||ST.v==="lock") ? "none" : "flex";
   view.className = "fade";
   if(ST.v!=="exam" && ST.v!=="session") clearInterval(timerId);
-  const fn = {login:vLogin, wallet:vWallet, admin:vAdmin, home:vHome, subjects:vSubjects, subject:vSubject, bookunit:vBookUnit, source:vSource,
+  const fn = {lock:vLock, periodic:vPeriodic, login:vLogin, wallet:vWallet, admin:vAdmin, home:vHome, subjects:vSubjects, subject:vSubject, bookunit:vBookUnit, source:vSource,
     unit:vUnit, quiz:vQuiz, result:vResult, session:vSession, review:vReview, progress:vProgress,
     exams:vExams, exam:vExam, examresult:vExamResult, settings:vSettings, report:vReport}[ST.v];
   fn();
@@ -1656,12 +1656,17 @@ function vHome(){
         <div class="leg"><b>3. Kiểm tra</b><small>5 phút &middot; quiz</small></div>
       </div>
       <button class="btn" id="start">${S.doneToday.length? "Ôn thêm một phiên nữa" : "Bắt đầu phiên hôm nay"} &rarr;</button>
-      ${S.doneToday.length? `<p style="font-size:13px;color:var(--good);margin-top:10px;text-align:center">&#10003; Hôm nay đã hoàn thành ${S.doneToday.length} phiên &middot; ${S.hist[today()]||0} phút</p>`:""}
+      <p style="font-size:13px;margin-top:11px;text-align:center;color:${S.doneToday.length>=(S.goal||1)?"var(--good)":"var(--ink-soft)"}">
+        ${S.doneToday.length>=(S.goal||1)?"&#10003; Đã đạt mục tiêu hôm nay":"Mục tiêu hôm nay"}:
+        <b>${S.doneToday.length}/${S.goal||1} phiên</b>${S.hist[today()]?` &middot; ${S.hist[today()]} phút`:""}</p>
     </div>
     ${due? `<button class="unit" id="rv" style="--ac:var(--bad);--ac-bg:var(--bad-bg)"><div class="row">
       <span class="num">${due}</span><div style="flex:1"><h4>Ôn lại câu đã làm sai</h4>
       <p class="en">Đến hạn ôn hôm nay &middot; khoảng 3 phút</p></div><span style="color:var(--ink-faint)">&rsaquo;</span></div></button>`:""}
     <div><p class="label" style="margin-bottom:9px">Ba môn</p><div class="stack-s" id="sl"></div></div>
+    <button class="unit" id="pe"><div class="row"><span style="font-size:20px">&#128197;</span>
+      <div style="flex:1"><h4>Ôn tập định kỳ</h4><p class="en">Kiểm tra theo tuần, theo tháng và cả năm</p></div>
+      <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
     <button class="unit" id="ex"><div class="row"><span style="font-size:20px">&#128221;</span>
       <div style="flex:1"><h4>Đề thi thử Checkpoint</h4><p class="en">3 đề &middot; 12 câu &middot; 25 phút mỗi đề</p></div>
       <span style="color:var(--ink-faint)">&rsaquo;</span></div></button>
@@ -1681,6 +1686,7 @@ function vHome(){
     b.onclick=()=>go("subject",{k}); sl.appendChild(b);
   });
   view.querySelector('#start').onclick=()=>startSession();
+  view.querySelector('#pe').onclick=()=>go("periodic");
   view.querySelector('#ex').onclick=()=>go("exams");
   view.querySelector('#rp').onclick=()=>go("report");
   const rv=view.querySelector('#rv'); if(rv) rv.onclick=()=>go("review");
@@ -2074,7 +2080,7 @@ function vExamResult(){
       <p class="aa">Đáp án đúng: <b>${q.o[q.a]}</b>${ST.ans[i]==null?" &middot; <i>bỏ trống</i>":""}</p>
       ${ok?"":`<p class="aa" style="color:var(--ink-soft)">${q.e}</p>`}</div>`));
   });
-  view.querySelector('#bk').onclick=()=> ST.paper ? go("bookunit",{k:k,bu:ST.bu}) : go("exams");
+  view.querySelector('#bk').onclick=()=> ST.paper ? go(ST.paper.back||"bookunit",{k:k,bu:ST.bu}) : go("exams");
 }
 
 /* ---------- TIẾN ĐỘ ---------- */
@@ -2158,6 +2164,15 @@ function vSettings(){
         <button class="toggle" id="tvi" aria-pressed="${!!S.showVI}" aria-label="Hiện tiếng Việt"></button></div>
       <div class="sw" style="border-top:1px solid var(--line)"><div class="t">Phát âm tiếng Anh<small>Chạm nút loa để nghe từ và câu</small></div>
         <button class="toggle" id="tts" aria-pressed="${!!S.tts}" aria-label="Bật phát âm"></button></div>
+      <div class="sw" style="border-top:1px solid var(--line)"><div class="t">Mục tiêu mỗi ngày
+        <small>Số phiên 15 phút con muốn học trong một ngày</small></div>
+        <div class="row" style="gap:6px">${[1,2,3].map(n=>
+          `<button class="pill ${(S.goal||1)===n?'on':''}" data-goal="${n}" style="padding:8px 13px;font-size:13.5px">${n}</button>`).join("")}</div></div>
+    </div>
+    <div class="card">
+      <div class="sw"><div class="t">Mật mã mở app<small>${S.appPin? "Đang bật &mdash; ai mở app cũng phải nhập" : "Đang tắt &mdash; ai có link đều xem được"}</small></div>
+        <button class="btn btn-ghost btn-sm" id="applock">${S.appPin?"Đổi hoặc tắt":"Đặt mật mã"}</button></div>
+      <div id="lockbox"></div>
     </div>
     <div class="card">
       <div class="sw"><div class="t">Đang dùng: <b>${S.role==="admin"?"Bố mẹ":KID}</b>
@@ -2172,6 +2187,21 @@ function vSettings(){
     <div class="note">Toàn bộ tiến độ được lưu trong trình duyệt của thiết bị này. Xoá dữ liệu trình duyệt sẽ mất tiến độ, nhưng bài học thì vẫn còn nguyên.</div>
     <button class="btn btn-ghost" id="reset">Xoá dữ liệu luyện tập</button></div>`;
   view.querySelector('#sw').onclick=()=>{ S.role=null; save(); go("login"); };
+  view.querySelectorAll('[data-goal]').forEach(b=>b.onclick=()=>{ S.goal=+b.dataset.goal; save(); go("settings"); });
+  view.querySelector('#applock').onclick=()=>{
+    const b = view.querySelector('#lockbox');
+    b.innerHTML = `<div class="fade" style="padding:0 15px 15px">
+      <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:10px">Nhập 4 tới 6 chữ số. Để trống rồi bấm Lưu là tắt mật mã.</p>
+      <input class="pin" id="ap" type="tel" inputmode="numeric" maxlength="6" placeholder="- - - -" autocomplete="off">
+      <p id="ae" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
+      <button class="btn btn-ghost" id="asv">Lưu</button></div>`;
+    b.querySelector('#asv').onclick=()=>{
+      const v=b.querySelector('#ap').value.trim();
+      if(v===""){ S.appPin=null; save(); go("settings"); return; }
+      if(!/^\d{4,6}$/.test(v)){ b.querySelector('#ae').textContent="Mật mã phải là 4 tới 6 chữ số."; return; }
+      S.appPin=v; UNLOCKED=true; save(); go("settings");
+    };
+  };
   view.querySelector('#tvi').onclick=()=>{ S.showVI=!S.showVI; save(); go("settings"); };
   view.querySelector('#tts').onclick=()=>{ S.tts=!S.tts; save(); if(S.tts) say("Hello"); go("settings"); };
   view.querySelector('#reset').onclick=()=>{
@@ -5165,7 +5195,110 @@ Object.assign(TESTS, {
  {u:"e20", q:"An artwork carved from stone or clay is a:", o:["painting","sculpture","canvas","gallery"], a:1, e:"sculpture là tác phẩm điêu khắc."},
  {u:"e20", q:"______ has left their brushes on the table.", o:["Someone","Anyone","No one","Everyone are"], a:0, e:"Câu khẳng định dùng someone; anyone thường dùng trong câu hỏi và phủ định."}]}
 });
+</script>
+
+<script>
+/* ---------- ÔN TẬP ĐỊNH KỲ: tuần, tháng, cả năm ---------- */
+function qPool(pick){
+  const out=[];
+  SUBJ_IDS.forEach(k=>DATA[k].units.forEach(u=>{
+    if(pick && !pick(u)) return;
+    u.quiz.forEach(q=>out.push({q:q.q, o:q.o, a:q.a, e:q.e, u:u.id}));
+  }));
+  return out;
+}
+function testPool(){
+  const out=[];
+  Object.keys(TESTS).forEach(key=>{
+    if(key.indexOf("review:")===0) return;
+    TESTS[key].qs.forEach(q=>out.push({q:q.q, o:q.o, a:q.a, e:q.e, u:q.u}));
+  });
+  return out;
+}
+const studiedIn = (days)=> (u)=>{ const r=S.units[u.id]; return r && r.date && r.date >= dayAdd(-days); };
+const studiedEver = (u)=> !!S.units[u.id];
+
+function buildPeriodic(kind){
+  let pool, n, mins, name, vi;
+  if(kind==="week"){
+    pool = qPool(studiedIn(7));
+    if(pool.length < 15) pool = qPool(studiedEver);
+    if(pool.length < 15) pool = qPool(null);
+    n = 15; mins = 20; name = "Weekly review"; vi = "Ôn tuần &middot; những bài con vừa học";
+  } else if(kind==="month"){
+    pool = qPool(studiedIn(31));
+    if(pool.length < 25) pool = qPool(studiedEver);
+    if(pool.length < 25) pool = qPool(null);
+    n = 25; mins = 35; name = "Monthly review"; vi = "Ôn tháng &middot; gộp mọi bài trong tháng";
+  } else {
+    pool = qPool(null).concat(testPool());
+    n = 40; mins = 50; name = "End-of-year mock", vi = "Thi thử cả năm &middot; ba môn trộn lẫn";
+  }
+  const qs = shuffle(pool).slice(0, Math.min(n, pool.length));
+  return {key:"review:"+kind, name, vi, mins, qs, back:"periodic"};
+}
+function vPeriodic(){
+  ttl.textContent = "Ôn tập định kỳ";
+  const rows=[
+    ["week","&#128198;","Ôn tuần","15 câu &middot; 20 phút","Lấy từ những bài con đã học trong 7 ngày gần nhất. Làm mỗi cuối tuần để kiến thức không rơi."],
+    ["month","&#128197;","Ôn tháng","25 câu &middot; 35 phút","Gộp mọi bài đã học trong tháng, ba môn trộn lẫn giống đề thật."],
+    ["year","&#127942;","Thi thử cả năm","40 câu &middot; 50 phút","Rút từ toàn bộ 66 bài và 32 bài kiểm tra unit. Đây là bài giống kỳ Checkpoint nhất."]
+  ];
+  const daHoc = allUnits().filter(x=>S.units[x.u.id]).length;
+  view.innerHTML = `<div class="stack" style="--ac:var(--esl); --ac-bg:var(--esl-bg)">
+    <div><p class="eyebrow">Kiểm tra lại cho chắc</p>
+      <h2 style="font-size:20px;margin-top:2px">Ôn tập định kỳ</h2>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-top:7px">Đề tự sinh mới mỗi lần, không bao giờ trùng thứ tự.
+      Con đã học <b>${daHoc}/${allUnits().length}</b> bài &mdash; đề chỉ hỏi những phần con đã học qua.</p></div>
+    <div class="stack-s" id="l"></div>
+    <div class="note">Ba bài này không cộng điểm thưởng. Chúng để con biết mình còn nhớ được bao nhiêu, chứ không phải để lấy điểm.</div></div>`;
+  const l = view.querySelector('#l');
+  rows.forEach(([kind,ic,t,meta,desc])=>{
+    const r = (S.tests||{})["review:"+kind];
+    const b = el(`<button class="unit"><div class="row" style="align-items:flex-start">
+      <span style="font-size:20px">${ic}</span>
+      <div style="flex:1"><h4>${t}</h4><p class="en">${meta}</p>
+        <p class="en" style="margin-top:5px;line-height:1.5">${desc}</p></div>
+      ${r?`<span class="pill on mono">${r.best}%</span>`:`<span class="pill">Chưa làm</span>`}</div></button>`);
+    b.onclick=()=>{
+      const paper = buildPeriodic(kind);
+      if(!paper.qs.length){ alert("Con cần học ít nhất một bài trước đã nhé."); return; }
+      go("exam",{k:"esl", bu:0, paper, n:0, ans:new Array(paper.qs.length).fill(null),
+        endAt:Date.now()+paper.mins*60000});
+    };
+    l.appendChild(b);
+  });
+}
+
+/* ---------- KHOÁ APP BẰNG MẬT MÃ ---------- */
+let UNLOCKED = false;
+function vLock(){
+  ttl.textContent = "Mở khoá";
+  backBtn.hidden = true; tabsEl.style.display = "none";
+  view.innerHTML = `<div class="stack">
+    <div class="hero" style="text-align:center">
+      <p style="font-size:44px;margin-bottom:6px">&#128274;</p>
+      <h2 style="font-size:20px">Nhập mật mã của gia đình</h2>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-top:6px">Bố mẹ đã đặt mật mã cho app này.</p>
+      <input class="pin" id="p" type="tel" inputmode="numeric" maxlength="6" placeholder="- - - -" autocomplete="off" style="margin-top:16px">
+      <p id="err" style="font-size:13px;color:var(--bad);margin-top:9px;min-height:18px"></p>
+      <button class="btn" id="ok">Mở khoá</button></div></div>`;
+  const inp=view.querySelector('#p'), err=view.querySelector('#err');
+  inp.focus();
+  const submit=()=>{
+    if(inp.value.trim()!==S.appPin){ err.textContent="Sai mật mã. Thử lại nhé."; inp.value=""; inp.focus(); return; }
+    UNLOCKED = true;
+    go(S.role ? (S.role==="admin"?"admin":"home") : "login");
+  };
+  view.querySelector('#ok').onclick=submit;
+  inp.onkeydown=(e)=>{ if(e.key==="Enter") submit(); };
+}
+</script>
+
+<script>
+if(S.goal===undefined) S.goal = 1;
+if(S.appPin===undefined) S.appPin = null;
 syncPoints();
-ST = { v: S.role ? (S.role==="admin" ? "admin" : "home") : "login" };
+ST = { v: (S.appPin && !UNLOCKED) ? "lock" : (S.role ? (S.role==="admin" ? "admin" : "home") : "login") };
 render();
 </script>
