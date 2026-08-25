@@ -83,7 +83,7 @@ và ghi vào lịch sử.
 - **Nghe phát âm** từ và câu tiếng Anh bằng giọng en-GB của thiết bị.
 - **Ôn lại câu sai tự động** sau 1, 2, 4, 7 và 14 ngày.
 - **Đề thi thử** có đồng hồ, không lộ đáp án cho tới khi nộp bài.
-- **Báo cáo cho bố mẹ**: số phút học 7 ngày gần nhất, điểm theo môn, unit cần kèm thêm.
+- **Báo cáo cho bố mẹ**: số phút học 7 ngày gần nhất (đếm thời gian thật, mọi cách học đều tính), điểm theo môn, unit cần kèm thêm.
 - Giao diện tự đổi theo nền sáng/tối của điện thoại.
 
 > **Lưu ý:** toàn bộ tiến độ và điểm lưu bằng `localStorage` trên **chính thiết bị và trình duyệt đó**.

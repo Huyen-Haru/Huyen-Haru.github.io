@@ -1864,7 +1864,6 @@ function vResult(){
   const right = ST.qs.filter((it,i)=>ST.ans[i]===it.q.a).length;
   const p = Math.round(right/ST.qs.length*100);
   if(ST.src!=="review" && ST.src!=="mix"){ markDone(u.id,p); }
-  if(ST.src==="session"){ addMinutes(15); }
   ttl.textContent = "Kết quả";
   const msg = p===100?"Tuyệt đối! Unit này đã vững."
     : p>=80?"Rất tốt. Xem lại câu sai là chắc chắn."
@@ -2051,7 +2050,7 @@ function vExamResult(){
   const store = ST.paper ? (S.tests = S.tests || {}) : S.exams;
   const rec = store[key] || {best:0, tries:0};
   rec.best=Math.max(rec.best,p); rec.last=p; rec.tries++; rec.date=today();
-  store[key]=rec; addMinutes(ex.mins);
+  store[key]=rec;
   const pkey = ST.paper ? ("test_"+ST.paper.key) : ("exam_"+k);
   const _b=(S.pts&&S.pts.claimed[pkey])||0; syncPoints();
   LAST_DELTA = ((S.pts&&S.pts.claimed[pkey])||0)-_b; save();
@@ -6717,11 +6716,29 @@ Object.keys(TESTS).forEach(key=>{ if(key.indexOf("review:")!==0) TESTS[key].qs.f
 SUBJ_IDS.forEach(k=>EXAMS[k].qs.forEach(shuffleQ));
 Object.keys(EXT).forEach(id=>{ if(EXT[id].c) shuffleQ(EXT[id].c); });
 
-if(S.goal===undefined) S.goal = 1;
-if(S.appPin===undefined) S.appPin = null;
-syncPoints();
 ST = { v: (!S.pinAsked && !S.appPin) ? "setpin"
         : ((S.appPin && !UNLOCKED) ? "lock"
         : (S.role ? (S.role==="admin" ? "admin" : "home") : "login")) };
 render();
+</script>
+
+<script>
+/* Đếm thời gian học THẬT: cứ mỗi phút đang mở app và còn thao tác thì ghi 1 phút */
+let lastActive = Date.now();
+["click","keydown","touchstart","pointerdown","scroll","input"].forEach(ev=>
+  document.addEventListener(ev, ()=>{ lastActive = Date.now(); }, {passive:true}));
+
+function ghiMotPhut(){
+  if(document.hidden) return false;                 // đang ẩn app thì không tính
+  if(Date.now() - lastActive > 3*60*1000) return false;  // bỏ máy đó quá 3 phút thì không tính
+  addMinutes(1);
+  syncPoints();
+  save();
+  return true;
+}
+setInterval(ghiMotPhut, 60*1000);
+
+if(S.goal===undefined) S.goal = 1;
+if(S.appPin===undefined) S.appPin = null;
+syncPoints();
 </script>
