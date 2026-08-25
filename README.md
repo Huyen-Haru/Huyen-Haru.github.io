@@ -13,3 +13,7 @@ Mỗi bài gồm hướng dẫn từng bước, phím tắt và thử thách th�
 ## Chạy website
 
 Mở file `index.html` bằng trình duyệt. Website không cần cài đặt hay build.
+
+## Khóa Power BI Master
+
+Khóa Power BI thực chiến nằm tại `power-bi/index.html`, gồm 5 bài từ Power Query, mô hình dữ liệu, DAX, thiết kế dashboard đến xuất bản trên Power BI Service. Bản online: `https://huyen-haru.github.io/power-bi/`.
